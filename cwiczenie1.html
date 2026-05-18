@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ćwiczenie Językowe z Ustawieniami Audio</title>
-    <a href="index.html" style="text-decoration: none; color: #4a90e2; font-weight: bold; display: inline-block; margin-bottom: 12px;">← Do menu</a>
+    <title>Ćwiczenie Językowe z Kolorowaniem Końcówek</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -37,6 +36,22 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
+        /* Кнопка повернення до меню */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            transition: transform 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .back-link:active {
+            transform: translateX(-4px);
+        }
+
         h2 {
             font-size: 1.2rem;
             text-align: center;
@@ -44,7 +59,6 @@
             color: #0f172a;
         }
 
-        /* Панель налаштувань звуку */
         .audio-settings {
             background: #f8fafc;
             border: 1px solid #cbd5e1;
@@ -180,6 +194,33 @@
             color: #991b1b;
         }
 
+        /* Стилі для красивого відображення кореня та закінчення */
+        .colored-word {
+            display: inline-block;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+        .colored-word.text-success {
+            border: 1px solid var(--success);
+            background: #f0fdf4;
+        }
+        .colored-word.text-error {
+            border: 1px solid var(--error);
+            background: #fef2f2;
+        }
+        .ending-correct {
+            color: var(--success);
+            font-weight: 800;
+            text-decoration: underline;
+        }
+        .ending-incorrect {
+            color: var(--error);
+            font-weight: 800;
+            text-decoration: underline;
+        }
+
         .choices-grid-wrapper {
             margin-top: 10px;
             padding-top: 10px;
@@ -249,13 +290,15 @@
 <body>
 
 <div class="container">
+    <!-- Додано рядок для повернення в головне меню -->
+    <a href="index.html" class="back-link">← Do menu</a>
+
     <h2>Ćwiczenie 1: Uzupełnij zdania poprawną formą.</h2>
     
-    <!-- Нова панель налаштувань звуку -->
     <div class="audio-settings">
         <div class="audio-row">
             <label for="voice-select">Голос:</label>
-            <select id="voice-select" onchange="saveAudioSettings()"></select>
+            <select id="voice-select"></select>
         </div>
         <div class="audio-row">
             <label for="speed-range">Швидкість:</label>
@@ -323,20 +366,16 @@
     let currentMode = 'input';
     let systemVoices = [];
 
-    // Логіка ініціалізації та автоматичного підбору голосу
     function loadVoices() {
         systemVoices = window.speechSynthesis.getVoices();
         const voiceSelect = document.getElementById('voice-select');
         if (!voiceSelect) return;
-        
         voiceSelect.innerHTML = '';
 
-        // Фільтруємо суто польські голоси
         const plVoices = systemVoices.filter(voice => voice.lang.startsWith('pl-') || voice.lang.startsWith('pl_'));
-
         if(plVoices.length === 0) {
             const opt = document.createElement('option');
-            opt.text = "Польський голос не знайдено (використовується системний)";
+            opt.text = "Системний польський голос";
             voiceSelect.appendChild(opt);
             return;
         }
@@ -346,52 +385,48 @@
             const option = document.createElement('option');
             option.value = voice.name;
             option.text = `${voice.name} (${voice.lang})`;
-            
-            // Пріоритет віддаємо Google або якісним Premium голосам від Apple/Microsoft
             if (voice.name.toLowerCase().includes('google') || voice.name.toLowerCase().includes('natural')) {
                 defaultIdx = index;
             }
             voiceSelect.appendChild(option);
         });
-
-        // Встановлюємо найкращий за замовчуванням
         voiceSelect.selectedIndex = defaultIdx;
     }
 
-    // Потрібно для коректного завантаження списку в деяких мобільних браузерах
     if (typeof window.speechSynthesis !== 'undefined' && window.speechSynthesis.onvoiceschanged !== undefined) {
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
     function nativeSpeak(text) {
         if (!window.speechSynthesis) return;
-
-        // Зупиняємо попереднє мовлення перед новим запуском
         window.speechSynthesis.cancel();
-
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'pl-PL';
-
-        // Беремо налаштування з панелі інтерфейсу
         const selectedVoiceName = document.getElementById('voice-select').value;
         const speed = parseFloat(document.getElementById('speed-range').value);
-
         const activeVoice = systemVoices.find(v => v.name === selectedVoiceName);
-        if (activeVoice) {
-            utterance.voice = activeVoice;
-        }
-
+        if (activeVoice) utterance.voice = activeVoice;
         utterance.rate = speed;
         window.speechSynthesis.speak(utterance);
     }
 
     function updateSpeedLabel(val) {
         document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1) + 'x';
-        saveAudioSettings();
     }
 
-    function saveAudioSettings() {
-        // Додатковий метод, якщо потрібно зберігати стан
+    // Допоміжна функція для генерації HTML з розділенням основи та закінчення
+    function getColoredWordHtml(fullWord, stem, isSuccess) {
+        let ending = "";
+        if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
+            ending = fullWord.substring(stem.length);
+        } else {
+            // Якщо основа складна або слово не ділиться прямо, беремо останню літеру за закінчення
+            stem = fullWord.substring(0, fullWord.length - 1);
+            ending = fullWord.substring(fullWord.length - 1);
+        }
+        const className = isSuccess ? "ending-correct" : "ending-incorrect";
+        const boxName = isSuccess ? "colored-word text-success" : "colored-word text-error";
+        return `<span class="${boxName}">${stem}<span class="${className}">${ending}</span></span>`;
     }
 
     function speakFullSentence(exIdx) {
@@ -448,12 +483,13 @@
                     const stem = ex.stems[i];
                     const num = ex.num[i];
                     const baseWord = baseWords[num];
-                    const inputId = `input-${exIdx}-${i}`;
+                    const placeholderId = `display-${exIdx}-${i}`;
 
+                    // В обох режимах спочатку речення рендериться із пустим контейнером [ ? ] або інпутом
                     if (currentMode === 'input') {
-                        currentText += `<span class="hint-text">${baseWord} &rarr;</span> <input type="text" id="${inputId}" class="word-input" data-ans="${correct}" data-exidx="${exIdx}" onchange="checkInput('${inputId}')">`;
+                        currentText += `<span id="container-${exIdx}-${i}"><span class="hint-text">${baseWord} &rarr;</span> <input type="text" id="input-${exIdx}-${i}" class="word-input" data-ans="${correct}" data-stem="${stem}" data-exidx="${exIdx}" onchange="checkInput('${exIdx}', '${i}')"></span>`;
                     } else {
-                        currentText += ` <b id="display-${exIdx}-${i}" style="color:var(--primary)">[ ? ]</b> `;
+                        currentText += ` <b id="${placeholderId}" style="color:var(--primary)">[ ? ]</b> `;
                         
                         const fakeEndings = generateFakeEndings(correct, stem);
                         const allChoices = [correct, ...fakeEndings].sort(() => 0.5 - Math.random());
@@ -462,7 +498,7 @@
                         choicesBoxesHtml += `<div class="choice-title">Слово (${num}) - Початкова форма: ${baseWord}</div>`;
                         choicesBoxesHtml += `<div class="choices-grid">`;
                         allChoices.forEach(choice => {
-                            choicesBoxesHtml += `<button class="choice-btn" data-correct-val="${correct}" onclick="checkSelect(this, '${correct}', ${exIdx}, ${i})">${choice}</button>`;
+                            choicesBoxesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${correct}', '${stem}', ${exIdx}, ${i})">${choice}</button>`;
                         });
                         choicesBoxesHtml += `</div></div>`;
                     }
@@ -485,40 +521,41 @@
         });
     }
 
-    function checkInput(id) {
-        const input = document.getElementById(id);
+    function checkInput(exIdx, partIdx) {
+        const input = document.getElementById(`input-${exIdx}-${partIdx}`);
+        const container = document.getElementById(`container-${exIdx}-${partIdx}`);
+        const ruleBox = document.getElementById(`rule-${exIdx}`);
+        
         const userAns = input.value.trim().toLowerCase();
         const correctAns = input.getAttribute('data-ans').toLowerCase();
-        const exIdx = parseInt(input.getAttribute('data-exidx'));
-        const ruleBox = document.getElementById(`rule-${exIdx}`);
+        const stem = input.getAttribute('data-stem');
 
         if (userAns === correctAns) {
-            input.className = "word-input correct";
+            // Замінюємо інпут на красиво розфарбоване слово
+            container.innerHTML = getColoredWordHtml(correctAns, stem, true);
             ruleBox.style.display = "none";
             
-            const parent = input.closest('.sentence-item');
-            const allInputs = parent.querySelectorAll('.word-input');
-            let allCorrect = true;
-            allInputs.forEach(inp => {
-                if(!inp.classList.contains('correct')) allCorrect = false;
-            });
+            // Перевірка чи закінчено все речення в режимі вводу
+            const parent = container.closest('.sentence-item');
+            const remainingInputs = parent.querySelectorAll('.word-input');
             
-            if(allCorrect) {
+            if (remainingInputs.length === 0) {
                 speakFullSentence(exIdx);
             } else {
-                nativeSpeak(input.value);
+                nativeSpeak(correctAns);
             }
         } else if (userAns === "") {
             input.className = "word-input";
             ruleBox.style.display = "none";
         } else {
-            input.className = "word-input incorrect";
+            // При помилці ховаємо інпут і підставляємо вірний варіант з підсвіткою помилки/правильного закінчення
+            container.innerHTML = getColoredWordHtml(correctAns, stem, false);
             nativeSpeak("Źle");
             ruleBox.style.display = "block";
         }
     }
 
-    function checkSelect(btn, correct, exIdx, partIdx) {
+    function checkSelect(btn, correct, stem, exIdx, partIdx) {
         const wrapper = document.getElementById(`wrapper-${exIdx}-${partIdx}`);
         const displayWord = document.getElementById(`display-${exIdx}-${partIdx}`);
         const ruleBox = document.getElementById(`rule-${exIdx}`);
@@ -529,8 +566,8 @@
 
         if (isCorrect) {
             btn.classList.add('correct');
-            displayWord.innerText = ` ${correct} `;
-            displayWord.style.color = "var(--success)";
+            // Підставляємо слово із зеленим закінченням
+            displayWord.innerHTML = getColoredWordHtml(correct, stem, true);
             ruleBox.style.display = "none";
 
             const mainSentenceItem = wrapper.closest('.sentence-item');
@@ -539,16 +576,22 @@
             let sentenceFinished = true;
             allWrappersInSentence.forEach(w => {
                 const correctBtn = w.querySelector('.choice-btn.correct');
+                // Також перевіряємо чи немає у цьому ж реченні червоних помилок
                 if (!correctBtn) sentenceFinished = false;
             });
 
-            if (sentenceFinished) {
+            // Якщо є заблоковані кнопки з помилками в цьому ж реченні — не читаємо все разом
+            const hasErrors = mainSentenceItem.querySelectorAll('.choice-btn.incorrect').length > 0;
+
+            if (sentenceFinished && !hasErrors) {
                 speakFullSentence(exIdx);
             } else {
                 nativeSpeak(btn.innerText);
             }
         } else {
             btn.classList.add('incorrect');
+            // При помилці підставляємо слово з червоним закінченням замість [ ? ]
+            displayWord.innerHTML = getColoredWordHtml(correct, stem, false);
             nativeSpeak("Źle");
             ruleBox.style.display = "block";
             buttons.forEach(b => {
@@ -557,7 +600,6 @@
         }
     }
 
-    // Перший запуск для мобільних пристроїв
     window.addEventListener('DOMContentLoaded', () => {
         loadVoices();
         renderExercise();
