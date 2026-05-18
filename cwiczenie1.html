@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ćwiczenie Językowe z Gramatyką</title>
-	<a href="index.html" style="text-decoration: none; color: #4a90e2; font-weight: bold; display: inline-block; margin-bottom: 12px;">← Do menu</a>
+    <title>Ćwiczenie Językowe z Ustawieniami Audio</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -42,6 +41,48 @@
             text-align: center;
             margin-bottom: 16px;
             color: #0f172a;
+        }
+
+        /* Панель налаштувань звуку */
+        .audio-settings {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        .audio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .audio-row:last-child {
+            margin-bottom: 0;
+        }
+        .audio-row label {
+            font-weight: 600;
+            color: #475569;
+            min-width: 70px;
+        }
+        .audio-row select, .audio-row input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .audio-row input[type="range"] {
+            padding: 0;
+            cursor: pointer;
+        }
+        .speed-val {
+            font-weight: bold;
+            min-width: 35px;
+            text-align: right;
         }
 
         .vocab-container {
@@ -184,7 +225,6 @@
             opacity: 0.7;
         }
 
-        /* Стилі для блоку з правилом-підказкою */
         .rule-box {
             display: none;
             margin-top: 12px;
@@ -209,6 +249,19 @@
 
 <div class="container">
     <h2>Ćwiczenie 1: Uzupełnij zdania poprawną formą.</h2>
+    
+    <!-- Нова панель налаштувань звуку -->
+    <div class="audio-settings">
+        <div class="audio-row">
+            <label for="voice-select">Голос:</label>
+            <select id="voice-select" onchange="saveAudioSettings()"></select>
+        </div>
+        <div class="audio-row">
+            <label for="speed-range">Швидкість:</label>
+            <input type="range" id="speed-range" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSpeedLabel(this.value)">
+            <span id="speed-val" class="speed-val">1.0x</span>
+        </div>
+    </div>
     
     <div class="vocab-container">
         <div>1) chleb</div><div>2) bułka</div><div>3) masło</div>
@@ -237,10 +290,9 @@
         19: "mleko", 20: "sok", 21: "piwo", 22: "wino", 23: "lody", 24: "ciastko"
     };
 
-    // Граматичні підказки для кожного речення
     const rules = {
-        biernik_affirmative: "<strong>💡 Правило (Biernik):</strong> У стверджувальних реченнях після дієслів <em>jem, pijemy, lubimy, poproszę</em> використовується <strong>Знахідний відмінок (Biernik)</strong>. <br>• Жіночий рід (-a) змінюється на <strong>-ę</strong> (sałatka → sałatkę).<br>• Чоловічий рід (істоти) отримує <strong>-a</strong> (kurczak → kurczaka).<br>• Середній та неживий чоловічий рід <strong>не змінюються</strong> (mięso, ryż, wino).",
-        dopelniacz_negative: "<strong>💡 Правило заперечення (Dopełniacz):</strong> Якщо перед дієсловом стоїть заперечення <strong>NIE</strong> (nie jem, nie piję, nie mam, nie lubię), Знахідний відмінок автоматично переходить у <strong>Родовий (Dopełniacz)</strong>!<br>• Жіночий рід отримує закінчення <strong>-y / -i</strong> (zupa → zupy, szynka → szynki).<br>• Чоловічий рід отримує закінчення <strong>-u / -a</strong> (sok → soku, chleb → chleba, ser → sera).<br>• Середній рід отримує закінчення <strong>-a</strong> (masło → masła, ciastko → ciastka)."
+        biernik_affirmative: "<strong>💡 Правило (Biernik):</strong> У стверджувальних реченнях використовується <strong>Знахідний відмінок (Biernik)</strong>. <br>• Жіночий рід (-a) → <strong>-ę</strong> (sałatka → sałatkę).<br>• Чоловічий рід (істоти) → <strong>-a</strong> (kurczak → kurczaka).<br>• Середній та неживий чоловічий рід <strong>не змінюються</strong> (mięso, ryż).",
+        dopelniacz_negative: "<strong>💡 Правило заперечення (Dopełniacz):</strong> Після заперечення <strong>NIE</strong> Знахідний відмінок переходить у <strong>Роdoвий (Dopełniacz)</strong>!<br>• Жіночий рід → <strong>-y / -i</strong> (zupa → zupy).<br>• Чоловічий рід → <strong>-u / -a</strong> (sok → soku, chleb → chleba).<br>• Середній рід → <strong>-a</strong> (masło → masła)."
     };
 
     const exercises = [
@@ -260,7 +312,7 @@
         { text: ["Nie lubię (10) ", " i nie jem (6) ", "."], answers: ["ryby", "sera"], num: [10, 6], stems: ["ryb", "ser"], rule: rules.dopelniacz_negative },
         { text: ["Nie lubimy (8) ", "."], answers: ["kiełbasy"], num: [8], stems: ["kiełbas"], rule: rules.dopelniacz_negative },
         { text: ["One nie jedzą (7) ", " na kolację."], answers: ["szynki"], num: [7], stems: ["szynk"], rule: rules.dopelniacz_negative },
-        { text: ["Mamy (6) ", ", ale nie mamy (12) ", "."], answers: ["ser", "makaronu"], num: [6, 12], stems: ["ser", "makaron"], rule: rules.dopelniacz_negative }, // мікс, але заперечення в кінці головне для помилок
+        { text: ["Mamy (6) ", ", ale nie mamy (12) ", "."], answers: ["ser", "makaronu"], num: [6, 12], stems: ["ser", "makaron"], rule: rules.dopelniacz_negative },
         { text: ["Lubimy (7) ", ", ale nie lubimy (6) ", "."], answers: ["szynkę", "sera"], num: [7, 6], stems: ["szynk", "ser"], rule: rules.dopelniacz_negative },
         { text: ["Jemy (9) ", ", ale nie jemy (11) ", "."], answers: ["kurczaka", "ryżu"], num: [9, 11], stems: ["kurczak", "ryż"], rule: rules.dopelniacz_negative },
         { text: ["Pijemy (21) ", ", ale nie pijemy (22) ", "."], answers: ["piwo", "wina"], num: [21, 22], stems: ["piw", "win"], rule: rules.dopelniacz_negative }
@@ -268,12 +320,77 @@
 
     const endings = ['a', 'ę', 'y', 'ie', 'u', 'em', 'o', 'ich', 'ami'];
     let currentMode = 'input';
-    let audio = new Audio();
+    let systemVoices = [];
 
-    function googleSpeak(text) {
-        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=pl&client=tw-ob&q=${encodeURIComponent(text)}`;
-        audio.src = url;
-        audio.play().catch(e => console.log("Audio play failed:", e));
+    // Логіка ініціалізації та автоматичного підбору голосу
+    function loadVoices() {
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        if (!voiceSelect) return;
+        
+        voiceSelect.innerHTML = '';
+
+        // Фільтруємо суто польські голоси
+        const plVoices = systemVoices.filter(voice => voice.lang.startsWith('pl-') || voice.lang.startsWith('pl_'));
+
+        if(plVoices.length === 0) {
+            const opt = document.createElement('option');
+            opt.text = "Польський голос не знайдено (використовується системний)";
+            voiceSelect.appendChild(opt);
+            return;
+        }
+
+        let defaultIdx = 0;
+        plVoices.forEach((voice, index) => {
+            const option = document.createElement('option');
+            option.value = voice.name;
+            option.text = `${voice.name} (${voice.lang})`;
+            
+            // Пріоритет віддаємо Google або якісним Premium голосам від Apple/Microsoft
+            if (voice.name.toLowerCase().includes('google') || voice.name.toLowerCase().includes('natural')) {
+                defaultIdx = index;
+            }
+            voiceSelect.appendChild(option);
+        });
+
+        // Встановлюємо найкращий за замовчуванням
+        voiceSelect.selectedIndex = defaultIdx;
+    }
+
+    // Потрібно для коректного завантаження списку в деяких мобільних браузерах
+    if (typeof window.speechSynthesis !== 'undefined' && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function nativeSpeak(text) {
+        if (!window.speechSynthesis) return;
+
+        // Зупиняємо попереднє мовлення перед новим запуском
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pl-PL';
+
+        // Беремо налаштування з панелі інтерфейсу
+        const selectedVoiceName = document.getElementById('voice-select').value;
+        const speed = parseFloat(document.getElementById('speed-range').value);
+
+        const activeVoice = systemVoices.find(v => v.name === selectedVoiceName);
+        if (activeVoice) {
+            utterance.voice = activeVoice;
+        }
+
+        utterance.rate = speed;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function updateSpeedLabel(val) {
+        document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1) + 'x';
+        saveAudioSettings();
+    }
+
+    function saveAudioSettings() {
+        // Додатковий метод, якщо потрібно зберігати стан
     }
 
     function speakFullSentence(exIdx) {
@@ -287,7 +404,7 @@
             }
         });
         fullText = fullText.replace(/\s+/g, ' ').trim();
-        googleSpeak(fullText);
+        nativeSpeak(fullText);
     }
 
     function generateFakeEndings(correct, stem) {
@@ -357,7 +474,6 @@
                 itemDiv.innerHTML += choicesBoxesHtml;
             }
 
-            // Додаємо невидимий за замовчуванням блок для правила
             const ruleDiv = document.createElement('div');
             ruleDiv.id = `rule-${exIdx}`;
             ruleDiv.className = 'rule-box';
@@ -377,7 +493,7 @@
 
         if (userAns === correctAns) {
             input.className = "word-input correct";
-            ruleBox.style.display = "none"; // Ховаємо правило при успіху
+            ruleBox.style.display = "none";
             
             const parent = input.closest('.sentence-item');
             const allInputs = parent.querySelectorAll('.word-input');
@@ -389,15 +505,15 @@
             if(allCorrect) {
                 speakFullSentence(exIdx);
             } else {
-                googleSpeak(input.value);
+                nativeSpeak(input.value);
             }
         } else if (userAns === "") {
             input.className = "word-input";
             ruleBox.style.display = "none";
         } else {
             input.className = "word-input incorrect";
-            googleSpeak("Źle");
-            ruleBox.style.display = "block"; // Показуємо правило при помилці
+            nativeSpeak("Źle");
+            ruleBox.style.display = "block";
         }
     }
 
@@ -414,7 +530,7 @@
             btn.classList.add('correct');
             displayWord.innerText = ` ${correct} `;
             displayWord.style.color = "var(--success)";
-            ruleBox.style.display = "none"; // Ховаємо правило, якщо цей крок успішний
+            ruleBox.style.display = "none";
 
             const mainSentenceItem = wrapper.closest('.sentence-item');
             const allWrappersInSentence = mainSentenceItem.querySelectorAll('.choices-grid-wrapper');
@@ -428,17 +544,23 @@
             if (sentenceFinished) {
                 speakFullSentence(exIdx);
             } else {
-                googleSpeak(btn.innerText);
+                nativeSpeak(btn.innerText);
             }
         } else {
             btn.classList.add('incorrect');
-            googleSpeak("Źle");
-            ruleBox.style.display = "block"; // Показуємо правило при помилці
+            nativeSpeak("Źle");
+            ruleBox.style.display = "block";
             buttons.forEach(b => {
                 if (b.innerText === correct) b.classList.add('correct');
             });
         }
     }
+
+    // Перший запуск для мобільних пристроїв
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        renderExercise();
+    });
 </script>
 
 </body>
