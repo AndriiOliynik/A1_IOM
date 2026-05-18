@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ćwiczenie Językowe z Podsumowaniem</title>
+    <title>Ćwiczenie Językowe z Przyklejonym Panelu</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -51,16 +51,20 @@
             transform: translateX(-4px);
         }
 
-        /* Стилі для блоку статистики */
+        /* ОНОВЛЕНО: Статистика, яка завжди залишається на екрані (Sticky) */
         .stats-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-around;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Тінь, щоб візуально відокремити від контенту */
         }
         .stat-box .num {
             font-size: 1.4rem;
@@ -297,7 +301,6 @@
             color: #b45309;
         }
 
-        /* Нижня кнопка повернення */
         .bottom-nav {
             text-align: center;
             padding: 16px 0 8px 0;
@@ -334,7 +337,7 @@
 
     <h2>Ćwiczenie 1: Uzupełnij zdania poprawną formą.</h2>
 
-    <!-- Динамічна панель статистики -->
+    <!-- Цей блок тепер плавно липне до верху екрана при гортанні -->
     <div class="stats-panel">
         <div class="stat-box">
             <span id="stat-ok" class="num stat-correct">0</span>
@@ -380,7 +383,6 @@
 
     <div id="exercise-container" class="sentence-list"></div>
 
-    <!-- Кнопка повернення в кінці сторінки -->
     <div class="bottom-nav">
         <a href="index.html" class="btn-back-main">Powrót do menu głównego</a>
     </div>
@@ -426,7 +428,6 @@
     let currentMode = 'input';
     let systemVoices = [];
 
-    // Змінні для підрахунку результатів
     let correctCount = 0;
     let incorrectCount = 0;
 
