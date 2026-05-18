@@ -279,17 +279,18 @@
             text-decoration: underline;
         }
 
-        /* ОНОВЛЕНО: Жирне фіолетове закінчення на КНОПКАХ без підкреслення */
+        /* ОНОВЛЕНО: Жирне фіолетове закінчення на кнопках з білою окантовкою */
         .choice-btn .ending-correct {
-            color: #e0f2fe; /* Світлий відтінок для гарного контрасту з фоном */
             color: #d946ef; /* Яскравий фіолетовий */
-            font-weight: 800;
-            text-decoration: none; /* Без підкреслення */
+            font-weight: 900;
+            text-decoration: none;
+            -webkit-text-stroke: 1px #ffffff; /* Біла окантовка (контур) навколо літери */
         }
         .choice-btn .ending-incorrect {
-            color: #fae8ff; /* Фіолетовий пастельний відтінок, який чітко видно на червоному тлі */
-            font-weight: 800;
-            text-decoration: none; /* Без підкреслення */
+            color: #f472b6; /* Яскравіший рожево-фіолетовий для кращої видимості на червоному */
+            font-weight: 900;
+            text-decoration: none;
+            -webkit-text-stroke: 1px #ffffff; /* Біла окантовка (контур) навколо літери */
         }
 
         .choices-grid-wrapper {
@@ -309,14 +310,16 @@
             gap: 6px;
             margin-bottom: 10px;
         }
+        
+        /* ОНОВЛЕНО: Збільшено шрифт кнопок та зроблено його напівжирним */
         .choice-btn {
             background: #f8fafc;
             border: 1px solid #cbd5e1;
-            padding: 10px;
+            padding: 11px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 1.05rem; /* Збільшено шрифт */
+            font-weight: 600;   /* Зроблено текст кнопок масивнішим */
             transition: all 0.1s;
             text-align: center;
             outline: none;
@@ -329,16 +332,16 @@
             background-color: var(--success) !important;
             color: white;
             border-color: var(--success);
-            font-weight: 600;
+            font-weight: 700;
         }
         .choice-btn.incorrect {
             background-color: var(--error) !important;
             color: white;
             border-color: var(--error);
-            font-weight: 600;
+            font-weight: 700;
         }
         .choice-btn:disabled {
-            opacity: 0.95; /* Збільшено читабельність тексту на заблокованій кнопці */
+            opacity: 0.95;
         }
 
         .rule-box {
@@ -552,7 +555,6 @@
         document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1) + 'x';
     }
 
-    // Отримання HTML-коду слова з виділеним закінченням для тексту речення
     function getColoredWordHtml(fullWord, stem, isSuccess) {
         let ending = "";
         if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
@@ -566,7 +568,6 @@
         return `<span class="${boxName}">${stem}<span class="${className}">${ending}</span></span>`;
     }
 
-    // Розбиття слова всередині тегів КНОПОК тесту (Фіолетовий стиль без підкреслення)
     function getInnerButtonHtml(fullWord, stem, isSuccess) {
         let ending = "";
         if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
