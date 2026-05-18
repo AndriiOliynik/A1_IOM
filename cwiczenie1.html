@@ -51,7 +51,6 @@
             transform: translateX(-4px);
         }
 
-        /* ОНОВЛЕНО: Статистика, яка завжди залишається на екрані (Sticky) */
         .stats-panel {
             position: sticky;
             top: 0;
@@ -64,7 +63,7 @@
             display: flex;
             justify-content: space-around;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Тінь, щоб візуально відокремити від контенту */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .stat-box .num {
             font-size: 1.4rem;
@@ -182,11 +181,49 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .sentence-text {
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
             margin-bottom: 8px;
+        }
+
+        .sentence-text {
             word-wrap: break-word;
-            display: inline-block;
-            width: 100%;
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .sentence-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .action-btn:active {
+            background: #e2e8f0;
+            transform: scale(0.95);
+        }
+        .btn-speak {
+            font-size: 0.9rem;
+            padding: 4px 6px;
         }
 
         .hint-text {
@@ -229,6 +266,8 @@
             border: 1px solid var(--error);
             background: #fef2f2;
         }
+        
+        /* Стилі для закінчень у тексті */
         .ending-correct {
             color: var(--success);
             font-weight: 800;
@@ -236,6 +275,18 @@
         }
         .ending-incorrect {
             color: var(--error);
+            font-weight: 800;
+            text-decoration: underline;
+        }
+
+        /* ОНОВЛЕНО: Стилі для закінчень безпосередньо НА кнопках тесту */
+        .choice-btn .ending-correct {
+            color: #ffffff; /* На зеленій кнопці білий текст краще контрастує */
+            font-weight: 800;
+            text-decoration: underline;
+        }
+        .choice-btn .ending-incorrect {
+            color: #ffffff; /* На червоній кнопці також використовуємо білий для читабельності */
             font-weight: 800;
             text-decoration: underline;
         }
@@ -267,6 +318,7 @@
             font-weight: 500;
             transition: all 0.1s;
             text-align: center;
+            outline: none;
             -webkit-tap-highlight-color: transparent;
         }
         .choice-btn:active:not(:disabled) {
@@ -276,14 +328,16 @@
             background-color: var(--success) !important;
             color: white;
             border-color: var(--success);
+            font-weight: 600;
         }
         .choice-btn.incorrect {
             background-color: var(--error) !important;
             color: white;
             border-color: var(--error);
+            font-weight: 600;
         }
         .choice-btn:disabled {
-            opacity: 0.7;
+            opacity: 0.9; /* Трохи збільшено непрозорість, щоб виділений текст кнопки добре читався */
         }
 
         .rule-box {
@@ -337,7 +391,6 @@
 
     <h2>Ćwiczenie 1: Uzupełnij zdania poprawną formą.</h2>
 
-    <!-- Цей блок тепер плавно липне до верху екрана при гортанні -->
     <div class="stats-panel">
         <div class="stat-box">
             <span id="stat-ok" class="num stat-correct">0</span>
@@ -498,6 +551,7 @@
         document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1) + 'x';
     }
 
+    // Допоміжна функція для отримання HTML-коду слова з виділеним закінченням
     function getColoredWordHtml(fullWord, stem, isSuccess) {
         let ending = "";
         if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
@@ -511,6 +565,19 @@
         return `<span class="${boxName}">${stem}<span class="${className}">${ending}</span></span>`;
     }
 
+    // НОВЕ: Функція для розбиття слова безпосередньо всередині тегів кнопок
+    function getInnerButtonHtml(fullWord, stem, isSuccess) {
+        let ending = "";
+        if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
+            ending = fullWord.substring(stem.length);
+        } else {
+            stem = fullWord.substring(0, fullWord.length - 1);
+            ending = fullWord.substring(fullWord.length - 1);
+        }
+        const className = isSuccess ? "ending-correct" : "ending-incorrect";
+        return `${stem}<span class="${className}">${ending}</span>`;
+    }
+
     function speakFullSentence(exIdx) {
         const ex = exercises[exIdx];
         let fullText = "";
@@ -518,11 +585,29 @@
             let cleanPart = part.replace(/\(\d+\)/g, "");
             fullText += cleanPart;
             if (i < ex.answers.length) {
-                fullText += " " + ex.answers[i] + " ";
+                const inputEl = document.getElementById(`input-${exIdx}-${i}`);
+                const displayEl = document.getElementById(`display-${exIdx}-${i}`);
+                
+                if (currentMode === 'input' && (!inputEl || inputEl.tagName !== 'INPUT')) {
+                    fullText += " " + ex.answers[i] + " ";
+                } else if (currentMode === 'select' && displayEl && !displayEl.innerText.includes('[ ? ]')) {
+                    fullText += " " + ex.answers[i] + " ";
+                } else {
+                    fullText += " " + baseWords[ex.num[i]] + " ";
+                }
             }
         });
         fullText = fullText.replace(/\s+/g, ' ').trim();
         nativeSpeak(fullText);
+    }
+
+    function toggleRule(exIdx) {
+        const ruleBox = document.getElementById(`rule-${exIdx}`);
+        if (ruleBox.style.display === "block") {
+            ruleBox.style.display = "none";
+        } else {
+            ruleBox.style.display = "block";
+        }
     }
 
     function generateFakeEndings(correct, stem) {
@@ -553,6 +638,9 @@
             const itemDiv = document.createElement('div');
             itemDiv.className = 'sentence-item';
 
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'sentence-header';
+
             const textDiv = document.createElement('div');
             textDiv.className = 'sentence-text';
 
@@ -580,7 +668,8 @@
                         choicesBoxesHtml += `<div class="choice-title">Слово (${num}) - Початкова форма: ${baseWord}</div>`;
                         choicesBoxesHtml += `<div class="choices-grid">`;
                         allChoices.forEach(choice => {
-                            choicesBoxesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${correct}', '${stem}', ${exIdx}, ${i})">${choice}</button>`;
+                            // Кнопкам додаємо data-атрибут основи, щоб легше було розбивати слова при кліках
+                            choicesBoxesHtml += `<button class="choice-btn" data-stem="${stem}" onclick="checkSelect(this, '${correct}', '${stem}', ${exIdx}, ${i})">${choice}</button>`;
                         });
                         choicesBoxesHtml += `</div></div>`;
                     }
@@ -588,7 +677,17 @@
             });
 
             textDiv.innerHTML = currentText;
-            itemDiv.appendChild(textDiv);
+            headerDiv.appendChild(textDiv);
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'sentence-actions';
+            actionsDiv.innerHTML = `
+                <button class="action-btn btn-speak" onclick="speakFullSentence(${exIdx})" title="Повторити голос">🔊</button>
+                <button class="action-btn" onclick="toggleRule(${exIdx})" title="Показати підказку">💡 Podpowiedź</button>
+            `;
+            headerDiv.appendChild(actionsDiv);
+            itemDiv.appendChild(headerDiv);
+
             if (choicesBoxesHtml) {
                 itemDiv.innerHTML += choicesBoxesHtml;
             }
@@ -653,7 +752,10 @@
             correctCount++;
             updateStatsUi();
 
+            // ОНОВЛЕНО: підсвічуємо закінчення прямо всередині обраної правильної кнопки
+            btn.innerHTML = getInnerButtonHtml(btn.innerText, stem, true);
             btn.classList.add('correct');
+            
             displayWord.innerHTML = getColoredWordHtml(correct, stem, true);
             ruleBox.style.display = "none";
 
@@ -671,18 +773,27 @@
             if (sentenceFinished && !hasErrors) {
                 speakFullSentence(exIdx);
             } else {
-                nativeSpeak(btn.innerText);
+                nativeSpeak(btn.textContent);
             }
         } else {
             incorrectCount++;
             updateStatsUi();
 
+            // ОНОВЛЕНО: підсвічуємо закінчення на неправильній кнопці, на яку натиснули
+            btn.innerHTML = getInnerButtonHtml(btn.innerText, stem, false);
             btn.classList.add('incorrect');
+            
             displayWord.innerHTML = getColoredWordHtml(correct, stem, false);
             nativeSpeak("Źle");
             ruleBox.style.display = "block";
+            
+            // ОНОВЛЕНО: на додачу підсвічуємо закінчення на кнопці з правильною відповіддю, щоб користувач бачив різницю
             buttons.forEach(b => {
-                if (b.innerText === correct) b.classList.add('correct');
+                if (b.textContent === correct || b.innerText === correct) {
+                    const bStem = b.getAttribute('data-stem') || stem;
+                    b.innerHTML = getInnerButtonHtml(correct, bStem, true);
+                    b.classList.add('correct');
+                }
             });
         }
     }
