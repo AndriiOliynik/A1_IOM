@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktywne Ćwiczenia Językowe</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --background: #f1f5f9;
+            --text: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stats-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .stat-box .num {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+        }
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .stat-correct { color: var(--success); }
+        .stat-incorrect { color: var(--error); }
+        .stat-percent { color: var(--primary); }
+
+        .audio-settings {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .audio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .audio-row:last-child { margin-bottom: 0; }
+        .audio-row label { font-weight: 600; color: #475569; min-width: 70px; }
+        .audio-row select, .audio-row input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 24px;
+            margin-bottom: 14px;
+            color: #0f172a;
+        }
+        h2:first-of-type { margin-top: 0; }
+
+        .vocab-container {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+        }
+        .vocab-item {
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.1s;
+        }
+        .vocab-item:hover { background: #e2e8f0; }
+
+        .mode-toggle {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 99px;
+            margin-bottom: 16px;
+        }
+        .mode-label {
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 6px 0;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .mode-label.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sentence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sentence-item {
+            background: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.98rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .sentence-text { word-wrap: break-word; flex: 1; line-height: 1.6; }
+        .sentence-actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+        .action-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.1s;
+        }
+        .action-btn:active { transform: scale(0.95); }
+
+        .word-input {
+            display: inline-block;
+            font-size: 0.95rem;
+            padding: 2px 6px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            width: 140px;
+            outline: none;
+            margin: 2px 4px;
+        }
+        .word-input:focus { border-color: var(--primary); }
+        
+        .full-sentence-input {
+            width: 100%;
+            margin-top: 8px;
+            padding: 6px 10px;
+            font-size: 0.95rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+        }
+        .full-sentence-input:focus { border-color: var(--primary); }
+
+        .colored-word {
+            display: inline-block;
+            font-weight: 600;
+            padding: 1px 4px;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+        .colored-word.text-success { border: 1px solid var(--success); background: #f0fdf4; }
+        .colored-word.text-error { border: 1px solid var(--error); background: #fef2f2; }
+        
+        .ending-correct { color: #d946ef; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; text-decoration: none; }
+        .ending-incorrect { color: #f472b6; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; text-decoration: none; }
+
+        .choices-grid-wrapper {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .choice-title { font-size: 0.78rem; color: #64748b; margin-bottom: 4px; font-weight: 600; }
+        .choices-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+        
+        .choice-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem; 
+            font-weight: 600;   
+            text-align: center;
+            outline: none;
+        }
+        .choice-btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
+        .choice-btn.incorrect { background-color: var(--error) !important; color: white; border-color: var(--error); }
+
+        .rule-box {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #78350f;
+        }
+
+        .hint-badge {
+            font-size: 0.78rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="stats-panel">
+        <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
+        <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
+        <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
+    </div>
+    
+    <div class="audio-settings">
+        <div class="audio-row">
+            <label for="voice-select">Голос:</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="audio-row">
+            <label for="speed-range">Швидкість:</label>
+            <input type="range" id="speed-range" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('speed-val').innerText = parseFloat(this.value).toFixed(1) + 'x'">
+            <span id="speed-val" style="font-weight:bold; min-width:35px; text-align:right;">1.0x</span>
+        </div>
+    </div>
+
+    <h2>Ćwiczenie 1: Podpisz fotografie i uzupełnij formą.</h2>
+    <div class="vocab-container" id="vocab-list"></div>
+    <div class="mode-toggle">
+        <span id="label-input-ex1" class="mode-label active" onclick="setExMode('ex1', 'input')">Вписати форму</span>
+        <span id="label-select-ex1" class="mode-label" onclick="setExMode('ex1', 'select')">Тест варіанти</span>
+    </div>
+    <div id="ex1-container" class="sentence-list"></div>
+
+    <h2>Ćwiczenie 8: Proszę napisać zdania według wzoru.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex8" class="mode-label active" onclick="setExMode('ex8', 'input')">Вписати речення</span>
+        <span id="label-select-ex8" class="mode-label" onclick="setExMode('ex8', 'select')">Тест варіанти</span>
+    </div>
+    <div id="ex8-container" class="sentence-list"></div>
+
+    <h2>Ćwiczenie 9: Proszę napisać odpowiedź na pytania.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex9" class="mode-label active" onclick="setExMode('ex9', 'input')">Вписати відповідь</span>
+        <span id="label-select-ex9" class="mode-label" onclick="setExMode('ex9', 'select')">Тест варіанти</span>
+    </div>
+    <div id="ex9-container" class="sentence-list"></div>
+</div>
+
+<script>
+    const baseWords = {
+        1: "chleb", 2: "bułka", 3: "masło", 4: "jajko", 5: "jogurt", 6: "ser",
+        7: "szynka", 8: "kiełbasa", 9: "kurczak", 10: "ryba", 11: "ryż", 12: "makaron",
+        13: "kanapka", 14: "sałatka", 15: "zupa", 16: "mięso", 17: "kawa", 18: "herbata",
+        19: "mleko", 20: "sok", 21: "piwo", 22: "wino", 23: "lody", 24: "ciastko"
+    };
+
+    const rules = {
+        ex1: "<strong>💡 Biernik:</strong> Знахідний відмінок. Жіночий рід (-a) змінюється на <b>-ę</b>, чоловічий істот на <b>-a</b>. Середній та неживий чоловічий рід не змінюються.",
+        ex8: "<strong>💡 Kierunek i Narzędnik:</strong> Напрямок руху = <b>do + Dopełniacz</b> (do sklepu, do centrum). Транспортний засіб = <b>Narzędnik без прийменника</b> (autobusem, metrem, rowerem).",
+        ex9: "<strong>💡 Gdzie idzie/jedzie...:</strong> Відповідь на питання куди? вимагає конструкції <b>do + Родовий відмінок</b> локації (do teatru, do szkoły, do biura)."
+    };
+
+    const ex1Data = [
+        { text: ["Na obiad jem (9) ", ", (11) ", " i (14) ", "."], answers: ["kurczaka", "ryż", "sałatkę"], num: [9, 11, 14], stems: ["kurczak", "ryż", "sałatk"], rule: rules.ex1 },
+        { text: ["Bardzo lubimy (18) ", " i (23) ", " czekoladowe."], answers: ["herbatę", "lody"], num: [18, 23], stems: ["herbat", "lod"], rule: rules.ex1 },
+        { text: ["Na lunch jedzą (13) ", " lub (15) ", "."], answers: ["kanapkę", "zupę"], num: [13, 15], stems: ["kanapk", "zup"], rule: rules.ex1 },
+        { text: ["Na obiad jemy (16) ", " lub (10) ", "."], answers: ["mięso", "rybę"], num: [16, 10], stems: ["mięs", "ryb"], rule: rules.ex1 },
+        { text: ["Poproszę czerwone (22) ", "."], answers: ["wino"], num: [22], stems: ["win"], rule: rules.ex1 },
+        { text: ["Poproszę (24) ", " i (17) ", "."], answers: ["ciastko", "kawę"], num: [24, 17], stems: ["ciastk", "kaw"], rule: rules.ex1 },
+        { text: ["Na śniadanie pijemy (20) ", " pomarańczowy i jemy (4) ", "."], answers: ["sok", "jajko"], num: [20, 4], stems: ["sok", "jajk"], rule: rules.ex1 },
+        { text: ["Chcesz (17) ", " czy (18) ", "?"], answers: ["kawę", "herbatę"], num: [17, 18], stems: ["kaw", "herbat"], rule: rules.ex1 }
+    ];
+
+    const ex8Data = [
+        { prompt: "My / iść / sklep", answers: ["Idziemy do sklepu."], stem: "Idziemy do sklep", fakes: ["Idę do sklepu.", "Idziemy w sklep.", "Idziemy do sklepie."], rule: rules.ex8 },
+        { prompt: "Oni / iść / centrum", answers: ["Idą do centrum."], stem: "Idą do centr", fakes: ["Idziemy do centrum.", "Idą w centrum.", "Jadą do centrum."], rule: rules.ex8 },
+        { prompt: "Ty / iść / park", answers: ["Idziesz do parku."], stem: "Idziesz do park", fakes: ["Idę do parku.", "Idziesz w parku.", "Idziecie do parku."], rule: rules.ex8 },
+        { prompt: "Ja / jechać / autobus", answers: ["Jadę autobusem."], stem: "Jadę autobus", fakes: ["Jadę do autobusu.", "Jedziemy autobusem.", "Jadę autobus."], rule: rules.ex8 },
+        { prompt: "Ona / iść / muzeum", answers: ["Ona idzie do muzeum.", "Idzie do muzeum."], stem: "Idzie do muze", fakes: ["Idzie w muzeum.", "Idziemy do muzeum.", "Ona jadą do muzeum."], rule: rules.ex8 },
+        { prompt: "My / iść / pub", answers: ["Idziemy do pubu."], stem: "Idziemy do pub", fakes: ["Idę do pubu.", "Idziemy w pubie.", "Idziecie do pubu."], rule: rules.ex8 },
+        { prompt: "Wy / jechać / metro", answers: ["Jedziecie metrem."], stem: "Jedziecie metr", fakes: ["Jedziecie do metra.", "Jadę metrem.", "Jedziesz metrem."], rule: rules.ex8 },
+        { prompt: "Dziecko / jechać / rower", answers: ["Dziecko jedzie rowerem.", "Jedzie rowerem."], stem: "Jedzie rower", fakes: ["Jedzie do roweru.", "Jedzie rower.", "Jadą rowerem."], rule: rules.ex8 },
+        { prompt: "Student / iść / park", answers: ["Student idzie do parku.", "Idzie do parku."], stem: "Idzie do park", fakes: ["Idzie w parku.", "Idą do parku.", "Studenci idą do parku."], rule: rules.ex8 }
+    ];
+
+    const ex9Data = [
+        { prompt: "Gdzie idzie kelnerka?", answers: ["Ona idzie do restauracji.", "Idzie do restauracji.", "Ona idzie do kawiarni.", "Idzie do kawiarni."], stem: "Idzie do restaurac", fakes: ["Idzie w restauracji.", "Jadą do restauracji.", "Idzie do restauracja."], rule: rules.ex9 },
+        { prompt: "Gdzie jedzie aktor?", answers: ["On jedzie do teatru.", "Jedzie do teatru."], stem: "Jedzie do teatr", fakes: ["Jedzie w teatrze.", "Idzie do teatru.", "Jedzie do teatr."], rule: rules.ex9 },
+        { prompt: "Gdzie idzie dyrektor?", answers: ["On idzie do biura.", "Idzie do biura.", "On idzie do gabinetu.", "Idzie do gabinetu."], stem: "Idzie do biur", fakes: ["Idzie w biurze.", "Jadą do biura.", "Idzie do biuro."], rule: rules.ex9 },
+        { prompt: "Gdzie jedzie lekarz?", answers: ["On jedzie do szpitala.", "Jedzie do szpitala.", "On jedzie do przychodni.", "Jedzie do przychodni."], stem: "Jedzie do szpital", fakes: ["Jedzie w szpitalu.", "Idzie do szpitala.", "Jedzie do szpital."], rule: rules.ex9 },
+        { prompt: "Gdzie idzie nauczycielka?", answers: ["Ona idzie do szkoły.", "Idzie do szkoły."], stem: "Idzie do skoł", fakes: ["Idzie w szkole.", "Idziemy do szkoły.", "Idzie do szkoła."], rule: rules.ex9 },
+        { prompt: "Gdzie idzie kasjer?", answers: ["On idzie do banku.", "Idzie do banku.", "On idzie do sklepu.", "Idzie do sklepu."], stem: "Idzie do bank", fakes: ["Idzie w banku.", "Jadą do banku.", "Idzie do bank."], rule: rules.ex9 }
+    ];
+
+    const endings = ['a', 'ę', 'y', 'ie', 'u', 'em', 'o'];
+    let modes = { ex1: 'input', ex8: 'input', ex9: 'input' };
+    let systemVoices = [];
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        const total = correctCount + incorrectCount;
+        document.getElementById('stat-pct').innerText = total === 0 ? '0%' : Math.round((correctCount / total) * 100) + '%';
+    }
+
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+            return;
+        }
+        plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
+    }
+
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function nativeSpeak(text) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pl-PL';
+        const speed = parseFloat(document.getElementById('speed-range').value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+        if (activeVoice) utterance.voice = activeVoice;
+        utterance.rate = speed;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function buildColoredHtml(full, stem, ok) {
+        let ending = full.startsWith(stem) && full.length > stem.length ? full.substring(stem.length) : full.substring(full.length - 1);
+        let base = full.substring(0, full.length - ending.length);
+        return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${base}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
+    }
+
+    function toggleRule(id) {
+        const box = document.getElementById(id);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function setExMode(exKey, mode) {
+        modes[exKey] = mode;
+        document.getElementById(`label-input-${exKey}`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-${exKey}`).classList.toggle('active', mode === 'select');
+        
+        if(exKey === 'ex1') renderEx1();
+        if(exKey === 'ex8') renderComplexExercise('ex8-container', ex8Data, 'ex8');
+        if(exKey === 'ex9') renderComplexExercise('ex9-container', ex9Data, 'ex9');
+    }
+
+    function renderVocab() {
+        const vBox = document.getElementById('vocab-list');
+        vBox.innerHTML = '';
+        Object.entries(baseWords).forEach(([num, word]) => {
+            const div = document.createElement('div');
+            div.className = 'vocab-item';
+            div.innerHTML = `<b>${num})</b> ${word}`;
+            div.onclick = () => nativeSpeak(word);
+            vBox.appendChild(div);
+        });
+    }
+
+    function renderEx1() {
+        const container = document.getElementById('ex1-container');
+        container.innerHTML = '';
+
+        ex1Data.forEach((ex, exIdx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let htmlText = '';
+            let choicesHtml = '';
+
+            ex.text.forEach((part, i) => {
+                htmlText += part;
+                if (i < ex.answers.length) {
+                    const ans = ex.answers[i];
+                    const stem = ex.stems[i];
+                    const base = baseWords[ex.num[i]];
+                    const pId = `ex1-display-${exIdx}-${i}`;
+
+                    if (modes.ex1 === 'input') {
+                        htmlText += `<span id="ex1-wrapper-${exIdx}-${i}"><span class="hint-badge">${base}</span> <input type="text" class="word-input" onchange="checkEx1Input(${exIdx}, ${i}, '${ans}', '${stem}')" id="ex1-in-${exIdx}-${i}"></span>`;
+                    } else {
+                        htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
+                        let fakes = new Set();
+                        while(fakes.size < 3){
+                            let f = stem + endings[Math.floor(Math.random()*endings.length)];
+                            if(f !== ans && f !== stem) fakes.add(f);
+                        }
+                        const choices = [ans, ...fakes].sort(() => 0.5 - Math.random());
+                        choicesHtml += `<div class="choices-grid-wrapper" id="ex1-grid-${exIdx}-${i}"><div class="choice-title">${base} &rarr;</div><div class="choices-grid">`;
+                        choices.forEach(c => {
+                            choicesHtml += `<button class="choice-btn" onclick="checkEx1Select(this,'${ans}','${stem}','ex1-grid-${exIdx}-${i}', ${exIdx}, '${pId}')">${c}</button>`;
+                        });
+                        choicesHtml += `</div></div>`;
+                    }
+                }
+            });
+
+            item.innerHTML = `<div class="sentence-header"><div class="sentence-text">${htmlText}</div><div class="sentence-actions"><button class="action-btn" onclick="nativeSpeak('${ex.answers.join(', ')}')">🔊</button><button class="action-btn" onclick="toggleRule('rule-ex1-${exIdx}')">💡</button></div></div>${choicesHtml}<div class="rule-box" id="rule-ex1-${exIdx}">${ex.rule}</div>`;
+            container.appendChild(item);
+        });
+    }
+
+    function checkEx1Input(exIdx, partIdx, ans, stem) {
+        const input = document.getElementById(`ex1-in-${exIdx}-${partIdx}`);
+        const wrap = document.getElementById(`ex1-wrapper-${exIdx}-${partIdx}`);
+        if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
+            correctCount++; wrap.innerHTML = buildColoredHtml(ans, stem, true); nativeSpeak(ans);
+        } else {
+            incorrectCount++; wrap.innerHTML = buildColoredHtml(ans, stem, false); nativeSpeak("Źle");
+            document.getElementById(`rule-ex1-${exIdx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkEx1Select(btn, ans, stem, gridId, exIdx, pId) {
+        const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        let end = ans.substring(stem.length);
+        if (isCorrect) {
+            correctCount++; btn.classList.add('correct'); btn.innerHTML = `${stem}<span class="ending-correct">${end}</span>`;
+            disp.innerHTML = buildColoredHtml(ans, stem, true); nativeSpeak(ans);
+        } else {
+            incorrectCount++; btn.classList.add('incorrect'); btn.innerHTML = `${btn.innerText.substring(0, stem.length)}<span class="ending-incorrect">${btn.innerText.substring(stem.length)}</span>`;
+            disp.innerHTML = buildColoredHtml(ans, stem, false); nativeSpeak("Źle");
+            document.getElementById(`rule-ex1-${exIdx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function renderComplexExercise(containerId, dataData, exKey) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        dataData.forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let mainContent = '';
+            let choicesHtml = '';
+            const pId = `${exKey}-display-${idx}`;
+
+            if (modes[exKey] === 'input') {
+                mainContent = `
+                    <div class="sentence-text"><b>${idx+1}.</b> ${ex.prompt}</div>
+                    <input type="text" class="full-sentence-input" placeholder="Wpisz całe zdanie..." onchange="checkTextSentence(this, ${JSON.stringify(ex.answers).replace(/"/g, '&quot;')}, '${containerId}-${idx}')">
+                    <div id="ans-${containerId}-${idx}" style="margin-top:6px; font-weight:bold;"></div>
+                `;
+            } else {
+                mainContent = `
+                    <div class="sentence-text"><b>${idx+1}.</b> ${ex.prompt} &rarr; <span id="${pId}" style="color:var(--primary); font-weight:bold;">[ ? ]</span></div>
+                `;
+                const choices = [ex.answers[0], ...ex.fakes].sort(() => 0.5 - Math.random());
+                choicesHtml = `<div class="choices-grid-wrapper" id="${exKey}-grid-${idx}"><div class="choices-grid">`;
+                choices.forEach(c => {
+                    choicesHtml += `<button class="choice-btn" onclick="checkComplexSelect(this, '${ex.answers[0]}', '${ex.stem}', '${exKey}-grid-${idx}', '${pId}', '${containerId}-${idx}')">${c}</button>`;
+                });
+                choicesHtml += `</div></div>`;
+            }
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div style="flex:1;">${mainContent}</div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="nativeSpeak('${ex.answers[0]}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-${containerId}-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-${containerId}-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkTextSentence(input, validAnswers, rId) {
+        const val = input.value.trim().toLowerCase().replace(/[\.\s\,\!]+/g, '');
+        const display = document.getElementById(`ans-${rId}`);
+        let matched = validAnswers.some(ans => ans.toLowerCase().replace(/[\.\s\,\!]+/g, '') === val);
+
+        if(matched) {
+            correctCount++; display.innerHTML = `<span style="color:var(--success)">✓ Dobrze!</span>`; nativeSpeak(input.value);
+        } else {
+            incorrectCount++; display.innerHTML = `<span style="color:var(--error)">✗ Wzór: ${validAnswers[0]}</span>`; nativeSpeak("Źle");
+            document.getElementById(`rule-${rId}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkComplexSelect(btn, correctSentence, stem, gridId, pId, ruleId) {
+        const isCorrect = btn.innerText.trim().toLowerCase().replace(/[\.\s\,\!]+/g, '') === correctSentence.toLowerCase().replace(/[\.\s\,\!]+/g, '');
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            correctCount++; btn.classList.add('correct');
+            disp.innerHTML = `<span style="color:var(--success)">${correctSentence}</span>`;
+            nativeSpeak(correctSentence);
+        } else {
+            incorrectCount++; btn.classList.add('incorrect');
+            disp.innerHTML = `<span style="color:var(--error)">${correctSentence}</span>`;
+            nativeSpeak("Źle");
+            document.getElementById(`rule-${ruleId}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        renderVocab();
+        renderEx1();
+        renderComplexExercise('ex8-container', ex8Data, 'ex8');
+        renderComplexExercise('ex9-container', ex9Data, 'ex9');
+    });
+</script>
+</body>
+</html>
