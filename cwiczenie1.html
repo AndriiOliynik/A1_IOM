@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ćwiczenie Językowe z Kolorowaniem Końcówek</title>
+    <title>Ćwiczenie Językowe z Podsumowaniem</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -36,7 +36,6 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        /* Кнопка повернення до меню */
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -51,6 +50,32 @@
         .back-link:active {
             transform: translateX(-4px);
         }
+
+        /* Стилі для блоку статистики */
+        .stats-panel {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .stat-box .num {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+        }
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .stat-correct { color: var(--success); }
+        .stat-incorrect { color: var(--error); }
+        .stat-percent { color: var(--primary); }
 
         h2 {
             font-size: 1.2rem;
@@ -142,6 +167,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            margin-bottom: 24px;
         }
         .sentence-item {
             background: #fff;
@@ -183,18 +209,7 @@
         .word-input:focus {
             border-color: var(--primary);
         }
-        .word-input.correct {
-            border-color: var(--success);
-            background-color: #f0fdf4;
-            color: #166534;
-        }
-        .word-input.incorrect {
-            border-color: var(--error);
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
 
-        /* Стилі для красивого відображення кореня та закінчення */
         .colored-word {
             display: inline-block;
             font-weight: 600;
@@ -281,6 +296,31 @@
         .rule-box strong {
             color: #b45309;
         }
+
+        /* Нижня кнопка повернення */
+        .bottom-nav {
+            text-align: center;
+            padding: 16px 0 8px 0;
+            border-top: 2px solid #e2e8f0;
+        }
+        .btn-back-main {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(74, 144, 226, 0.2);
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-back-main:active {
+            transform: scale(0.98);
+            background: #357abd;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -290,10 +330,25 @@
 <body>
 
 <div class="container">
-    <!-- Додано рядок для повернення в головне меню -->
     <a href="index.html" class="back-link">← Do menu</a>
 
     <h2>Ćwiczenie 1: Uzupełnij zdania poprawną formą.</h2>
+
+    <!-- Динамічна панель статистики -->
+    <div class="stats-panel">
+        <div class="stat-box">
+            <span id="stat-ok" class="num stat-correct">0</span>
+            <span class="label">Правильно</span>
+        </div>
+        <div class="stat-box">
+            <span id="stat-err" class="num stat-incorrect">0</span>
+            <span class="label">Помилки</span>
+        </div>
+        <div class="stat-box">
+            <span id="stat-pct" class="num stat-percent">0%</span>
+            <span class="label">Оцінка</span>
+        </div>
+    </div>
     
     <div class="audio-settings">
         <div class="audio-row">
@@ -324,6 +379,11 @@
     </div>
 
     <div id="exercise-container" class="sentence-list"></div>
+
+    <!-- Кнопка повернення в кінці сторінки -->
+    <div class="bottom-nav">
+        <a href="index.html" class="btn-back-main">Powrót do menu głównego</a>
+    </div>
 </div>
 
 <script>
@@ -365,6 +425,29 @@
     const endings = ['a', 'ę', 'y', 'ie', 'u', 'em', 'o', 'ich', 'ami'];
     let currentMode = 'input';
     let systemVoices = [];
+
+    // Змінні для підрахунку результатів
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function resetStats() {
+        correctCount = 0;
+        incorrectCount = 0;
+        updateStatsUi();
+    }
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        
+        const total = correctCount + incorrectCount;
+        if (total === 0) {
+            document.getElementById('stat-pct').innerText = '0%';
+        } else {
+            const percentage = Math.round((correctCount / total) * 100);
+            document.getElementById('stat-pct').innerText = percentage + '%';
+        }
+    }
 
     function loadVoices() {
         systemVoices = window.speechSynthesis.getVoices();
@@ -414,13 +497,11 @@
         document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1) + 'x';
     }
 
-    // Допоміжна функція для генерації HTML з розділенням основи та закінчення
     function getColoredWordHtml(fullWord, stem, isSuccess) {
         let ending = "";
         if (fullWord.startsWith(stem) && fullWord.length > stem.length) {
             ending = fullWord.substring(stem.length);
         } else {
-            // Якщо основа складна або слово не ділиться прямо, беремо останню літеру за закінчення
             stem = fullWord.substring(0, fullWord.length - 1);
             ending = fullWord.substring(fullWord.length - 1);
         }
@@ -459,6 +540,7 @@
         currentMode = mode;
         document.getElementById('label-input').classList.toggle('active', mode === 'input');
         document.getElementById('label-select').classList.toggle('active', mode === 'select');
+        resetStats();
         renderExercise();
     }
 
@@ -485,7 +567,6 @@
                     const baseWord = baseWords[num];
                     const placeholderId = `display-${exIdx}-${i}`;
 
-                    // В обох режимах спочатку речення рендериться із пустим контейнером [ ? ] або інпутом
                     if (currentMode === 'input') {
                         currentText += `<span id="container-${exIdx}-${i}"><span class="hint-text">${baseWord} &rarr;</span> <input type="text" id="input-${exIdx}-${i}" class="word-input" data-ans="${correct}" data-stem="${stem}" data-exidx="${exIdx}" onchange="checkInput('${exIdx}', '${i}')"></span>`;
                     } else {
@@ -531,11 +612,12 @@
         const stem = input.getAttribute('data-stem');
 
         if (userAns === correctAns) {
-            // Замінюємо інпут на красиво розфарбоване слово
+            correctCount++;
+            updateStatsUi();
+
             container.innerHTML = getColoredWordHtml(correctAns, stem, true);
             ruleBox.style.display = "none";
             
-            // Перевірка чи закінчено все речення в режимі вводу
             const parent = container.closest('.sentence-item');
             const remainingInputs = parent.querySelectorAll('.word-input');
             
@@ -548,7 +630,9 @@
             input.className = "word-input";
             ruleBox.style.display = "none";
         } else {
-            // При помилці ховаємо інпут і підставляємо вірний варіант з підсвіткою помилки/правильного закінчення
+            incorrectCount++;
+            updateStatsUi();
+
             container.innerHTML = getColoredWordHtml(correctAns, stem, false);
             nativeSpeak("Źle");
             ruleBox.style.display = "block";
@@ -565,8 +649,10 @@
         buttons.forEach(b => b.disabled = true);
 
         if (isCorrect) {
+            correctCount++;
+            updateStatsUi();
+
             btn.classList.add('correct');
-            // Підставляємо слово із зеленим закінченням
             displayWord.innerHTML = getColoredWordHtml(correct, stem, true);
             ruleBox.style.display = "none";
 
@@ -576,11 +662,9 @@
             let sentenceFinished = true;
             allWrappersInSentence.forEach(w => {
                 const correctBtn = w.querySelector('.choice-btn.correct');
-                // Також перевіряємо чи немає у цьому ж реченні червоних помилок
                 if (!correctBtn) sentenceFinished = false;
             });
 
-            // Якщо є заблоковані кнопки з помилками в цьому ж реченні — не читаємо все разом
             const hasErrors = mainSentenceItem.querySelectorAll('.choice-btn.incorrect').length > 0;
 
             if (sentenceFinished && !hasErrors) {
@@ -589,8 +673,10 @@
                 nativeSpeak(btn.innerText);
             }
         } else {
+            incorrectCount++;
+            updateStatsUi();
+
             btn.classList.add('incorrect');
-            // При помилці підставляємо слово з червоним закінченням замість [ ? ]
             displayWord.innerHTML = getColoredWordHtml(correct, stem, false);
             nativeSpeak("Źle");
             ruleBox.style.display = "block";
