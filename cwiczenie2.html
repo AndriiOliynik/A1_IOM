@@ -25,6 +25,7 @@
             color: var(--text);
             line-height: 1.5;
             padding: 12px;
+            scroll-behavior: smooth;
         }
 
         .container {
@@ -65,6 +66,51 @@
         .stat-incorrect { color: var(--error); }
         .stat-percent { color: var(--primary); }
 
+        .navigation-menu {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .navigation-menu p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .nav-links a.index-link {
+            color: #e67e22;
+            border-color: #f39c12;
+        }
+        .nav-links a.index-link:hover {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+
         .audio-settings {
             background: #f8fafc;
             border: 1px solid #cbd5e1;
@@ -99,6 +145,7 @@
             margin-top: 24px;
             margin-bottom: 14px;
             color: #0f172a;
+            scroll-margin-top: 90px;
         }
         h2:first-of-type { margin-top: 0; }
 
@@ -180,6 +227,38 @@
         }
         .action-btn:active { transform: scale(0.95); }
 
+        .back-to-nav-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+            margin-bottom: 10px;
+        }
+        .back-to-nav-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .back-to-nav-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .back-to-index-btn {
+            background: #fff3e0;
+            border: 1px solid #ffe0b2;
+            color: #e67e22;
+        }
+        .back-to-index-btn:hover {
+            background: #ffe0b2;
+            color: #d35400;
+        }
+
         .word-input {
             display: inline-block;
             font-size: 0.95rem;
@@ -257,17 +336,34 @@
             border-radius: 4px;
             font-weight: bold;
         }
+        
+        .final-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="stats-panel">
+    <div class="stats-panel" id="top-nav">
         <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
         <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
         <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
     </div>
     
+    <div class="navigation-menu">
+        <p>Навігація за сторінкою:</p>
+        <div class="nav-links">
+            <a href="index.html" class="index-link">🏠 На головну (Index)</a>
+            <a href="#ex1-heading">Ćwiczenie 1</a>
+            <a href="#ex8-heading">Ćwiczenie 8</a>
+            <a href="#ex9-heading">Ćwiczenie 9</a>
+        </div>
+    </div>
+
     <div class="audio-settings">
         <div class="audio-row">
             <label for="voice-select">Голос:</label>
@@ -280,27 +376,43 @@
         </div>
     </div>
 
-    <h2>Ćwiczenie 1: Podpisz fotografie i uzupełnij formą.</h2>
+    <h2 id="ex1-heading">Ćwiczenie 1: Podpisz fotografie i uzupełnij formą.</h2>
     <div class="vocab-container" id="vocab-list"></div>
     <div class="mode-toggle">
         <span id="label-input-ex1" class="mode-label active" onclick="setExMode('ex1', 'input')">Вписати форму</span>
-        <span id="label-select-ex1" class="mode-label" onclick="setExMode('ex1', 'select')">Тест варіанти</span>
+        <span id="label-select-ex1" class="mode-label" onclick="setExMode('ex1', 'select')">Test варіанти</span>
     </div>
     <div id="ex1-container" class="sentence-list"></div>
+    <div class="back-to-nav-container">
+        <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
+        <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
+    </div>
 
-    <h2>Ćwiczenie 8: Proszę napisać zdania według wzoru.</h2>
+    <h2 id="ex8-heading">Ćwiczenie 8: Proszę napisać zdania według wzoru.</h2>
     <div class="mode-toggle">
         <span id="label-input-ex8" class="mode-label active" onclick="setExMode('ex8', 'input')">Вписати речення</span>
         <span id="label-select-ex8" class="mode-label" onclick="setExMode('ex8', 'select')">Тест варіанти</span>
     </div>
     <div id="ex8-container" class="sentence-list"></div>
+    <div class="back-to-nav-container">
+        <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
+        <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
+    </div>
 
-    <h2>Ćwiczenie 9: Proszę napisać odpowiedź na pytania.</h2>
+    <h2 id="ex9-heading">Ćwiczenie 9: Proszę napisać odpowiedź na pytania.</h2>
     <div class="mode-toggle">
         <span id="label-input-ex9" class="mode-label active" onclick="setExMode('ex9', 'input')">Вписати відповідь</span>
         <span id="label-select-ex9" class="mode-label" onclick="setExMode('ex9', 'select')">Тест варіанти</span>
     </div>
     <div id="ex9-container" class="sentence-list"></div>
+    <div class="back-to-nav-container">
+        <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
+        <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
+    </div>
+    
+    <div class="final-footer">
+        <button class="back-to-nav-btn back-to-index-btn" style="padding: 10px 20px; font-size: 0.95rem;" onclick="location.href='index.html'">🏠 Повернутися на головну сторінку</button>
+    </div>
 </div>
 
 <script>
@@ -313,8 +425,8 @@
 
     const rules = {
         ex1: "<strong>💡 Biernik:</strong> Знахідний відмінок. Жіночий рід (-a) змінюється на <b>-ę</b>, чоловічий істот на <b>-a</b>. Середній та неживий чоловічий рід не змінюються.",
-        ex8: "<strong>💡 Kierunek i Narzędnik:</strong> Напрямок руху = <b>do + Dopełniacz</b> (do sklepu, do centrum). Транспортний засіб = <b>Narzędnik без прийменника</b> (autobusem, metrem, rowerem).",
-        ex9: "<strong>💡 Gdzie idzie/jedzie...:</strong> Відповідь на питання куди? вимагає конструкції <b>do + Родовий відмінок</b> локації (do teatru, do szkoły, do biura)."
+        ex8: "<strong>💡 Formy czasowników ruchu:</strong> Контекст вимагає вибору правильного дієслова: пішки &rarr; <b>iść</b>, транспортом &rarr; <b>jechać</b>. Перевірте узгодження з особою (ja, ty, my, wy, oni).",
+        ex9: "<strong>💡 Formy czasowników ruchu:</strong> Зверніть увагу на вибір правильного дієслова: пішки &rarr; <b>iść</b> (idzie, idą), транспортом &rarr; <b>jechać</b> (jedzie, jadą) відповідно до особи."
     };
 
     const ex1Data = [
@@ -329,24 +441,24 @@
     ];
 
     const ex8Data = [
-        { prompt: "My / iść / sklep", answers: ["Idziemy do sklepu."], stem: "Idziemy do sklep", fakes: ["Idę do sklepu.", "Idziemy w sklep.", "Idziemy do sklepie."], rule: rules.ex8 },
-        { prompt: "Oni / iść / centrum", answers: ["Idą do centrum."], stem: "Idą do centr", fakes: ["Idziemy do centrum.", "Idą w centrum.", "Jadą do centrum."], rule: rules.ex8 },
-        { prompt: "Ty / iść / park", answers: ["Idziesz do parku."], stem: "Idziesz do park", fakes: ["Idę do parku.", "Idziesz w parku.", "Idziecie do parku."], rule: rules.ex8 },
-        { prompt: "Ja / jechać / autobus", answers: ["Jadę autobusem."], stem: "Jadę autobus", fakes: ["Jadę do autobusu.", "Jedziemy autobusem.", "Jadę autobus."], rule: rules.ex8 },
-        { prompt: "Ona / iść / muzeum", answers: ["Ona idzie do muzeum.", "Idzie do muzeum."], stem: "Idzie do muze", fakes: ["Idzie w muzeum.", "Idziemy do muzeum.", "Ona jadą do muzeum."], rule: rules.ex8 },
-        { prompt: "My / iść / pub", answers: ["Idziemy do pubu."], stem: "Idziemy do pub", fakes: ["Idę do pubu.", "Idziemy w pubie.", "Idziecie do pubu."], rule: rules.ex8 },
-        { prompt: "Wy / jechać / metro", answers: ["Jedziecie metrem."], stem: "Jedziecie metr", fakes: ["Jedziecie do metra.", "Jadę metrem.", "Jedziesz metrem."], rule: rules.ex8 },
-        { prompt: "Dziecko / jechać / rower", answers: ["Dziecko jedzie rowerem.", "Jedzie rowerem."], stem: "Jedzie rower", fakes: ["Jedzie do roweru.", "Jedzie rower.", "Jadą rowerem."], rule: rules.ex8 },
-        { prompt: "Student / iść / park", answers: ["Student idzie do parku.", "Idzie do parku."], stem: "Idzie do park", fakes: ["Idzie w parku.", "Idą do parku.", "Studenci idą do parku."], rule: rules.ex8 }
+        { prompt: "My / iść / sklep", answers: ["Idziemy do sklepu."], stem: "idziemy", fakes: ["Idę do sklepu.", "Idziesz do sklepu.", "Idą do sklepu."], rule: rules.ex8, textTemplate: "[ ? ] do sklepu." },
+        { prompt: "Oni / iść / centrum", answers: ["Idą do centrum."], stem: "idą", fakes: ["Idziemy do centrum.", "Idzie do centrum.", "Jadą do centrum."], rule: rules.ex8, textTemplate: "[ ? ] do centrum." },
+        { prompt: "Ty / iść / park", answers: ["Idziesz do parku."], stem: "idziesz", fakes: ["Idę do parku.", "Idzie do parku.", "Idziecie do parku."], rule: rules.ex8, textTemplate: "[ ? ] do parku." },
+        { prompt: "Ja / jechać / autobus", answers: ["Jadę autobusem."], stem: "jadę", fakes: ["Jedziemy autobusem.", "Jedzie autobusem.", "Jadą autobusem."], rule: rules.ex8, textTemplate: "[ ? ] autobusem." },
+        { prompt: "Ona / iść / muzeum", answers: ["Ona idzie do muzeum.", "Idzie do muzeum."], stem: "idzie", fakes: ["Ona jadę do muzeum.", "Ona idziemy do muzeum.", "Ona idą do muzeum."], rule: rules.ex8, textTemplate: "Ona [ ? ] do muzeum." },
+        { prompt: "My / iść / pub", answers: ["Idziemy do pubu."], stem: "idziemy", fakes: ["Idę do pubu.", "Idziesz do pubu.", "Idziecie do pubu."], rule: rules.ex8, textTemplate: "[ ? ] do pubu." },
+        { prompt: "Wy / jechać / metro", answers: ["Jedziecie metrem."], stem: "jedziecie", fakes: ["Jedziesz metrem.", "Jadę metrem.", "Jedziemy metrem."], rule: rules.ex8, textTemplate: "[ ? ] metrem." },
+        { prompt: "Dziecko / jechać / rower", answers: ["Dziecko jedzie rowerem.", "Jedzie rowerem."], stem: "jedzie", fakes: ["Dziecko jadę rowerem.", "Dziecko jedziemy rowerem.", "Dziecko jadą rowerem."], rule: rules.ex8, textTemplate: "Dziecko [ ? ] rowerem." },
+        { prompt: "Student / iść / park", answers: ["Student idzie do parku.", "Idzie do parku."], stem: "idzie", fakes: ["Student idę do parku.", "Student idziemy do parku.", "Student idą do parku."], rule: rules.ex8, textTemplate: "Student [ ? ] do parku." }
     ];
 
     const ex9Data = [
-        { prompt: "Gdzie idzie kelnerka?", answers: ["Ona idzie do restauracji.", "Idzie do restauracji.", "Ona idzie do kawiarni.", "Idzie do kawiarni."], stem: "Idzie do restaurac", fakes: ["Idzie w restauracji.", "Jadą do restauracji.", "Idzie do restauracja."], rule: rules.ex9 },
-        { prompt: "Gdzie jedzie aktor?", answers: ["On jedzie do teatru.", "Jedzie do teatru."], stem: "Jedzie do teatr", fakes: ["Jedzie w teatrze.", "Idzie do teatru.", "Jedzie do teatr."], rule: rules.ex9 },
-        { prompt: "Gdzie idzie dyrektor?", answers: ["On idzie do biura.", "Idzie do biura.", "On idzie do gabinetu.", "Idzie do gabinetu."], stem: "Idzie do biur", fakes: ["Idzie w biurze.", "Jadą do biura.", "Idzie do biuro."], rule: rules.ex9 },
-        { prompt: "Gdzie jedzie lekarz?", answers: ["On jedzie do szpitala.", "Jedzie do szpitala.", "On jedzie do przychodni.", "Jedzie do przychodni."], stem: "Jedzie do szpital", fakes: ["Jedzie w szpitalu.", "Idzie do szpitala.", "Jedzie do szpital."], rule: rules.ex9 },
-        { prompt: "Gdzie idzie nauczycielka?", answers: ["Ona idzie do szkoły.", "Idzie do szkoły."], stem: "Idzie do skoł", fakes: ["Idzie w szkole.", "Idziemy do szkoły.", "Idzie do szkoła."], rule: rules.ex9 },
-        { prompt: "Gdzie idzie kasjer?", answers: ["On idzie do banku.", "Idzie do banku.", "On idzie do sklepu.", "Idzie do sklepu."], stem: "Idzie do bank", fakes: ["Idzie w banku.", "Jadą do banku.", "Idzie do bank."], rule: rules.ex9 }
+        { prompt: "Gdzie idzie kelnerka?", answers: ["Ona idzie do restauracji.", "Idzie do restauracji."], stem: "idzie", fakes: ["Ona jedzie do restauracji.", "Ona idą do restauracji.", "Ona idziemy do restauracji."], rule: rules.ex9, textTemplate: "[ ? ] do restauracji." },
+        { prompt: "Gdzie jedzie aktor?", answers: ["On jedzie do teatru.", "Jedzie do teatru."], stem: "jedzie", fakes: ["On idzie do teatru.", "On jadą do teatru.", "On jedziesz do teatru."], rule: rules.ex9, textTemplate: "[ ? ] do teatru." },
+        { prompt: "Gdzie idzie dyrektor?", answers: ["On idzie do biura.", "Idzie do biura."], stem: "idzie", fakes: ["On jedzie do biura.", "On idą do biura.", "On idziesz do biura."], rule: rules.ex9, textTemplate: "[ ? ] do biura." },
+        { prompt: "Gdzie jedzie lekarz?", answers: ["On jedzie do szpitala.", "Jedzie do szpitala."], stem: "jedzie", fakes: ["On idzie do szpitala.", "On jadą do szpitala.", "On jedziemy do szpitala."], rule: rules.ex9, textTemplate: "[ ? ] do szpitala." },
+        { prompt: "Gdzie idzie nauczycielka?", answers: ["Ona idzie do szkoły.", "Idzie do szkoły."], stem: "idzie", fakes: ["Ona jedzie do szkoły.", "Ona idą do szkoły.", "Ona idziecie do szkoły."], rule: rules.ex9, textTemplate: "[ ? ] do szkoły." },
+        { prompt: "Gdzie idzie kasjer?", answers: ["On idzie do banku.", "Idzie do banku."], stem: "idzie", fakes: ["On jedzie do banku.", "On idą do banku.", "On idziemy do banku."], rule: rules.ex9, textTemplate: "[ ? ] do banku." }
     ];
 
     const endings = ['a', 'ę', 'y', 'ie', 'u', 'em', 'o'];
@@ -354,6 +466,10 @@
     let systemVoices = [];
     let correctCount = 0;
     let incorrectCount = 0;
+
+    function scrollToTop() {
+        document.getElementById('top-nav').scrollIntoView({ behavior: 'smooth' });
+    }
 
     function updateStatsUi() {
         document.getElementById('stat-ok').innerText = correctCount;
@@ -516,7 +632,7 @@
                 `;
             } else {
                 mainContent = `
-                    <div class="sentence-text"><b>${idx+1}.</b> ${ex.prompt} &rarr; <span id="${pId}" style="color:var(--primary); font-weight:bold;">[ ? ]</span></div>
+                    <div class="sentence-text"><b>${idx+1}.</b> ${ex.prompt} &rarr; <span id="${pId}">${ex.textTemplate}</span></div>
                 `;
                 const choices = [ex.answers[0], ...ex.fakes].sort(() => 0.5 - Math.random());
                 choicesHtml = `<div class="choices-grid-wrapper" id="${exKey}-grid-${idx}"><div class="choices-grid">`;
