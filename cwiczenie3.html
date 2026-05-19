@@ -268,7 +268,6 @@
             padding-top: 8px;
             border-top: 1px dashed #e2e8f0;
         }
-        .choice-title { font-size: 0.78rem; color: #64748b; margin-bottom: 4px; font-weight: 600; }
         .choices-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
         
         .choice-btn {
@@ -361,26 +360,25 @@
 </div>
 
 <script>
-    // Дані на основі сторінки 32 підручника (Ćwiczenie 7 A, B, C)
     const ex7Data = [
         // A. -ować
-        { pre: "1. Dwa samoloty ", post: " .", ans: "lądują", stem: "lądu", verb: "lądować", fakes: ["ląduję", "lądujesz", "ląduje"] },
+        { pre: "1. Dwa samoloty ", post: ".", ans: "lądują", stem: "lądu", verb: "lądować", fakes: ["ląduję", "lądujesz", "ląduje"] },
         { pre: "2. Marek ", post: " samochód.", ans: "parkuje", stem: "parku", verb: "parkować", fakes: ["parkuję", "parkujesz", "parkują"] },
-        { pre: "3. Dwa samochody ", post: " .", ans: "parkują", stem: "parku", verb: "parkować", fakes: ["parkuje", "parkujemy", "parkujecie"] },
-        { pre: "4. Co (ty) ", post: " ?", ans: "studiujesz", stem: "studiu", verb: "studiować", fakes: ["studiuję", "studiuje", "studiują"] },
-        { pre: "5. Czym ona się ", post: " ?", ans: "interesuje", stem: "interesu", verb: "interesować się", fakes: ["interesuję", "interesujesz", "interesują"] },
-        { pre: "6. Gdzie (wy) ", post: " ?", ans: "pracujecie", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracujesz", "pracuje"] },
+        { pre: "3. Dwa samochody ", post: ".", ans: "parkują", stem: "parku", verb: "parkować", fakes: ["parkuje", "parkujemy", "parkujecie"] },
+        { pre: "4. Co (ty) ", post: "?", ans: "studiujesz", stem: "studiu", verb: "studiować", fakes: ["studiuję", "studiuje", "studiują"] },
+        { pre: "5. Czym ona się ", post: "?", ans: "interesuje", stem: "interesu", verb: "interesować się", fakes: ["interesuję", "interesujesz", "interesują"] },
+        { pre: "6. Gdzie (wy) ", post: "?", ans: "pracujecie", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracujesz", "pracuje"] },
         { pre: "7. (my) ", post: " w Bytomiu.", ans: "pracujemy", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracuje", "pracują"] },
         { pre: "8. Codziennie (my) ", post: " w internecie.", ans: "surfujemy", stem: "surfu", verb: "surfować", fakes: ["surfuję", "surfujesz", "surfuje"] },
-        { pre: "9. Maria rzadko ", post: " .", ans: "mailuje", stem: "mailu", verb: "mailować", fakes: ["mailuję", "mailujesz", "mailują"] },
+        { pre: "9. Maria rzadko ", post: ".", ans: "mailuje", stem: "mailu", verb: "mailować", fakes: ["mailuję", "mailujesz", "mailują"] },
         { pre: "10. (ja) się ", post: " historią.", ans: "interesuję", stem: "interesu", verb: "interesować się", fakes: ["interesujesz", "interesuje", "interesują"] },
         
         // B. -m, -sz
         { pre: "11. (ja) ", post: " interesującą książkę.", ans: "czytam", stem: "czyta", verb: "czytać", fakes: ["czytasz", "czyta", "czytają"] },
-        { pre: "12. Jak często (ty) ", post: " ?", ans: "pływasz", stem: "pływa", verb: "pływać", fakes: ["pływam", "pływa", "pływają"] },
-        { pre: "13. On ", post: " w restauracji.", ans: "je", post: " w restauracji?", ans: "je", stem: "j", verb: "jeść", fakes: ["jem", "jesz", "jedzą"] },
+        { pre: "12. Jak часто (ty) ", post: "?", ans: "pływasz", stem: "pływa", verb: "pływać", fakes: ["pływam", "pływa", "pływają"] },
+        { pre: "13. On ", post: " w restauracji.", ans: "je", stem: "j", verb: "jeść", fakes: ["jem", "jesz", "jedzą"] },
         { pre: "14. (my) ", post: " muzyki.", ans: "słuchamy", stem: "słucha", verb: "słuchać", fakes: ["słucham", "słuchasz", "słuchają"] },
-        { pre: "15. One pięknie ", post: " .", ans: "śpiewają", stem: "śpiewa", verb: "śpiewać", fakes: ["śpiewam", "śpiewasz", "śpiewa"] },
+        { pre: "15. One pięknie ", post: ".", ans: "śpiewają", stem: "śpiewa", verb: "śpiewać", fakes: ["śpiewam", "śpiewasz", "śpiewa"] },
         
         // C. -ę, -isz
         { pre: "16. Czy (ty) ", post: " po polsku?", ans: "mówisz", stem: "mów", verb: "mówić", fakes: ["mówię", "mówi", "mówią"] },
@@ -390,7 +388,7 @@
         { pre: "20. Jak często (wy) ", post: " do kina?", ans: "chodzicie", stem: "chodz", verb: "chodzić", fakes: ["chodzę", "chodzisz", "chodzą"] }
     ];
 
-    const ruleText = "<strong>💡 Wskazówka:</strong> Zwróć uwagę на особове займенник (ja, ty, on/ona, my, wy, oni/one) та тип відмінювання дієслова (koniugacja -uję/-ujesz, -m/-sz або -ę/-isz).";
+    const ruleText = "<strong>💡 Wskazówka:</strong> Zwróć uwagę na osobę i typ koniugacji czasownika.";
 
     let currentMode = 'input';
     let systemVoices = [];
@@ -426,16 +424,29 @@
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
-    function nativeSpeak(text) {
+    // Послідовне озвучування: спочатку СЛОВО, потім ПОВНЕ РЕЧЕННЯ
+    function speakWordAndSentence(word, fullSentence) {
         if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pl-PL';
+
         const speed = parseFloat(document.getElementById('speed-range').value);
         const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
-        if (activeVoice) utterance.voice = activeVoice;
-        utterance.rate = speed;
-        window.speechSynthesis.speak(utterance);
+
+        // 1. Озвучування правильного дієслова
+        const wordUtterance = new SpeechSynthesisUtterance(word);
+        wordUtterance.lang = 'pl-PL';
+        wordUtterance.rate = speed;
+        if (activeVoice) wordUtterance.voice = activeVoice;
+
+        // 2. Озвучування всього речення після паузи
+        const sentenceUtterance = new SpeechSynthesisUtterance(fullSentence);
+        sentenceUtterance.lang = 'pl-PL';
+        sentenceUtterance.rate = speed;
+        if (activeVoice) sentenceUtterance.voice = activeVoice;
+
+        // Додаємо в чергу програвання
+        window.speechSynthesis.speak(wordUtterance);
+        window.speechSynthesis.speak(sentenceUtterance);
     }
 
     function buildColoredHtml(full, stem, ok) {
@@ -468,20 +479,20 @@
             let htmlText = ex.pre;
             let choicesHtml = '';
             const pId = `ex7-display-${idx}`;
+            const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
 
             if (currentMode === 'input') {
-                htmlText += `<span id="ex7-wrapper-${idx}"><span class="hint-badge">${ex.verb}</span> <input type="text" class="word-input" onchange="checkInput(${idx}, '${ex.ans}', '${ex.stem}')" id="ex7-in-${idx}"></span>`;
+                htmlText += `<span id="ex7-wrapper-${idx}"><span class="hint-badge">${ex.verb}</span> <input type="text" class="word-input" onchange="checkInput(${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="ex7-in-${idx}"></span>`;
                 htmlText += ex.post;
             } else {
                 htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
                 htmlText += ex.post + ` <span class="hint-badge">(${ex.verb})</span>`;
                 
-                // Перемішуємо правильну відповідь та фейкові форми дієслова
                 const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
                 
                 choicesHtml += `<div class="choices-grid-wrapper" id="ex7-grid-${idx}"><div class="choices-grid">`;
                 choices.forEach(c => {
-                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 'ex7-grid-${idx}', ${idx}, '${pId}')">${c}</button>`;
+                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 'ex7-grid-${idx}', ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
                 });
                 choicesHtml += `</div></div>`;
             }
@@ -490,7 +501,7 @@
                 <div class="sentence-header">
                     <div class="sentence-text">${htmlText}</div>
                     <div class="sentence-actions">
-                        <button class="action-btn" onclick="nativeSpeak('${ex.ans}')">🔊</button>
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.ans}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
                         <button class="action-btn" onclick="toggleRule('rule-ex7-${idx}')">💡</button>
                     </div>
                 </div>
@@ -501,30 +512,38 @@
         });
     }
 
-    function checkInput(idx, ans, stem) {
+    function checkInput(idx, ans, stem, fullSentence) {
         const input = document.getElementById(`ex7-in-${idx}`);
         const wrap = document.getElementById(`ex7-wrapper-${idx}`);
         if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
-            correctCount++; wrap.innerHTML = buildColoredHtml(ans, stem, true); nativeSpeak(ans);
+            correctCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
         } else {
-            incorrectCount++; wrap.innerHTML = buildColoredHtml(ans, stem, false); nativeSpeak("Źle");
+            incorrectCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
             document.getElementById(`rule-ex7-${idx}`).style.display = 'block';
         }
         updateStatsUi();
     }
 
-    function checkSelect(btn, ans, stem, gridId, idx, pId) {
+    function checkSelect(btn, ans, stem, gridId, idx, pId, fullSentence) {
         const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
         const disp = document.getElementById(pId);
         const grid = document.getElementById(gridId);
         grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
 
         if (isCorrect) {
-            correctCount++; btn.classList.add('correct');
-            disp.innerHTML = buildColoredHtml(ans, stem, true); nativeSpeak(ans);
+            correctCount++; 
+            btn.classList.add('correct');
+            disp.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
         } else {
-            incorrectCount++; btn.classList.add('incorrect');
-            disp.innerHTML = buildColoredHtml(ans, stem, false); nativeSpeak("Źle");
+            incorrectCount++; 
+            btn.classList.add('incorrect');
+            disp.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
             document.getElementById(`rule-ex7-${idx}`).style.display = 'block';
         }
         updateStatsUi();
