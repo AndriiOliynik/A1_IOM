@@ -362,25 +362,191 @@
 <script>
     const ex7Data = [
         // A. -ować -> -uję/-ujesz
-        { pre: "1. Dwa samoloty ", post: ".", ans: "lądują", stem: "lądu", verb: "Grid", fakes: ["ląduję", "lądujesz", "ląduje"], rule: "<b>Dwa samoloty (oni)</b> + тип <b>-ować</b>: отсекаем <i>-ować</i>, добавляем суффикс <b>-uj-</b> и окончание <b>-ją</b>." },
-        { pre: "2. Marek ", post: " samochód.", ans: "parkuje", stem: "parku", verb: "parkować", fakes: ["parkuję", "parkujesz", "parkują"], rule: "<b>Marek (on)</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + окончание 3-го лица ед. ч. <b>-e</b>." },
-        { pre: "3. Dwa samochody ", post: ".", ans: "parkują", stem: "parku", verb: "parkować", fakes: ["parkuje", "parkujemy", "parkujecie"], rule: "<b>Dwa samochody (oni)</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + окончание мн. ч. <b>-ją</b>." },
-        { pre: "4. Co (ty) ", post: "?", ans: "studiujesz", stem: "studiu", verb: "studiować", fakes: ["studiuję", "studiuje", "studiują"], rule: "<b>Ty</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + личное окончание <b>-ujesz</b>." },
-        { pre: "5. Czym ona się ", post: "?", ans: "interesuje", stem: "interesu", verb: "interesować się", fakes: ["interesuję", "interesujesz", "interesują"], rule: "<b>Ona</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + окончание 3-го лица ед. ч. <b>-e</b>." },
-        { pre: "6. Gdzie (wy) ", post: "?", ans: "pracujecie", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracujesz", "pracuje"], rule: "<b>Wy</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + личное окончание <b>-ujecie</b>." },
-        { pre: "7. (my) ", post: " w Bytomiu.", ans: "pracujemy", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracuje", "pracują"], rule: "<b>My</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + личное окончание <b>-ujemy</b>." },
-        { pre: "8. Codziennie (my) ", post: " w internetu.", ans: "surfujemy", stem: "surfu", verb: "surfować", fakes: ["surfuję", "surfujesz", "surfuje"], rule: "<b>My</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + обязательное окончание <b>-ujemy</b>." },
-        { pre: "9. Maria rzadko ", post: ".", ans: "mailuje", stem: "mailu", verb: "mailować", fakes: ["mailuję", "mailujesz", "mailują"], rule: "<b>Maria (ona)</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + стандартное окончание <b>-e</b>." },
-        { pre: "10. (ja) się ", post: " historią.", ans: "interesuję", stem: "interesu", verb: "interesować się", fakes: ["interesujesz", "interesuje", "interesują"], rule: "<b>Ja</b> + тип <b>-ować</b>: суффикс <b>-uj-</b> + личное окончание 1-го лица ед. ч. <b>-uję</b>." },
+        { pre: "1. Dwa samoloty ", post: ".", ans: "lądują", stem: "lądu", verb: "lądować", fakes: ["ląduję", "lądujesz", "ląduje"], rule: "<b>Dwa samoloty (oni)</b> + тип <b>-ować</b>: відкидаємо <i>-ować</i>, додаємо суфікс <b>-uj-</b> та закінчення <b>-ją</b>." },
+        { pre: "2. Marek ", post: " samochód.", ans: "parkuje", stem: "parku", verb: "parkować", fakes: ["parkuję", "parkujesz", "parkują"], rule: "<b>Marek (on)</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + закінчення 3-ї особи однини <b>-e</b>." },
+        { pre: "3. Dwa samochody ", post: ".", ans: "parkują", stem: "parku", verb: "parkować", fakes: ["parkuje", "parkujemy", "parkujecie"], rule: "<b>Dwa samochody (oni)</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + закінчення множини <b>-ją</b>." },
+        { pre: "4. Co (ty) ", post: "?", ans: "studiujesz", stem: "studiu", verb: "studiować", fakes: ["studiuję", "studiuje", "studiują"], rule: "<b>Ty</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + особисте закінчення 2-ї особи однини <b>-ujesz</b>." },
+        { pre: "5. Czym ona się ", post: "?", ans: "interesuje", stem: "interesu", verb: "interesować się", fakes: ["interesuję", "interesujesz", "interesują"], rule: "<b>Ona</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + стандартне закінчення 3-ї особи однини <b>-e</b>." },
+        { pre: "6. Gdzie (wy) ", post: "?", ans: "pracujecie", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracujesz", "pracuje"], rule: "<b>Wy</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + закінчення ви-форми <b>-ujecie</b>." },
+        { pre: "7. (my) ", post: " w Bytomiu.", ans: "pracujemy", stem: "pracu", verb: "pracować", fakes: ["pracuję", "pracuje", "pracują"], rule: "<b>My</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + обов'язкове закінчення ми-форми <b>-ujemy</b>." },
+        { pre: "8. Codziennie (my) ", post: " w internecie.", ans: "surfujemy", stem: "surfu", verb: "surfować", fakes: ["surfuję", "surfujesz", "surfuje"], rule: "<b>My</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + закінчення <b>-ujemy</b>." },
+        { pre: "9. Maria rzadko ", post: ".", ans: "mailuje", stem: "mailu", verb: "mailować", fakes: ["mailuję", "mailujesz", "mailują"], rule: "<b>Maria (ona)</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + закінчення 3-ї особи однини <b>-e</b>." },
+        { pre: "10. (ja) się ", post: " historią.", ans: "interesuję", stem: "interesu", verb: "interesować się", fakes: ["interesujesz", "interesuje", "interesują"], rule: "<b>Ja</b> + тип <b>-ować</b>: суфікс <b>-uj-</b> + особове закінчення 1-ї особи однини <b>-uję</b>." },
         
         // B. -m, -sz -> тип -ać
-        { pre: "11. (ja) ", post: " interesującą książkę.", ans: "czytam", stem: "czyta", verb: "czytać", fakes: ["czytasz", "czyta", "czytają"], rule: "<b>Ja</b> + тип <b>-ać</b>: убираем только <i>-ć</i>, к гласной <b>-a-</b> добавляем короткое окончание 1-го лица <b>-m</b>." },
-        { pre: "12. Jak często (ty) ", post: "?", ans: "pływasz", stem: "pływa", verb: "pływać", fakes: ["pływam", "pływa", "pływają"], rule: "<b>Ty</b> + тип <b>-ać</b>: сохраняем основу на <b>-a-</b> и добавляем окончание 2-го лица <b>-sz</b>." },
-        { pre: "13. On ", post: " w restauracji.", ans: "je", stem: "j", verb: "jeść", fakes: ["jem", "jesz", "jedzą"], rule: "<b>On (исключение)</b>: глагол <i>jeść</i> меняет корень, в 3-м лице ед. ч. имеет супер-короткую форму <b>je</b>." },
-        { pre: "14. (my) ", post: " muzyki.", ans: "słuchamy", stem: "słucha", verb: "słuchać", fakes: ["słucham", "słuchasz", "słuchają"], rule: "<b>My</b> + тип <b>-ać</b>: основа на гласную <b>-a-</b> + маркер всех мы-форм <b>-my</b>." },
-        { pre: "15. One pięknie ", post: ".", ans: "śpiewają", stem: "śpiewa", verb: "śpiewać", fakes: ["śpiewam", "śpiewasz", "śpiewa"], rule: "<b>One</b> + тип <b>-ać</b>: для они/оне к основе на <b>-a-</b> добавляется окончание <b>-ją</b>." },
+        { pre: "11. (ja) ", post: " interesującą książkę.", ans: "czytam", stem: "czyta", verb: "czytać", fakes: ["czytasz", "czyta", "czytają"], rule: "<b>Ja</b> + тип <b>-ać</b>: відкидаємо тільки літеру <i>-ć</i>, до голосної основи <b>-a-</b> додаємо коротке закінчення <b>-m</b>." },
+        { pre: "12. Jak często (ty) ", post: "?", ans: "pływasz", stem: "pływa", verb: "płyвать", fakes: ["pływam", "pływa", "pływają"], rule: "<b>Ty</b> + тип <b>-ać</b>: зберігаємо основу на <b>-a-</b> і додаємо закінчення 2-ї особи <b>-sz</b>." },
+        { pre: "13. On ", post: " w restauracji.", ans: "je", stem: "j", verb: "jeść", fakes: ["jem", "jesz", "jedzą"], rule: "<b>On (виняток)</b>: дієслово <i>jeść</i> змінює корінь, у 3-й особі однини має коротку форму <b>je</b>." },
+        { pre: "14. (my) ", post: " muzyki.", ans: "słuchamy", stem: "słucha", verb: "słuchać", fakes: ["słucham", "słuchasz", "słuchają"], rule: "<b>My</b> + тип <b>-ać</b>: основа на голосну <b>-a-</b> + маркер усіх ми-форм <b>-my</b>." },
+        { pre: "15. One pięknie ", post: ".", ans: "śpiewają", stem: "śpiewa", verb: "śpiewać", fakes: ["śpiewam", "śpiewasz", "śpiewa"], rule: "<b>One</b> + тип <b>-ać</b>: для вони/оне до основи на <b>-a-</b> додається закінчення <b>-ją</b>." },
         
         // C. -ę, -isz -> тип -ić/-yć
-        { pre: "16. Czy (ty) ", post: " po polsku?", ans: "mówisz", stem: "mów", verb: "mówić", fakes: ["mówię", "mówi", "mówią"], rule: "<b>Ty</b> + тип <b>-ić</b>: отсекаем <i>-ić</i>, основа мягкая, добавляем окончание 2-го лица <b>-isz</b>." },
-        { pre: "17. (ja) ", post: " po rosyjsku.", ans: "mówię", stem: "mów", verb: "mówić", fakes: ["mówisz", "mówi", "mówią"], rule: "<b>Ja</b> + тип <b>-ić</b>: окончание 1-го лица ед. ч. <b>-ę</b> (смягчает предыдущую согласную: <i>mówi-ę</i>)." },
-        { pre: "18. Czy (wy) ", post: " chodzić do kina?", ans: "lubicie", stem: "lub
+        { pre: "16. Czy (ty) ", post: " po polsku?", ans: "mówisz", stem: "mów", verb: "mówić", fakes: ["mówię", "mówi", "mówią"], rule: "<b>Ty</b> + тип <b>-ić</b>: відкидаємо <i>-ić</i>, основа м'яка, додаємо закінчення 2-ї особи <b>-isz</b>." },
+        { pre: "17. (ja) ", post: " po rosyjsku.", ans: "mówię", stem: "mów", verb: "mówić", fakes: ["mówisz", "mówi", "mówią"], rule: "<b>Ja</b> + тип <b>-ić</b>: закінчення 1-ї особи однини <b>-ę</b> (пом'якшує попередню приголосну: <i>mówi-ę</i>)." },
+        { pre: "18. Czy (wy) ", post: " chodzić do kina?", ans: "lubicie", stem: "lub", verb: "lubić", fakes: ["lubię", "lubisz", "lubią"], rule: "<b>Wy</b> + тип <b>-ić</b>: закінчення ви-форм на м'яку основу має вигляд <b>-icie</b>." },
+        { pre: "19. Oni ", post: " języka polskiego.", ans: "uczą się", stem: "ucz", verb: "uczyć się", fakes: ["uczę się", "uczysz się", "uczy się"], rule: "<b>Oni</b> + тип <b>-yć</b>: після шиплячого <i>cz</i> закінчення вони-форм — носове <b>-ą</b>." },
+        { pre: "20. Jak często (wy) ", post: " do kina?", ans: "chodzicie", stem: "chodz", verb: "chodzić", fakes: ["chodzę", "chodzisz", "chodzą"], rule: "<b>Wy</b> + тип <b>-ić</b>: корінь <i>chodz-</i> м'який, тому пишеться м'яке ви-закінчення <b>-icie</b>." }
+    ];
+
+    let currentMode = 'input';
+    let systemVoices = [];
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function scrollToTop() {
+        document.getElementById('top-nav').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        const total = correctCount + incorrectCount;
+        document.getElementById('stat-pct').innerText = total === 0 ? '0%' : Math.round((correctCount / total) * 100) + '%';
+    }
+
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+            return;
+        }
+        plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
+    }
+
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speakWordAndSentence(word, fullSentence) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+
+        const speed = parseFloat(document.getElementById('speed-range').value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+
+        const wordUtterance = new SpeechSynthesisUtterance(word);
+        wordUtterance.lang = 'pl-PL';
+        wordUtterance.rate = speed;
+        if (activeVoice) wordUtterance.voice = activeVoice;
+
+        const sentenceUtterance = new SpeechSynthesisUtterance(fullSentence);
+        sentenceUtterance.lang = 'pl-PL';
+        sentenceUtterance.rate = speed;
+        if (activeVoice) sentenceUtterance.voice = activeVoice;
+
+        window.speechSynthesis.speak(wordUtterance);
+        window.speechSynthesis.speak(sentenceUtterance);
+    }
+
+    function buildColoredHtml(full, stem, ok) {
+        if (full.startsWith(stem) && full.length > stem.length) {
+            let ending = full.substring(stem.length);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
+        }
+        return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${full}</span>`;
+    }
+
+    function toggleRule(id) {
+        const box = document.getElementById(id);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function setExMode(exKey, mode) {
+        currentMode = mode;
+        document.getElementById(`label-input-ex7`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-ex7`).classList.toggle('active', mode === 'select');
+        renderExercise();
+    }
+
+    function renderExercise() {
+        const container = document.getElementById('ex7-container');
+        container.innerHTML = '';
+
+        ex7Data.forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let htmlText = ex.pre;
+            let choicesHtml = '';
+            const pId = `ex7-display-${idx}`;
+            const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
+
+            if (currentMode === 'input') {
+                htmlText += `<span id="ex7-wrapper-${idx}"><span class="hint-badge">${ex.verb}</span> <input type="text" class="word-input" onchange="checkInput(${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="ex7-in-${idx}"></span>`;
+                htmlText += ex.post;
+            } else {
+                htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
+                htmlText += ex.post + ` <span class="hint-badge">(${ex.verb})</span>`;
+                
+                const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
+                
+                choicesHtml += `<div class="choices-grid-wrapper" id="ex7-grid-${idx}"><div class="choices-grid">`;
+                choices.forEach(c => {
+                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 'ex7-grid-${idx}', ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
+                });
+                choicesHtml += `</div></div>`;
+            }
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div class="sentence-text">${htmlText}</div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.ans}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-ex7-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-ex7-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkInput(idx, ans, stem, fullSentence) {
+        const input = document.getElementById(`ex7-in-${idx}`);
+        const wrap = document.getElementById(`ex7-wrapper-${idx}`);
+        if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
+            correctCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-ex7-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkSelect(btn, ans, stem, gridId, idx, pId, fullSentence) {
+        const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            correctCount++; 
+            btn.classList.add('correct');
+            disp.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            btn.classList.add('incorrect');
+            disp.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-ex7-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        renderExercise();
+    });
+</script>
+</body>
+</html>
