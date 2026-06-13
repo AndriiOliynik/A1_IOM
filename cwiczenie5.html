@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ćwiczenia: Lekcja 5 (A1)</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --background: #f1f5f9;
+            --text: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stats-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .stat-box .num {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+        }
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .stat-correct { color: var(--success); }
+        .stat-incorrect { color: var(--error); }
+        .stat-percent { color: var(--primary); }
+
+        .navigation-menu {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .navigation-menu p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .audio-settings {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .audio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .audio-row:last-child { margin-bottom: 0; }
+        .audio-row label { font-weight: 600; color: #475569; min-width: 70px; }
+        .audio-row select, .audio-row input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 24px;
+            margin-bottom: 14px;
+            color: #0f172a;
+            scroll-margin-top: 90px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 99px;
+            margin-bottom: 16px;
+        }
+        .mode-label {
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 6px 0;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .mode-label.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sentence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sentence-item {
+            background: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.98rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .sentence-text { word-wrap: break-word; flex: 1; line-height: 1.6; }
+        .sentence-actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+        .action-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.1s;
+        }
+
+        .back-to-nav-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+            margin-bottom: 10px;
+        }
+        .back-to-nav-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .back-to-nav-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .word-input {
+            display: inline-block;
+            font-size: 0.95rem;
+            padding: 2px 6px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            width: 170px;
+            outline: none;
+            margin: 2px 4px;
+        }
+        .word-input:focus { border-color: var(--primary); }
+        .word-input.wide { width: 95%; display: block; margin-top: 6px; }
+
+        .colored-word {
+            display: inline-block;
+            font-weight: 600;
+            padding: 1px 4px;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+        .colored-word.text-success { border: 1px solid var(--success); background: #f0fdf4; }
+        .colored-word.text-error { border: 1px solid var(--error); background: #fef2f2; }
+        
+        .ending-correct { color: #d946ef; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+        .ending-incorrect { color: #f472b6; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+
+        .choices-grid-wrapper {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .choices-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+        @media (max-width: 480px) { .choices-grid { grid-template-columns: 1fr; } }
+        
+        .choice-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem; 
+            font-weight: 600;   
+            text-align: left;
+            outline: none;
+        }
+        .choice-btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
+        .choice-btn.incorrect { background-color: var(--error) !important; color: white; border-color: var(--error); }
+
+        .rule-box {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #78350f;
+        }
+
+        .hint-badge {
+            font-size: 0.78rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .final-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- STATS PANEL -->
+    <div class="stats-panel" id="top-nav">
+        <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
+        <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
+        <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
+    </div>
+    
+    <!-- NAVIGATION MENU -->
+    <div class="navigation-menu">
+        <p>Навігація за вправами:</p>
+        <div class="nav-links">
+            <a href="#ex1-heading">Wprawa 1</a>
+            <a href="#ex2-heading">Wprawa 2</a>
+            <a href="#ex3-heading">Wprawa 3</a>
+            <a href="#ex4-heading">Wprawa 4</a>
+            <a href="#ex5-heading">Wprawa 5</a>
+            <a href="#ex6-heading">Wprawa 6</a>
+            <a href="#ex7-heading">Wprawa 7</a>
+            <a href="#ex8-heading">Wprawa 8</a>
+            <a href="#ex9a-heading">Wprawa 9a</a>
+            <a href="#ex10-heading">Wprawa 10</a>
+            <a href="#ex7verbs-heading">Koniugacja 7</a>
+            <a href="#ex8verbs-heading">Koniugacja 8</a>
+        </div>
+    </div>
+
+    <!-- AUDIO SETTINGS -->
+    <div class="audio-settings">
+        <div class="audio-row">
+            <label for="voice-select">Голос:</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="audio-row">
+            <label for="speed-range">Швидкість:</label>
+            <input type="range" id="speed-range" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('speed-val').innerText = parseFloat(this.value).toFixed(1) + 'x'">
+            <span id="speed-val" style="font-weight:bold; min-width:35px; text-align:right;">1.0x</span>
+        </div>
+    </div>
+
+    <!-- EXERCISE 1 -->
+    <h2 id="ex1-heading">1. Które słowo nie pasuje do pozostałych i dlaczego?</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex1" class="mode-label active" onclick="setExMode('ex1', 'input')">Вписати форму</span>
+        <span id="label-select-ex1" class="mode-label" onclick="setExMode('ex1', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex1-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 2 -->
+    <h2 id="ex2-heading">2. Proszę uzupełnić zdania.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex2" class="mode-label active" onclick="setExMode('ex2', 'input')">Вписати форму</span>
+        <span id="label-select-ex2" class="mode-label" onclick="setExMode('ex2', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex2-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 3 -->
+    <h2 id="ex3-heading">3. Proszę napisać zdanie o znaczeniu przeciwnym.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex3" class="mode-label active" onclick="setExMode('ex3', 'input')">Вписати форму</span>
+        <span id="label-select-ex3" class="mode-label" onclick="setExMode('ex3', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex3-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 4 -->
+    <h2 id="ex4-heading">4. Proszę wpisać formy biernika lub narzędnika.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex4" class="mode-label active" onclick="setExMode('ex4', 'input')">Вписати форму</span>
+        <span id="label-select-ex4" class="mode-label" onclick="setExMode('ex4', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex4-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 5 -->
+    <h2 id="ex5-heading">5. Proszę wybrać właściwe słowo.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex5" class="mode-label active" onclick="setExMode('ex5', 'input')">Вписати форму</span>
+        <span id="label-select-ex5" class="mode-label" onclick="setExMode('ex5', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex5-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 6 -->
+    <h2 id="ex6-heading">6. Proszę wpisać właściwy przyimek.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex6" class="mode-label active" onclick="setExMode('ex6', 'input')">Вписати форму</span>
+        <span id="label-select-ex6" class="mode-label" onclick="setExMode('ex6', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex6-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 7 -->
+    <h2 id="ex7-heading">7. Proszę wpisać formy biernika.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex7" class="mode-label active" onclick="setExMode('ex7', 'input')">Вписати форму</span>
+        <span id="label-select-ex7" class="mode-label" onclick="setExMode('ex7', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex7-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 8 -->
+    <h2 id="ex8-heading">8. Proszę zapytać o podkreślone słowa.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex8" class="mode-label active" onclick="setExMode('ex8', 'input')">Вписати форму</span>
+        <span id="label-select-ex8" class="mode-label" onclick="setExMode('ex8', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex8-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 9a -->
+    <h2 id="ex9a-heading">9a. Proszę wybrać odpowiednią formę.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex9a" class="mode-label active" onclick="setExMode('ex9a', 'input')">Вписати форму</span>
+        <span id="label-select-ex9a" class="mode-label" onclick="setExMode('ex9a', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex9a-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 10 -->
+    <h2 id="ex10-heading">10. Proszę wybrać odpowiednią formę (Test jednokrotnego wyboru).</h2>
+    <div id="ex10-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 7 VERBS -->
+    <h2 id="ex7verbs-heading">7 (odmiana czasowników str. 32). Proszę wpisać właściwą formę.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex7verbs" class="mode-label active" onclick="setExMode('ex7verbs', 'input')">Вписати форму</span>
+        <span id="label-select-ex7verbs" class="mode-label" onclick="setExMode('ex7verbs', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex7verbs-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+    <!-- EXERCISE 8 VERBS -->
+    <h2 id="ex8verbs-heading">8 (odmiana czasowników str. 33). Proszę wpisać właściwą formę.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-ex8verbs" class="mode-label active" onclick="setExMode('ex8verbs', 'input')">Вписати форму</span>
+        <span id="label-select-ex8verbs" class="mode-label" onclick="setExMode('ex8verbs', 'select')">Test варіанти</span>
+    </div>
+    <div id="ex8verbs-container" class="sentence-list"></div>
+    <div class="back-to-nav-container"><button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button></div>
+
+</div>
+
+<script>
+    // DATA CONFIGURATION
+    const dataset = {
+        ex1: [
+            { pre: "1. muzeum – kino – teatr – ", post: "", ans: "sport", stem: "sport", nomination: "Przykład", fakes: ["muzeum","kino"], rule: "<b>sport</b> — решта слів означають культурні установи." },
+            { pre: "2. słuchać — śpiewać — tańczyć — ", post: "", ans: "spać", stem: "spać", nomination: "Co nie pasuje?", fakes: ["słuchać","śpiewać"], rule: "<b>spać</b> — решта слів означають активне дозвілля/рух або хобі." },
+            { pre: "3. biegać — pływać — jeździć na rowerze — ", post: "", ans: "oglądać telewizję", stem: "oglądać telewizję", nomination: "Co nie pasuje?", fakes: ["biegać","pływać"], rule: "<b>oglądać telewizję</b> — решта слів — це активні види спорту/фізична активність." },
+            { pre: "4. grać na gitarze — podróżować samochodem — jeździć na rowerze — jeździć taksówką — ", post: "", ans: "grać na gitarze", stem: "grać na gitarze", nomination: "Co nie pasuje?", fakes: ["jeździć na rowerze","jeździć taksówką"], rule: "<b>grać na gitarze</b> — решта пов'язана з транспортом та переміщенням." },
+            { pre: "5. książka — gazeta — magazyn — ", post: "", ans: "zdjęcie", stem: "zdjęcie", nomination: "Co nie pasuje?", fakes: ["książka","gazeta"], rule: "<b>zdjęcie</b> — решта — це друкована періодика або книги." },
+            { pre: "6. telewizja — film — kino — ", post: "", ans: "kawiarnia", stem: "kawiarnia", nomination: "Co nie pasuje?", fakes: ["telewizja","kino"], rule: "<b>kawiarnia</b> — решта пов'язана з кінематографом та телебаченням." }
+        ],
+        ex2: [
+            { pre: "1. Czy lubicie ", post: " do teatru?", ans: "chodzić", stem: "chodzić", nomination: "chodzić", fakes: ["chodzą","chodzicie"], rule: "Після дієслова <i>lubić</i> використовується інфінітив." },
+            { pre: "2. Lubię ", post: " w tenisa.", ans: "grać", stem: "grać", nomination: "grać", fakes: ["gram","grasz"], rule: "Lubię + bezokolicznik (grać)." },
+            { pre: "3. Czy lubisz ", post: " muzyki klasycznej?", ans: "słuchać", stem: "słuchać", nomination: "słuchać", fakes: ["słucham","słucha"], rule: "Słuchać czegoś (Wydarzenie wymaga dopełniacza / muzyki)." },
+            { pre: "4. Małgorzata lubi ", post: " książki kryminalne.", ans: "czytać", stem: "czytać", nomination: "czytać", fakes: ["czyta","czytam"], rule: "Mikołaj / Małgorzata lubi + bezokolicznik." },
+            { pre: "5. Mój znajomy lubi czytać ", post: ", szczególnie „Rzeczpospolitą”.", ans: "gazety", stem: "gazet", nomination: "gazeta (Biernik lm.)", fakes: ["gazetą","gazetach"], rule: "Czytać co? Biernik liczby mnogiej: gazety." },
+            { pre: "6. Lubię chodzić do ", post: ", na przykład do Teatru Starego.", ans: "teatru", stem: "teatr", nomination: "teatr (Dopełniacz)", fakes: ["teatrem","teatrze"], rule: "Chodzić do + Dopełniacz: do teatru." },
+            { pre: "7. Magda i Agnieszka lubią uprawiać ", post: ", lubią jeździć na ", post2: ".", ans: "sport", ans2: "rowerze", stem: "sport", stem2: "rower", nomination: "sport / rower", fakes: ["sportem","rower"], rule: "Uprawiać co? Biernik (sport). Jeździć na czym? Miejscownik (rowerze)." },
+            { pre: "8. Mój przyjaciel lubi ", post: ", na przykład walca.", ans: "tańczyć", stem: "tańczyć", nomination: "tańczyć", fakes: ["tańczę","tańczy"], rule: "Lubi + bezokolicznik: tańczyć." },
+            { pre: "9. Barbara lubi ", post: " z kolegami.", ans: "spotykać się", stem: "spotykać się", nomination: "spotykać się", fakes: ["spotyka się","spotykam się"], rule: "Lubi + bezokolicznik z zaimkiem zwrotnym: spotykać się." },
+            { pre: "10. Andrzej lubi ", post: " telewizję.", ans: "oglądać", stem: "oglądać", nomination: "oglądać", fakes: ["ogląda","oglądam"], rule: "Lubi oglądać + Biernik (telewizję)." }
+        ],
+        ex3: [
+            { pre: "Приклад: Nigdy nie chodzimy do kina. ≠ ", post: "", ans: "Zawsze chodzimy do kina.", stem: "Zawsze chodzimy do kina.", nomination: "Zdanie", fakes: ["Często chodzimy do kina."], rule: "Antonim do <i>nigdy nie...</i> to <i>zawsze</i>." },
+            { pre: "1. Często uprawiam sport. ≠ ", post: "", ans: "Rzadko uprawiam sport.", stem: "Rzadko uprawiam sport.", nomination: "Zdanie", fakes: ["Nigdy nie uprawiam sportu."], rule: "Często ≠ Rzadko." },
+            { pre: "2. Zwykle w weekend słucham muzyki. ≠ ", post: "", ans: "Nigdy w weekend nie słucham muzyki.", alt: "Rzadko w weekend słucham muzyki.", stem: "Nigdy w weekend nie słucham muzyki.", nomination: "Zdanie", fakes: ["Zawsze w weekend słucham muzyki."], rule: "Zwykle ≠ Nigdy nie... або Rzadko." },
+            { pre: "3. Profesor zawsze mówi wolno. ≠ ", post: "", ans: "Profesor nigdy nie mówi wolno.", alt: "Profesor zawsze mówi szybko.", stem: "Profesor nigdy nie mówi wolno.", nomination: "Zdanie", fakes: ["Profesor rzadko mówi wolno."], rule: "Antonim: wolno ≠ szybko, lub zawsze ≠ nigdy не." },
+            { pre: "4. Andrzej rzadko dzwoni do koleżanki z liceum. ≠ ", post: "", ans: "Andrzej często dzwoni do koleżanki z liceum.", stem: "Andrzej często dzwoni do koleżanki z liceum.", nomination: "Zdanie", fakes: ["Andrzej zawsze dzwoni."], rule: "Rzadko ≠ Często." },
+            { pre: "5. Nigdy nie biegam w weekend. ≠ ", post: "", ans: "Zawsze biegam w weekend.", alt: "Zwykle biegam w weekend.", stem: "Zawsze biegam w weekend.", nomination: "Zdanie", fakes: ["Rzadko biegam w weekend."], rule: "Nigdy nie... ≠ Zawsze / zwykle." }
+        ],
+        ex4: [
+            { pre: "1. On interesuje się ", post: ". (francuski sport)", ans: "francuskim sportem", stem: "francuskim sportem", nomination: "Narzędnik", fakes: ["francuski sport","francuskiego sportu"], rule: "Interesować się + Narzędnik (Kim? Czym?): francuskim sportem." },
+            { pre: "2. Bardzo lubię ", post: ". (niemiecka kuchnia)", ans: "niemiecką kuchnię", stem: "niemiecką kuchnię", nomination: "Biernik", fakes: ["niemieckiej kuchni","niemiecką kuchnią"], rule: "Lobić + Biernik (Kogo? Co?): niemiecką kuchnię." },
+            { pre: "3. Ona lubi ", post: ". (wino i sałatka grecka)", ans: "wino i sałatkę grecką", stem: "wino i sałatkę grecką", nomination: "Biernik", fakes: ["wino i sałatką grecką","wina i sałatki greckiej"], rule: "Lubi + Biernik: wino (s.r.) i sałatkę grecką (ż.r.)." },
+            { pre: "4. Lubisz ", post: "? (muzyka klasyczna)", ans: "muzykę klasyczną", stem: "muzykę klasyczną", nomination: "Biernik", fakes: ["muzyką klasyczną","muzyka klasyczna"], rule: "Biernik dla rodzaju żeńskiego singularis: muzykę klasyczną." },
+            { pre: "5. Interesujesz się ", post: "? (muzyka hiszpańska)", ans: "muzyką hiszpańską", stem: "muzyką hiszpańską", nomination: "Narzędnik", fakes: ["muzykę hiszpańską","muzyka hiszpańska"], rule: "Interesować się + Narzędnik rodz. żeńskiego: muzyką hiszpańską." },
+            { pre: "6. Mam ", post: ". (interesująca książka)", ans: "interesującą książkę", stem: "interesującą książkę", nomination: "Biernik", fakes: ["interesującej książki","interesującą książką"], rule: "Mam + Biernik: interesującą książkę." },
+            { pre: "7. Czytam ", post: ". (kolorowy magazyn)", ans: "kolorowy magazyn", stem: "kolorowy magazyn", nomination: "Biernik", fakes: ["kolorowym magazynem","kolorowego magazynu"], rule: "Czytam + Biernik (nieżywotny męski = Mianownik): kolorowy magazyn." },
+            { pre: "8. Oni czytają ", post: ". (aktualna gazeta)", ans: "aktualną gazetę", stem: "aktualną gazetę", nomination: "Biernik", fakes: ["aktualnej gazety","aktualną gazetą"], rule: "Czytają + Biernik: aktualną gazetę." },
+            { pre: "9. Oni interesują się ", post: ". (literatura angielska)", ans: "literaturą angielską", stem: "literaturą angielską", nomination: "Narzędnik", fakes: ["literaturę angielską","literatury angielskiej"], rule: "Interesować się + Narzędnik: literaturą angielską." },
+            { pre: "10. Lubisz ", post: "? (kawa)", ans: "kawę", stem: "kaw", nomination: "Biernik", fakes: ["kawą","kawy"], rule: "Lubi + Biernik: kawę." },
+            { pre: "11. Masz ", post: "? (dobry samochód)", ans: "dobry samochód", stem: "dobry samochód", nomination: "Biernik", fakes: ["dobrego samochodu","dobrym samochodem"], rule: "Masz + Biernik: dobry samochód." },
+            { pre: "12. Interesujesz się ", post: "? (filozofia)", ans: "filozofią", stem: "filozofi", nomination: "Narzędnik", fakes: ["filozofię","filozofii"], rule: "Interesować się + Narzędnik: filozofią." }
+        ],
+        ex5: [
+            { pre: "1. Anna lubi czytać gazety – interesuje się ", post: ". Oczywiście lubi też oglądać telewizję, na przykład wiadomości.", ans: "polityką", stem: "polityk", nomination: "polityka / sport", fakes: ["sportem","filmem"], rule: "З контексту (читає газети) випливає інтерес до політики (polityką)." },
+            { pre: "2. Mariusz lubi czasopisma ekonomiczne. Lubi ", post: ", czytać książki.", ans: "ekonomię", stem: "ekonomi", nomination: "ekonomia / muzyka", fakes: ["ekonomią","muzykę"], rule: "Після <i>lubi</i> потрібен Biernik: ekonomię." },
+            { pre: "3. Wojtek interesuje się kulturą hiszpańską. Lubi ", post: ".", ans: "język hiszpański", stem: "język hiszpański", nomination: "język hiszpański", fakes: ["językiem hiszpańskim","języka hiszpańskiego"], rule: "Lubi + Biernik: język hiszpański." },
+            { pre: "4. Agnieszka bardzo lubi grać w tenisa, lubi ", post: ".", ans: "sport", stem: "sport", nomination: "sport", fakes: ["sportem","sportu"], rule: "Lubi + Biernik: sport." },
+            { pre: "5. Katarzyna lubi jeździć na nartach. Interesuje się ", post: ".", ans: "sportem", stem: "sport", nomination: "sport", fakes: ["sport","sportu"], rule: "Interesuje się + Narzędnik: sportem." }
+        ],
+        ex6: [
+            { pre: "1. Lubimy podróżować ", post: " Europie.", ans: "po", stem: "po", nomination: "przyimek", fakes: ["w","na"], rule: "Podróżować po czym? (Miejscownik): po Europie." },
+            { pre: "2. Grażyna świetnie gra ", post: " saksofonie.", ans: "na", stem: "na", nomination: "przyimek", fakes: ["w","po"], rule: "Grać na + instrument (Miejscownik): na saksofonie." },
+            { pre: "3. Andrzej rzadko spotyka się ", post: " rodzicami.", ans: "z", stem: "z", nomination: "przyimek", fakes: ["do","na"], rule: "Spotykać się z + Narzędnik (z kim?): z rodzicami." },
+            { pre: "4. Czy twój ojciec lubi chodzić ", post: " teatru?", ans: "do", stem: "do", nomination: "przyimek", fakes: ["na","w"], rule: "Chodzić do + Dopełniacz: do teatru." },
+            { pre: "5. Czy lubisz chodzić ", post: " dyskotekę?", ans: "na", stem: "na", nomination: "przyimek", fakes: ["do","w"], rule: "Chodzić na + wydarzenie/miejsce otwarte: na dyskotekę." },
+            { pre: "6. Moja matka świetnie gra ", post: " gitarze.", ans: "na", stem: "na", nomination: "przyimek", fakes: ["w","o"], rule: "Grać na + instrument: na gitarze." },
+            { pre: "7. Często spotykam się ", post: " kolegami.", ans: "z", stem: "z", nomination: "przyimek", fakes: ["do","o"], rule: "Spotykam się z + Narzędnik: z kolegami." },
+            { pre: "8. Często chodzimy ", post: " restauracji.", ans: "do", stem: "do", nomination: "przyimek", fakes: ["na","w"], rule: "Chodzić do +budynku: do restauracji." },
+            { pre: "9. Nie umiem grać ", post: " karty.", ans: "w", stem: "w", nomination: "przyimek", fakes: ["na","po"], rule: "Grać w + grę (Biernik): w karty." },
+            { pre: "10. Czy lubisz chodzić ", post: " teatru?", ans: "do", stem: "do", nomination: "przyimek", fakes: ["na","w"], rule: "Chodzić do teatru." }
+        ],
+        ex7: [
+            { pre: "1. (ja) Mam ", post: ". (brat i siostra)", ans: "brata i siostrę", stem: "brata i siostrę", nomination: "Biernik", fakes: ["brat i siostra","bratem i siostrą"], rule: "Biernik: brata (m. żywotny: -a) i siostrę (ż: -ę)." },
+            { pre: "2. On ma ", post: ". (auto)", ans: "auto", stem: "auto", nomination: "Biernik", fakes: ["auta","autem"], rule: "Rodzaj nijaki w Bierniku równy jest Mianownikowi: auto." },
+            { pre: "3. Ona lubi ", post: ". (język polski)", ans: "język polski", stem: "język polski", nomination: "Biernik", fakes: ["języka polskiego","językiem polskim"], rule: "Rodzaj męski nieżywotny: język polski." },
+            { pre: "4. Lubię ", post: ". (włoska kawa)", ans: "włoską kawę", stem: "włoską kawę", nomination: "Biernik", fakes: ["włoska kawa","włoską kawą"], rule: "Rodzaj żeński: -ą -ę (włoską kawę)." },
+            { pre: "5. Ona ma ", post: ". (małe dziecko)", ans: "małe dziecko", stem: "małe dziecko", nomination: "Biernik", fakes: ["małego dziecka","małym dzieckiem"], rule: "Rodzaj nijaki: małe dziecko." },
+            { pre: "6. On czyta ", post: ". (gazeta)", ans: "gazetę", stem: "gazet", nomination: "Biernik", fakes: ["gazeta","gazetą"], rule: "Rodzaj żeński: gazetę." },
+            { pre: "7. Paparazzi fotografują ", post: ". (popularna aktorka)", ans: "popularną aktorkę", stem: "popularną aktorkę", nomination: "Biernik", fakes: ["popularna aktorka","popularnej aktorki"], rule: "Biernik r. żeńskiego: popularną aktorkę." },
+            { pre: "8. Oni studiują ", post: ". (ekonomia)", ans: "ekonomię", stem: "ekonomi", nomination: "Biernik", fakes: ["ekonomia","ekonomią"], rule: "Biernik r. żeńskiego: ekonomię." },
+            { pre: "9. Ona tańczy ", post: ". (tango)", ans: "tango", stem: "tango", nomination: "Biernik", fakes: ["tanga","tangiem"], rule: "Rodzaj nijaki: tango." },
+            { pre: "10. Czy (wy) lubicie ", post: "? (sport)", ans: "sport", stem: "sport", nomination: "Biernik", fakes: ["sportu","sportem"], rule: "Męski nieżywotny: sport." },
+            { pre: "11. Mamy ", post: ". (dobry nauczyciel)", ans: "dobrego nauczyciela", stem: "dobrego nauczyciela", nomination: "Biernik", fakes: ["dobry nauczyciel","dobrym nauczycielem"], rule: "Męski żywotny/osobowy: закінчення -ego -a (dobrego nauczyciela)." },
+            { pre: "12. Oni czytają ", post: ". (angielski magazyn)", ans: "angielski magazyn", stem: "angielski magazyn", nomination: "Biernik", fakes: ["angielskiego magazynu","angielskim magazynem"], rule: "Męski nieżywotny: angielski magazyn." },
+            { pre: "13. Kocham ", post: ". (moja rodzina)", ans: "moją rodzinę", stem: "moją rodzinę", nomination: "Biernik", fakes: ["moja rodzina","mojej rodziny"], rule: "Żeński: moją rodzinę." },
+            { pre: "14. Mąż kocha ", post: ". (żona)", ans: "żonę", stem: "żon", nomination: "Biernik", fakes: ["żona","żoną"], rule: "Żeński: żonę." },
+            { pre: "15. Lubię ", post: ". (polskie kino)", ans: "polskie kino", stem: "polskie kino", nomination: "Biernik", fakes: ["polskiego kina","polskim kinem"], rule: "Nijaki: polskie kino." }
+        ],
+        ex8: [
+            { pre: "1. Lubię Martę. → ", post: " lubisz?", ans: "Kogo", stem: "Kogo", nomination: "Zaimki", fakes: ["Co","Jaki"], rule: "Marta to osoba (Biernik: Kogo?)." },
+            { pre: "2. Znam pana Nowaka. → ", post: " znasz?", ans: "Kogo", stem: "Kogo", nomination: "Zaimki", fakes: ["Co","Jaką"], rule: "Pan Nowak (osoba): Kogo?" },
+            { pre: "3. Lubię wino. → ", post: " lubisz?", ans: "Co", stem: "Co", nomination: "Zaimki", fakes: ["Kogo","Jakie"], rule: "Wino to rzecz: Co?" },
+            { pre: "4. Mam duży dom. → ", post: " masz dom?", ans: "Jaki", stem: "Jaki", nomination: "Zaimki", fakes: ["Jaką","Jakie"], rule: "Dom to r. męski: Jaki?" },
+            { pre: "5. Lubię dobrą kawę. → ", post: " kawę lubisz?", ans: "Jaką", stem: "Jaką", nomination: "Zaimki", fakes: ["Jaki","Jakie"], rule: "Kawa to r. żeński: Jaką?" },
+            { pre: "6. Mam małe dziecko. → ", post: " masz dziecko?", ans: "Jakie", stem: "Jakie", nomination: "Zaimki", fakes: ["Jaki","Jaką"], rule: "Dziecko to r. nijaki: Jakie?" }
+        ],
+        ex9a: [
+            { pre: "1. Ten samochód jest ", post: ".", ans: "stary", stem: "stary", nomination: "Mianownik", fakes: ["starym","stara"], rule: "Mianownik po <i>być</i> dla przymiotnika samodzielnego (samochód jest jaki? - stary)." },
+            { pre: "2. Moja rodzina jest ", post: ".", ans: "duża", stem: "duża", nomination: "Mianownik", fakes: ["dużą","duże"], rule: "Rodzina jest jaka? - duża." },
+            { pre: "3. Ona jest ", post: " kobietą. (Narzędnik)", ans: "sympatyczną", stem: "sympatyczną", nomination: "Narzędnik", fakes: ["sympatyczna","sympatycznej"], rule: "Być + rzeczownik + przymiotnik = Narzędnik (sympatyczną kobietą)." },
+            { pre: "4. Oni są ", post: " rodzicami. (Narzędnik)", ans: "dobrymi", stem: "dobrymi", nomination: "Narzędnik", fakes: ["dobrzy","dobre"], rule: "Liczba mnoga Narzędnik: -ymi / -imi (dobrymi rodzicami)." },
+            { pre: "5. Mam ", post: " psa. (Biernik)", ans: "inteligentnego", stem: "inteligentnego", nomination: "Biernik", fakes: ["inteligentny","inteligentnym"], rule: "Pies (m. żywotny): Biernik = Dopełniacz (-ego: inteligentnego)." },
+            { pre: "6. Lubię ", post: " literaturę. (Biernik)", ans: "angielską", stem: "angielską", nomination: "Biernik", fakes: ["angielska","angielskiej"], rule: "Biernik r. żeńskiego: angielską." },
+            { pre: "7. Znam tego ", post: " mężczyznę. (Biernik)", ans: "wysokiego", stem: "wysokiego", nomination: "Biernik", fakes: ["wysoki","wysokim"], rule: "Mężczyzna (m. osobowy): -ego (wysokiego)." },
+            { pre: "8. Mam ", post: " wujka. (Biernik)", ans: "wysokiego", stem: "wysokiego", nomination: "Biernik", fakes: ["wysoki","wysokim"], rule: "Wujek (m. osobowy): wysokiego." },
+            { pre: "9. Krzyś jest małym ", post: ". (Narzędnik)", ans: "dzieckiem", stem: "dzieckiem", nomination: "Narzędnik", fakes: ["dziecko","dziecka"], rule: "Być + małym + Narzędnik (dzieckiem)." },
+            { pre: "10. Żywiec to polskie ", post: ".", ans: "piwo", stem: "piwo", nomination: "Mianownik", fakes: ["piwem","piwa"], rule: "To + Mianownik: polskie piwo." }
+        ],
+        ex10: [
+            { question: "1. Ona ma...", choices: ["a) małego brat", "b) małym bratem", "c) małego brata"], correct: "c) małego brata", rule: "Biernik dla męskoosobowego/żywotnego: małego brata." },
+            { question: "2. On ma...", choices: ["a) jeden babci", "b) jeden babcia", "c) jedną babcię"], correct: "c) jedną babcię", rule: "Biernik dla żeńskiego: jedną babcię." },
+            { question: "3. Ona ma 14...", choices: ["a) rok", "b) lat", "c) lata"], correct: "b) lat", rule: "Від 5 і вище (крім закінчень на 2,3,4): lat." },
+            { question: "4. Moja matka ma 42...", choices: ["a) rok", "b) lat", "c) lata"], correct: "c) lata", rule: "Закінчення на 2, 3, 4 (крім 12,13,14) вимагають: lata." },
+            { question: "5. ...matka mieszka w Krakowie.", choices: ["a) Moja", "b) Mój", "c) Nasz"], correct: "a) Moja", rule: "Matka (r. żeński): Moja." },
+            { question: "6. Ewa interesuje się...", choices: ["a) muzyka", "b) muzykę", "c) muzyką"], correct: "c) muzyką", rule: "Interesować się + Narzędnik: muzyką." },
+            { question: "7. Mówię dobrze...", choices: ["a) po angielsku", "b) angielski", "c) angielskim"], correct: "a) po angielsku", rule: "Mówić + po + ...sku (po angielsku)." },
+            { question: "8. Jestem bardzo...", choices: ["a) ambitna", "b) ambitny", "c) ambitne"], correct: "b) ambitny", rule: "Forma męska przymiotnika (lub ogólna): ambitny." },
+            { question: "9. Skąd (ty)...?", choices: ["a) jestem", "b) jest", "c) jesteś"], correct: "c) jesteś", rule: "Koniugacja być (ty): jesteś." },
+            { question: "10. Znam dobrze...", choices: ["a) angielski", "b) po angielsku", "c) angielskiego"], correct: "a) angielski", rule: "Znać + Biernik (język angielski)." }
+        ],
+        ex7verbs: [
+            { pre: "1. Dwa samoloty ", post: ". (-ować)", ans: "lądują", stem: "lądują", nomination: "oni", fakes: ["ląduje","lądujemy"], rule: "Samoloty (oni) -> lądują." },
+            { pre: "2. Marek ", post: " samochód. (-ować)", ans: "parkuje", stem: "parkuje", nomination: "on", fakes: ["parkują","parkujesz"], rule: "Marek (on) -> parkuje." },
+            { pre: "3. Dwa samochody ", post: ". (-ровать)", ans: "parkują", stem: "parkują", nomination: "oni", fakes: ["parkuje","parkujecie"], rule: "Samochody (oni) -> parkują." },
+            { pre: "4. Co (ty) ", post: "? (-ować)", ans: "studiujesz", stem: "studiujesz", nomination: "ty", fakes: ["studiuję","studiuje"], rule: "Ty -> studiujesz." },
+            { pre: "5. Czym ona ", post: "? (-ować)", ans: "interesuje się", stem: "interesuje się", nomination: "ona", fakes: ["interesują się","interesujesz się"], rule: "Ona -> interesuje się." },
+            { pre: "6. Gdzie (wy) ", post: "? (-ować)", ans: "pracujecie", stem: "pracujecie", nomination: "wy", fakes: ["pracujemy","pracują"], rule: "Wy -> pracujecie." },
+            { pre: "7. (my) ", post: " w Bytomiu. (-ować)", ans: "pracujemy", stem: "pracujemy", nomination: "my", fakes: ["pracujecie","pracuję"], rule: "My -> pracujemy." },
+            { pre: "8. Codziennie (my) ", post: " w internecie. (-ować)", ans: "surfujemy", stem: "surfujemy", nomination: "my", fakes: ["surfujecie","surfują"], rule: "My -> surfujemy." },
+            { pre: "9. Maria rzadko ", post: ". (-ować)", ans: "mailuje", stem: "mailuje", nomination: "ona", fakes: ["mailują","mailuję"], rule: "Maria (ona) -> mailuje." },
+            { pre: "10. (ja) ", post: " się historią. (-ować)", ans: "interesuję", stem: "interesuję", nomination: "ja", fakes: ["interesuje","interesujesz"], rule: "Ja -> interesuję się." },
+            { pre: "11. (ja) ", post: " interesującą książkę. (-m, -sz)", ans: "czytam", stem: "czytam", nomination: "ja", fakes: ["czytasz","czyta"], rule: "Ja -> czytam." },
+            { pre: "12. Jak często (ty) ", post: " w restauracji? (-m, -sz)", ans: "jesz", stem: "jesz", nomination: "ty", fakes: ["jem","je"], rule: "Czasownik jeść (ty) -> jesz." },
+            { pre: "13. On ", post: ". (-m, -sz)", ans: "pływa", stem: "pływa", nomination: "on", fakes: ["pływam","pływają"], rule: "On -> pływa." },
+            { pre: "14. (my) ", post: " muzyki. (-m, -sz)", ans: "słuchamy", stem: "słuchamy", nomination: "my", fakes: ["słuchacie","słuchają"], rule: "My -> słuchamy." },
+            { pre: "15. One pięknie ", post: ". (-m, -sz)", ans: "śpiewają", stem: "śpiewają", nomination: "one", fakes: ["śpiewa","śpiewacie"], rule: "One -> śpiewają." },
+            { pre: "16. Czy (wy) ", post: "? (-m, -sz)", ans: "biegacie", stem: "biegacie", nomination: "wy", fakes: ["biegamy","biegają"], rule: "Wy -> biegacie." },
+            { pre: "17. Oni ", post: " w tenisa. (-m, -sz)", ans: "grają", stem: "grają", nomination: "oni", fakes: ["gra","gramy"], rule: "Oni -> grają." },
+            { pre: "18. Czy (ty) ", post: " na gitarze? (-m, -sz)", ans: "grasz", stem: "grasz", nomination: "ty", fakes: ["gram","gra"], rule: "Ty -> grasz." },
+            { pre: "19. Czy (wy) ", post: " w piłkę nożną? (-m, -sz)", ans: "gracie", stem: "gracie", nomination: "wy", fakes: ["gramy","grają"], rule: "Wy -> gracie." },
+            { pre: "20. Jak często (ty) ", post: " telewizję? (-m, -sz)", ans: "oglądasz", stem: "oglądasz", nomination: "ty", fakes: ["oglądam","ogląda"], rule: "Ty -> oglądasz." },
+            { pre: "21. Czy (ty) ", post: " chodzić do kina? (-ę, -isz)", ans: "lubisz", stem: "lubisz", nomination: "ty", fakes: ["lubię","lubi"], rule: "Ty -> lubisz." },
+            { pre: "22. (ja) ", post: " słabo po polsku. (-ę, -isz)", ans: "mówię", stem: "mówię", nomination: "ja", fakes: ["mówisz","mówi"], rule: "Ja -> mówię." },
+            { pre: "23. Czy (wy) ", post: " po rosyjsku? (-ę, -isz)", ans: "mówicie", stem: "mówicie", nomination: "wy", fakes: ["mówimy","mówią"], rule: "Wy -> mówicie." },
+            { pre: "24. Oni ", post: " pływać. (-ę, -isz)", ans: "lubią", stem: "lubią", nomination: "oni", fakes: ["lubi","lubimy"], rule: "Oni -> lubią." },
+            { pre: "25. Jak często (wy) ", post: " do kina? (-ę, -isz)", ans: "chodzicie", stem: "chodzicie", nomination: "wy", fakes: ["chodzimy","chodzą"], rule: "Wy -> chodzicie." },
+            { pre: "26. Dlaczego (ty) ", post: " się języka polskiego? (-ę, -isz)", ans: "uczysz", stem: "uczysz", nomination: "ty", fakes: ["uczę","uczy"], rule: "Ty -> uczysz się." },
+            { pre: "27. Co oni ", post: " codziennie? (-ę, -isz)", ans: "robią", stem: "robią", nomination: "oni", fakes: ["robi","robimy"], rule: "Oni -> robią." },
+            { pre: "28. Co (ty) ", post: " w weekend? (-ę, -isz)", ans: "robisz", stem: "robisz", nomination: "ty", fakes: ["robię","robi"], rule: "Ty -> robisz." },
+            { pre: "29. Czy one dobrze ", post: "? (-ę, -isz)", ans: "tańczą", stem: "tańczą", nomination: "one", fakes: ["tańczy","tańczycie"], rule: "One -> tańczą." },
+            { pre: "30. Oni lubią ", post: " do kina. (-ę, -isz)", ans: "chodzić", stem: "chodzić", nomination: "inf", fakes: ["chodzą","chodzimy"], rule: "Lubią + bezokolicznik (chodzić)." },
+            { pre: "31. Dziennikarz ", post: " artykuł. (-ę, -esz)", ans: "pisze", stem: "pisze", nomination: "on", fakes: ["piszą","piszę"], rule: "On -> pisze." },
+            { pre: "32. Czy (ty) często ", post: " e-maile? (-ę, -esz)", ans: "piszesz", stem: "piszesz", nomination: "ty", fakes: ["piszę","pisze"], rule: "Ty -> piszesz." },
+            { pre: "33. Czy (ja) ", post: " prosić o uwagę? (-ę, -esz)", ans: "mogę", stem: "mogę", nomination: "ja", fakes: ["możesz","może"], rule: "Ja -> mogę." },
+            { pre: "34. Czy ", post: " pan mówić wolniej? (-ę, -esz)", ans: "może", stem: "może", nomination: "pan", fakes: ["mogę","możesz"], rule: "Pan / Pani -> może." },
+            { pre: "35. Co (ty) ", post: " robić dzisiaj wieczorem? (-ę, -esz)", ans: "chcesz", stem: "chcesz", nomination: "ty", fakes: ["chcę","chce"], rule: "Ty -> chcesz." },
+            { pre: "36. Marta ", post: " pracować w Polsce. (-ę, -esz)", ans: "chce", stem: "chce", nomination: "ona", fakes: ["chcą","chcę"], rule: "Marta (ona) -> chce." },
+            { pre: "37. Anna i Dorota są dziennikarkami i ", post: " do „Gazety Wyborczej”. (-ę, -esz)", ans: "piszą", stem: "piszą", nomination: "one", fakes: ["pisze","piszemy"], rule: "One -> piszą." },
+            { pre: "38. One ", post: " mieszka w Polsce. (-ę, -esz)", ans: "chcą", stem: "chcą", nomination: "one", fakes: ["chce","chcemy"], rule: "One -> chcą." },
+            { pre: "39. Czy (wy) ", post: " powtórzyć, jaki macie numer telefonu? (-ę, -esz)", ans: "możecie", stem: "możecie", nomination: "wy", fakes: ["możemy","mogą"], rule: "Wy -> możecie." },
+            { pre: "40. W poniedziałek (ja) ", post: " test z polskiego. (-ę, -esz)", ans: "piszę", stem: "piszę", nomination: "ja", fakes: ["piszesz","pisze"], rule: "Ja -> piszę." }
+        ],
+        ex8verbs: [
+            { pre: "1. (ja) ", post: " artykuł.", ans: "Piszę", stem: "Piszę", nomination: "ja", fakes: ["Piszesz","Pisze"], rule: "Ja -> piszę." },
+            { pre: "2. One ", post: " regularnie na kurs francuskiego.", ans: "chodzą", stem: "chodzą", nomination: "one", fakes: ["chodzi","chodzicie"], rule: "One -> chodzą." },
+            { pre: "3. Czy pan ", post: " pracować we Wrocławiu?", ans: "chce", stem: "chce", nomination: "pan", fakes: ["chcę","chcesz"], rule: "Pan -> chce." },
+            { pre: "4. Czy (wy) ", post: " sport?", ans: "lubicie", stem: "lubicie", nomination: "wy", fakes: ["lubimy","lubią"], rule: "Wy -> lubicie." },
+            { pre: "5. (ty) ", post: " problem?", ans: "Masz", stem: "Masz", nomination: "ty", fakes: ["Mam","Ma"], rule: "Ty -> masz." },
+            { pre: "6. Czy pani ", post: " po niemiecku?", ans: "mówi", stem: "mówi", nomination: "pani", fakes: ["mówię","mówisz"], rule: "Pani -> mówi." },
+            { pre: "7. Uczeń ", post: " do szkoły.", ans: "chodzi", stem: "chodzi", nomination: "on", fakes: ["chodzą","chodzę"], rule: "Uczeń (on) -> chodzi." },
+            { pre: "8. Oni świetnie ", post: " sambę.", ans: "tańczą", stem: "tańczą", nomination: "oni", fakes: ["tańczy","tańczymy"], rule: "Oni -> tańczą." },
+            { pre: "9. Czy (ty) ", post: " w Krakowie?", ans: "studiujesz", stem: "studiujesz", nomination: "ty", fakes: ["studiuję","studiuje"], rule: "Ty -> studiujesz." },
+            { pre: "10. Gdzie (ty) ", post: "?", ans: "mieszkasz", stem: "mieszkasz", nomination: "ty", fakes: ["mieszkam","mieszka"], rule: "Ty -> mieszkasz." },
+            { pre: "11. (ja) ", post: " się języka polskiego.", ans: "Uczę się", stem: "Uczę się", nomination: "ja", fakes: ["Uczysz się","Uczy się"], rule: "Ja -> uczę się." },
+            { pre: "12. Czy (wy) ", post: " na kurs polskiego?", ans: "chodzicie", stem: "chodzicie", nomination: "wy", fakes: ["chodzimy","chodzą"], rule: "Wy -> chodzicie." },
+            { pre: "13. Oni świetnie ", post: " po polsku.", ans: "mówią", stem: "mówią", nomination: "oni", fakes: ["mówi","mówimy"], rule: "Oni -> mówią." },
+            { pre: "14. On ", post: " książkę.", ans: "pisze", stem: "pisze", nomination: "on", fakes: ["piszą","piszę"], rule: "On -> pisze." },
+            { pre: "15. Anna ", post: " europeistykę.", ans: "studiuje", stem: "studiuje", nomination: "ona", fakes: ["studiują","studiuję"], rule: "Anna (ona) -> studiuje." },
+            { pre: "16. Oni ", post: " na dyskotece.", ans: "tańczą", stem: "tańczą", nomination: "oni", fakes: ["tańczy","tańczymy"], rule: "Oni -> tańczą." },
+            { pre: "17. (my) ", post: " duży dom.", ans: "Mamy", stem: "Mamy", nomination: "my", fakes: ["Mam","Macie"], rule: "My -> mamy." },
+            { pre: "18. Czy Paweł ", post: " w Warszawie?", ans: "pracuje", stem: "pracuje", nomination: "on", fakes: ["pracują","pracuję"], rule: "Paweł (on) -> pracuje." },
+            { pre: "19. Teraz (ja) nie ", post: " słuchać muzyki.", ans: "chcę", stem: "chcę", nomination: "ja", fakes: ["chcesz","chce"], rule: "Ja -> chcę." },
+            { pre: "20. Czy (wy) ", post: " się literaturą?", ans: "interesujecie", stem: "interesujecie", nomination: "wy", fakes: ["interesujemy","interesują"], rule: "Wy -> interesujecie się." },
+            { pre: "21. Czy pan ", post: " mówić trochę wolniej?", ans: "może", stem: "może", nomination: "pan", fakes: ["mogę","możesz"], rule: "Pan -> może." },
+            { pre: "22. Oni ", post: " w pokoju.", ans: "są", stem: "są", nomination: "oni", fakes: ["jest","jesteśmy"], rule: "Oni -> są." },
+            { pre: "23. Czy (wy) ", post: " po angielsku?", ans: "czytacie", stem: "czytacie", nomination: "wy", fakes: ["czytamy","czytają"], rule: "Wy -> czytacie." },
+            { pre: "24. Czy (ty) ", post: " się języka polskiego?", ans: "uczysz", stem: "uczysz", nomination: "ty", fakes: ["uczę","uczy"], rule: "Ty -> uczysz się." },
+            { pre: "25. Wojtek i Ania ", post: " zadanie domowe.", ans: "robią", stem: "robią", nomination: "oni", fakes: ["robi","robimy"], rule: "Wojtek i Ania (oni) -> robią." },
+            { pre: "26. Czy (ty) ", post: " dobrze język polski?", ans: "znasz", stem: "znasz", nomination: "ty", fakes: ["znam","zna"], rule: "Ty -> znasz." },
+            { pre: "27. (oni) ", post: ", że to jest bez sensu.", ans: "Wiedzą", stem: "Wiedzą", nomination: "oni", fakes: ["Wie","Wiemy"], rule: "Oni -> wiedzą." },
+            { pre: "28. (ja) ", post: ", ale nie rozumiem.", ans: "Przepraszam", stem: "Przepraszam", nomination: "ja", fakes: ["Przepraszasz","Przeprasza"], rule: "Ja -> przepraszam." },
+            { pre: "29. Czy (ty) ", post: " mówić wolniej?", ans: "możesz", stem: "możesz", nomination: "ty", fakes: ["mogę","może"], rule: "Ty -> możesz." },
+            { pre: "30. (ja) ", post: " studiować ekonomię.", ans: "Chcę", stem: "Chcę", nomination: "ja", fakes: ["Chcesz","Chce"], rule: "Ja -> chcę." }
+        ]
+    };
+
+    const modes = { ex1: 'input', ex2: 'input', ex3: 'input', ex4: 'input', ex5: 'input', ex6: 'input', ex7: 'input', ex8: 'input', ex9a: 'input', ex7verbs: 'input', ex8verbs: 'input' };
+    let systemVoices = [];
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function scrollToTop() {
+        document.getElementById('top-nav').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        const total = correctCount + incorrectCount;
+        document.getElementById('stat-pct').innerText = total === 0 ? '0%' : Math.round((correctCount / total) * 100) + '%';
+    }
+
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+            return;
+        }
+        plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
+    }
+
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speakWordAndSentence(word, fullSentence) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+
+        const speed = parseFloat(document.getElementById('speed-range').value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+
+        const wordUtterance = new SpeechSynthesisUtterance(word);
+        wordUtterance.lang = 'pl-PL';
+        wordUtterance.rate = speed;
+        if (activeVoice) wordUtterance.voice = activeVoice;
+
+        const sentenceUtterance = new SpeechSynthesisUtterance(fullSentence);
+        sentenceUtterance.lang = 'pl-PL';
+        sentenceUtterance.rate = speed;
+        if (activeVoice) sentenceUtterance.voice = activeVoice;
+
+        window.speechSynthesis.speak(wordUtterance);
+        window.speechSynthesis.speak(sentenceUtterance);
+    }
+
+    function buildColoredHtml(full, stem, ok) {
+        if (full.startsWith(stem) && full.length > stem.length) {
+            let ending = full.substring(stem.length);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
+        }
+        if (full.length > 2) {
+            let endingIndex = full.length - 2; 
+            let basePart = full.substring(0, endingIndex);
+            let endPart = full.substring(endingIndex);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${basePart}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${endPart}</span></span>`;
+        }
+        return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${full}</span>`;
+    }
+
+    function toggleRule(id) {
+        const box = document.getElementById(id);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function setExMode(exKey, mode) {
+        modes[exKey] = mode;
+        document.getElementById(`label-input-${exKey}`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-${exKey}`).classList.toggle('active', mode === 'select');
+        renderStandardExercise(exKey);
+    }
+
+    function renderStandardExercise(key) {
+        const container = document.getElementById(`${key}-container`);
+        container.innerHTML = '';
+
+        dataset[key].forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let htmlText = ex.pre;
+            let choicesHtml = '';
+            const pId = `${key}-display-${idx}`;
+            
+            let fullCorrectSentence = (ex.pre + ex.ans + (ex.post || "")).replace(/\s+/g, ' ').trim();
+            if (ex.post2 && ex.ans2) {
+                fullCorrectSentence = (ex.pre + ex.ans + ex.post + ex.ans2 + ex.post2).replace(/\s+/g, ' ').trim();
+            }
+
+            if (modes[key] === 'input') {
+                if (key === 'ex3') {
+                    htmlText += `<span id="${key}-wrapper-${idx}-1"><input type="text" class="word-input wide" onchange="checkStandardInput('${key}', ${idx}, 1)" id="${key}-in-${idx}-1"></span>`;
+                } else {
+                    htmlText += `<span id="${key}-wrapper-${idx}-1"><input type="text" class="word-input" onchange="checkStandardInput('${key}', ${idx}, 1)" id="${key}-in-${idx}-1"></span>`;
+                }
+                htmlText += ex.post || "";
+                if (ex.post2 && ex.ans2) {
+                    htmlText += `<span id="${key}-wrapper-${idx}-2"><input type="text" class="word-input" onchange="checkStandardInput('${key}', ${idx}, 2)" id="${key}-in-${idx}-2"></span>`;
+                    htmlText += ex.post2;
+                }
+                htmlText += ` <span class="hint-badge">(${ex.nomination})</span>`;
+            } else {
+                htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
+                htmlText += (ex.post || "") + (ex.ans2 ? (" " + ex.ans2 + " " + ex.post2) : "") + ` <span class="hint-badge">(${ex.nomination})</span>`;
+                
+                const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
+                choicesHtml += `<div class="choices-grid-wrapper" id="${key}-grid-${idx}"><div class="choices-grid">`;
+                choices.forEach(c => {
+                    choicesHtml += `<button class="choice-btn" onclick="checkStandardSelect(this, '${key}', ${idx}, '${pId}', '${key}-grid-${idx}')">${c}</button>`;
+                });
+                choicesHtml += `</div></div>`;
+            }
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div class="sentence-text">${htmlText}</div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.ans}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-${key}-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-${key}-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkStandardInput(key, idx, inputNum) {
+        const ex = dataset[key][idx];
+        const input = document.getElementById(`${key}-in-${idx}-${inputNum}`);
+        const wrap = document.getElementById(`${key}-wrapper-${idx}-${inputNum}`);
+        const val = input.value.trim().toLowerCase().replace(/[\.\,\?\!\-\„\”\“]/g, "");
+        
+        const targetAns = inputNum === 1 ? ex.ans : ex.ans2;
+        const targetStem = inputNum === 1 ? ex.stem : ex.stem2;
+        const cleanTarget = targetAns.toLowerCase().replace(/[\.\,\?\!\-\„\”\“]/g, "");
+        const cleanAlt = ex.alt ? ex.alt.toLowerCase().replace(/[\.\,\?\!\-\„\”\“]/g, "") : null;
+
+        let fullSentence = (ex.pre + ex.ans + (ex.post || "")).replace(/\s+/g, ' ').trim();
+        if (ex.post2 && ex.ans2) fullSentence = (ex.pre + ex.ans + ex.post + ex.ans2 + ex.post2).replace(/\s+/g, ' ').trim();
+
+        if (val === cleanTarget || (inputNum === 1 && cleanAlt && val === cleanAlt)) {
+            correctCount++;
+            wrap.innerHTML = buildColoredHtml(inputNum === 1 ? (val === cleanAlt ? ex.alt : ex.ans) : ex.ans2, targetStem, true);
+            speakWordAndSentence(targetAns, fullSentence);
+        } else {
+            incorrectCount++;
+            wrap.innerHTML = buildColoredHtml(targetAns, targetStem, false);
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-${key}-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkStandardSelect(btn, key, idx, pId, gridId) {
+        const ex = dataset[key][idx];
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        const isCorrect = btn.innerText.trim().toLowerCase() === ex.ans.toLowerCase();
+        let fullSentence = (ex.pre + ex.ans + (ex.post || "")).replace(/\s+/g, ' ').trim();
+
+        if (isCorrect) {
+            correctCount++;
+            btn.classList.add('correct');
+            disp.innerHTML = buildColoredHtml(ex.ans, ex.stem, true);
+            speakWordAndSentence(ex.ans, fullSentence);
+        } else {
+            incorrectCount++;
+            btn.classList.add('incorrect');
+            disp.innerHTML = buildColoredHtml(ex.ans, ex.stem, false);
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-${key}-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function renderExercise10() {
+        const container = document.getElementById('ex10-container');
+        container.innerHTML = '';
+
+        dataset.ex10.forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            
+            let choicesHtml = `<div class="choices-grid-wrapper" id="ex10-grid-${idx}"><div class="choices-grid" style="grid-template-columns: 1fr;">`;
+            ex.choices.forEach(c => {
+                choicesHtml += `<button class="choice-btn" onclick="checkEx10Select(this, ${idx}, 'ex10-grid-${idx}')">${c}</button>`;
+            });
+            choicesHtml += `</div></div>`;
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div class="sentence-text"><b>${ex.question}</b></div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.correct}', '${ex.question}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-ex10-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-ex10-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkEx10Select(btn, idx, gridId) {
+        const ex = dataset.ex10[idx];
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        const isCorrect = btn.innerText.trim().toLowerCase() === ex.correct.toLowerCase();
+
+        if (isCorrect) {
+            correctCount++;
+            btn.classList.add('correct');
+            speakWordAndSentence(ex.correct, ex.question);
+        } else {
+            incorrectCount++;
+            btn.classList.add('incorrect');
+            speakWordAndSentence("Źle", ex.question);
+            document.getElementById(`rule-ex10-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        Object.keys(modes).forEach(key => renderStandardExercise(key));
+        renderExercise10();
+    });
+</script>
+</body>
+</html>
