@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ćwiczenia: Narzędnik i Podstawy (A1)</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --background: #f1f5f9;
+            --text: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stats-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .stat-box .num { font-size: 1.4rem; font-weight: 800; display: block; }
+        .stat-box .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 600; }
+        .stat-correct { color: var(--success); }
+        .stat-incorrect { color: var(--error); }
+        .stat-percent { color: var(--primary); }
+
+        .navigation-menu {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .navigation-menu p { font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+        .nav-links a {
+            background: white; border: 1px solid #cbd5e1; padding: 5px 10px;
+            border-radius: 6px; color: var(--primary); text-decoration: none;
+            font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+        }
+        .nav-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-links a.index-link { color: #e67e22; border-color: #f39c12; }
+        .nav-links a.index-link:hover { background: #e67e22; color: white; }
+
+        .audio-settings {
+            background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px;
+            border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem;
+        }
+        .audio-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
+        .audio-row:last-child { margin-bottom: 0; }
+        .audio-row label { font-weight: 600; color: #475569; min-width: 70px; }
+        .audio-row select, .audio-row input { flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; outline: none; }
+
+        h2 {
+            font-size: 1.15rem; background: #e2e8f0; padding: 8px 12px;
+            border-radius: 8px; margin-top: 28px; margin-bottom: 12px;
+            color: #0f172a; scroll-margin-top: 90px; border-left: 5px solid var(--primary);
+        }
+
+        .mode-toggle { display: flex; background: #e2e8f0; padding: 3px; border-radius: 99px; margin-bottom: 12px; }
+        .mode-label {
+            flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600;
+            padding: 5px 0; border-radius: 99px; cursor: pointer; transition: all 0.2s; user-select: none;
+        }
+        .mode-label.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+        .sentence-list { display: flex; flex-direction: column; gap: 10px; }
+        .sentence-item { background: #fff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.98rem; }
+        .sentence-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .sentence-text { word-wrap: break-word; flex: 1; line-height: 1.6; }
+        .sentence-actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+        .action-btn {
+            background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px;
+            padding: 4px 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: #475569;
+        }
+
+        .word-input {
+            display: inline-block; font-size: 0.95rem; padding: 2px 6px;
+            border: 2px solid #cbd5e1; border-radius: 6px; width: 180px; outline: none; margin: 2px 4px;
+        }
+        .word-input:focus { border-color: var(--primary); }
+
+        .colored-word { display: inline-block; font-weight: 600; padding: 1px 4px; border-radius: 4px; background: #f8fafc; }
+        .colored-word.text-success { border: 1px solid var(--success); background: #f0fdf4; }
+        .colored-word.text-error { border: 1px solid var(--error); background: #fef2f2; }
+        
+        .ending-correct { color: #d946ef; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+        .ending-incorrect { color: #f472b6; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+
+        .choices-grid-wrapper { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; }
+        .choices-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        @media(max-width: 450px) { .choices-grid { grid-template-columns: 1fr; } }
+        
+        .choice-btn {
+            background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 6px;
+            cursor: pointer; font-size: 0.9rem; font-weight: 600; text-align: left; outline: none;
+        }
+        .choice-btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
+        .choice-btn.incorrect { background-color: var(--error) !important; color: white; border-color: var(--error); }
+
+        .rule-box {
+            display: none; margin-top: 8px; padding: 8px 12px; background-color: #fffbeb;
+            border-left: 4px solid #f59e0b; border-radius: 4px; font-size: 0.85rem; color: #78350f;
+        }
+
+        .hint-badge { font-size: 0.78rem; color: #64748b; background: #f1f5f9; padding: 1px 4px; border-radius: 4px; font-weight: bold; }
+        .back-to-nav-container { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+        .back-to-nav-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; }
+        .back-to-index-btn { background: #fff3e0; border: 1px solid #ffe0b2; color: #e67e22; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="stats-panel" id="top-nav">
+        <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
+        <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
+        <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
+    </div>
+    
+    <div class="navigation-menu">
+        <p>Навігація за завданнями:</p>
+        <div class="nav-links">
+            <a href="index.html" class="index-link">🏠 Index</a>
+            <a href="#sec-3">Zadanie 3: Pytania i odpowiedzi</a>
+            <a href="#sec-4">Zadanie 4: Wybór poprawnej formy</a>
+            <a href="#sec-5">Zadanie 5: Narzędnik lp</a>
+        </div>
+    </div>
+
+    <div class="audio-settings">
+        <div class="audio-row">
+            <label for="voice-select">Голос:</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="audio-row">
+            <label for="speed-range">Швидкість:</label>
+            <input type="range" id="speed-range" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('speed-val').innerText = parseFloat(this.value).toFixed(1) + 'x'">
+            <span id="speed-val" style="font-weight:bold; min-width:35px; text-align:right;">1.0x</span>
+        </div>
+    </div>
+
+    <h2 id="sec-3">Zadanie 3: Dopasuj pytania do odpowiedzi</h2>
+    <div class="mode-toggle"><span id="label-input-s3" class="mode-label active" onclick="setSecMode(3, 'input')">Вписати відповідь</span><span id="label-select-s3" class="mode-label" onclick="setSecMode(3, 'select')">Test варіанти</span></div>
+    <div id="container-s3" class="sentence-list"></div>
+
+    <h2 id="sec-4">Zadanie 4: Proszę zdecydować, która forma jest poprawna i dlaczego?</h2>
+    <div class="mode-toggle"><span id="label-input-s4" class="mode-label active" onclick="setSecMode(4, 'input')">Вписати правильну форму</span><span id="label-select-s4" class="mode-label" onclick="setSecMode(4, 'select')">Test варіанти</span></div>
+    <div id="container-s4" class="sentence-list"></div>
+
+    <h2 id="sec-5">Zadanie 5: Proszę uzupełnić zdania poprawnymi formami narzędnika (Liczba pojedyncza)</h2>
+    <div class="mode-toggle"><span id="label-input-s5" class="mode-label active" onclick="setSecMode(5, 'input')">Вписати інструментал</span><span id="label-select-s5" class="mode-label" onclick="setSecMode(5, 'select')">Test варіанти</span></div>
+    <div id="container-s5" class="sentence-list"></div>
+
+    <div class="back-to-nav-container">
+        <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
+        <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
+    </div>
+</div>
+
+<script>
+    const sectionData = {
+        3: [
+            { pre: "Jak masz na imię? — ", post: "", ans: "Beata.", stem: "Beata", hint: "Ім'я", fakes: ["Nazywam się Beata Nowak.", "Jestem z Anglii."], rule: "Питання <i>Jak masz na imię?</i> вимагає лише імені у відповіді (напр. Beata)." },
+            { pre: "Skąd jesteś? — ", post: "", ans: "Jestem z Anglii.", stem: "Jestem z Anglii", hint: "Країна", fakes: ["W Brukseli.", "Polskimi filmami."], rule: "Питання <i>Skąd jesteś?</i> (Звідки ти?) вимагає конструкції <b>Jestem z + Dopełniacz</b>." },
+            { pre: "Jak się masz? — ", post: "", ans: "Dobrze, dziękuję.", stem: "Dobrze", hint: "Стан", fakes: ["Wszystko w porządku, a u ciebie?", "Tak, studiuję marketing."], rule: "Стандартна ввічлива відповідь на <i>Jak się masz?</i> — це <i>Dobrze, dziękuję</i>." },
+            { pre: "Co robisz? Studiujesz? — ", post: "", ans: "Tak, studiuję marketing.", stem: "Tak, studiuję", hint: "Діяльність", fakes: ["Ona jest studentką.", "Nazywam się Beata Nowak."], rule: "Відповідь безпосередньо підтверджує факт навчання (studiuję...)." },
+            { pre: "Co to jest? — ", post: "", ans: "To jest krzesło.", stem: "To jest krzesło", hint: "Предмет", fakes: ["To jest dziecko.", "Czy to jest długopis?"], rule: "Питання <i>Co to jest?</i> стосується неживих предметів (Mianownik)." },
+            { pre: "Kto to jest? — ", post: "", ans: "To jest dziecko.", stem: "To jest dziecko", hint: "Особа", fakes: ["Ona jest studentką.", "To jest krzesło."], rule: "Питання <i>Kto to jest?</i> стосується людей / істот." },
+            { pre: "Czy to jest długopis? — ", post: "", ans: "Tak, to jest długopis.", stem: "Tak, to jest długopis", hint: "Так/Ні", fakes: ["To jest krzesło.", "Tak, studiuję marketing."], rule: "Питання закритого типу (Чи це...?), на яке відповідають <i>Tak / Nie</i>." },
+            { pre: "Czym się interesujesz? — ", post: "", ans: "Polskimi filmami.", stem: "Polskimi filmami", hint: "Хобі", fakes: ["Jestem z Anglii.", "W Brukseli."], rule: "Дієслово <i>interesować się</i> вимагає орудного відмінка (Narzędnik) — <i>Czym? Polskimi filmami</i>." },
+            { pre: "Jak się nazywasz? — ", post: "", ans: "Nazywam się Beata Nowak.", stem: "Nazywam się", hint: "Прізвище", fakes: ["Beata.", "Ona jest studentką."], rule: "Питання <i>Jak się nazywasz?</i> передбачає відповідь з ім'ям та прізвищем." },
+            { pre: "Gdzie mieszkasz? — ", post: "", ans: "W Brukseli.", stem: "W Brukseli", hint: "Місто", fakes: ["Jestem z Anglii.", "Dobrze, dziękuję."], rule: "Питання <i>Gdzie?</i> вимагає локації (прийменник <i>w/na</i> + Miejscownik)." },
+            { pre: "Kim ona jest? — ", post: "", ans: "Ona jest studentką.", stem: "studentką", hint: "Професія", fakes: ["To jest dziecko.", "Nazywam się Beata Nowak."], rule: "Питання <i>Kim jest?</i> вимагає іменника в орудному відмінку (Narzędnik) для означення професії/ролі." },
+            { pre: "Co słychać? — ", post: "", ans: "Wszystko w porządku, a u ciebie?", stem: "Wszystko w porządku", hint: "Розмовне", fakes: ["Dobrze, dziękuję.", "Tak, studiuję marketing."], rule: "Розмовне питання <i>Co słychać?</i> (Як справи / Що чути?) чудово пасує до фрази <i>Wszystko w porządku...</i>" }
+        ],
+        4: [
+            { pre: "Umberto Eco jest Włochem. Kasia jest ", post: ".", ans: "Polką", stem: "Polk", hint: "Polka / Polką", fakes: ["Polka"], rule: "Конструкція <b>Podmiot + być + Narzędnik</b>. Для іменників жіночого роду закінчення <b>-ą</b>." },
+            { pre: "BMW to ", post: ".", ans: "niemiecka firma", stem: "niemiecka firma", hint: "niemiecka firma / Niemka", fakes: ["Niemka"], rule: "Конструкція з тотожністю <b>to + Mianownik</b>. Назва бренду автомобіля — це німецька компанія (firma), а не жінка-німкеня (Niemka)." },
+            { pre: "John Smith jest ", post: ".", ans: "Amerykaninem", stem: "Amerykanin", hint: "Amerykaninem / amerykański", fakes: ["amerykański"], rule: "Після дієслова <i>być</i> ставимо іменник в орудний відмінок (Narzędnik чоловічого роду): закінчення <b>-em</b>." },
+            { pre: "Andrew to ", post: ".", ans: "angielski student", stem: "angielski student", hint: "angielski student / Anglikiem", fakes: ["Anglikiem"], rule: "Після частки <b>to</b> іменна частина завжди залишається у називному відмінку (Mianownik)." },
+            { pre: "Robert jest ", post: ".", ans: "Anglikiem", stem: "Anglik", hint: "angielski student / Anglikiem", fakes: ["angielski student"], rule: "Класичне правило: <i>jest</i> вимагає орудного відмінка (Narzędnik) — <i>Anglik -> Anglikiem</i>." },
+            { pre: "Barcelona to ", post: ".", ans: "hiszpańskie miasto", stem: "hiszpańskie miasto", hint: "hiszpańskim miastem / hiszpańskie miasto", fakes: ["hiszpańskim miastem"], rule: "Сполучник <b>to</b> вимагає Називного відмінка (Mianownik): <i>hiszpańskie miasto</i>." },
+            { pre: "Olena jest ", post: ".", ans: "Ukrainką", stem: "Ukraink", hint: "Ukrainka / Ukrainką", fakes: ["Ukrainka"], rule: "Дієслово <i>być</i> керує орудним відмінком національності (Narzędnik): <i>Ukrainka -> Ukrainką</i>." },
+            { pre: "Wisła to ", post: ".", ans: "polska rzeka", stem: "polska rzeka", hint: "polska rzeka / polską rzeką", fakes: ["polską rzeką"], rule: "Частка <b>to</b> скасовує орудний відмінок і потребує форми Називного (Mianownik)." },
+            { pre: "Kraków to ", post: ".", ans: "polskie miasto", stem: "polskie miasto", hint: "polskie miasto / polskimi miastami", fakes: ["polskimi miastami"], rule: "У конструкціях із <b>to</b> використовується однина Називного відмінка: <i>polskie miasto</i>." },
+            { pre: "Piotr i Jan są ", post: ".", ans: "polskimi studentami", stem: "polskimi student", hint: "polskimi studentami / polskim studentem", fakes: ["polskim studentem"], rule: "Підмет у множині (Piotr i Jan), тому дієслово <i>są</i> вимагає множини орудного відмінка (Narzędnik lm): закінчення <b>-imi -ami</b>." }
+        ],
+        5: [
+            { pre: "On interesuje się ", post: " (muzyka klasyczna).", ans: "muzyką klasyczną", stem: "muzyką klasyczn", hint: "muzyka klasyczna", fakes: ["muzykę klasyczną", "muzyce klasycznej"], rule: "Жіночий рід в орудному відмінку (Narzędnik lp): прикметник та іменник мають однакове закінчення <b>-ą</b>." },
+            { pre: "Ona interesuje się ", post: " (polska historia).", ans: "polską historią", stem: "polską histori", hint: "polska historia", fakes: ["polskiej historii", "polską historię"], rule: "Іменник та прикметник жіночого роду в інструменталі завжди закінчуються на літеру <b>-ą</b>." },
+            { pre: "Interesujemy się ", post: " (niemiecki sport).", ans: "niemieckim sportem", stem: "niemieckim sport", hint: "niemiecki sport", fakes: ["niemieckim sportu", "niemiecki sportem"], rule: "Чоловічий рід (Narzędnik lp): прикметник закінчується на <b>-im</b> (після k/g), іменник на згідний — на <b>-em</b>." },
+            { pre: "Czy Jarek jest ", post: " ? (dobry kierowca).", ans: "dobrym kierowcą", stem: "dobrym kierowc", hint: "dobry kierowca", fakes: ["dobrym kierowcem", "dobrego kierowcy"], rule: "Іменник <i>kierowca</i> — чоловічого роду, але відмінюється за жіночим типом на <b>-ą</b>, прикметник чоловічий твердий — <b>-ym</b>." },
+            { pre: "Ona jest ", post: " (dobra nauczycielka).", ans: "dobrą nauczycielką", stem: "dobrą nauczycielk", hint: "dobra nauczycielka", fakes: ["dobrej nauczycielce", "dobrą nauczycielkę"], rule: "Жіночий рід, професія після дієслова <i>być</i>: обидва слова отримують флексію <b>-ą</b>." },
+            { pre: "Interesuję się ", post: " (literatura ukraińska).", ans: "literaturą ukraińską", stem: "literaturą ukraińsk", hint: "literatura ukraińska", fakes: ["literatury ukraińskiej", "literaturze ukraińskiej"], rule: "Орудний відмінок жіночого роду однини: традиційне закінчення <b>-ą</b> для обох слів." },
+            { pre: "Oni interesują się ", post: " (język polski).", ans: "językiem polskim", stem: "językiem polsk", hint: "język polski", fakes: ["języka polskiego", "językowi polskiemu"], rule: "Чоловічий рід: іменник отримує закінчення <b>-em</b>, прикметник після задньоязикового <i>k</i> — закінчення <b>-im</b>." },
+            { pre: "One interesują się ", post: " (język angielski).", ans: "językiem angielskim", stem: "językiem angielsk", hint: "język angielski", fakes: ["język angielski", "językiem angielskego"], rule: "Аналогічно: іменник чоловічого роду на приголосний має закінчення <b>-em</b>, прикметник після <i>k</i> — <b>-im</b>." },
+            { pre: "On jest ", post: " (szczupły mężczyzna).", ans: "szczupłym mężczyzną", stem: "szczupłym mężczyzn", hint: "szczupły mężczyzna", fakes: ["szczupłym mężczyznem", "szczupłego mężczyznę"], rule: "Іменник чоловічого роду із закінченням на <i>-a</i> (mężczyzna) в орудній формі приймає закінчення <b>-ą</b>, прикметник — <b>-ym</b>." },
+            { pre: "Ona jest ", post: " (niska kobieta).", ans: "niską kobietą", stem: "niską kobiet", hint: "niska kobieta", fakes: ["niskiej kobiecie", "niską kobietę"], rule: "Стандартне узгодження жіночого роду в Narzędnik: прикметник та іменник закінчуються на <b>-ą</b>." },
+            { pre: "Magda jest ", post: " (dobra studentka).", ans: "dobrą studentką", stem: "dobrą studentk", hint: "dobra studentka", fakes: ["dobra studentka", "dobrej studentce"], rule: "Характеристика особи жіночого роду через дієслово <i>być</i> потребує закінчень <b>-ą</b>." },
+            { pre: "Czy on jest ", post: " ? (dobry poeta).", ans: "dobrym poetą", stem: "dobrym poet", hint: "dobry poeta", fakes: ["dobrym poetem", "dobrego poety"], rule: "Чоловік-поет (poeta) отримує закінчення <b>-ą</b> (як жіночі форми), а прикметник — стандартне чоловіче <b>-ym</b>." },
+            { pre: "Czy ona jest ", post: " ? (dobra poetka).", ans: "dobrą poetką", stem: "dobrą poetk", hint: "dobra poetka", fakes: ["dobrej poetce", "dobrą poetkę"], rule: "Жіночий рід у значенні професії / ролі в орудному відмінку: закінчення <b>-ą</b>." },
+            { pre: "Sophia Loren jest ", post: " (włoska aktorka).", ans: "włoską aktorką", stem: "włoską aktork", hint: "włoska aktorka", fakes: ["włoskiej aktorce", "włoską aktorkę"], rule: "Опис особи жіночого роду після дієслова <i>być</i> — скрізь суфікс і флексія <b>-ą</b>." },
+            { pre: "Ona jest ", post: " (dobra dentystka).", ans: "dobrą dentystką", stem: "dobrą dentystk", hint: "dobra dentystka", fakes: ["dobra dentystka", "dobrej dentystce"], rule: "Повна форма орудного відмінка однини жіночого роду: закінчення <b>-ą</b>." }
+        ]
+    };
+
+    let activeSecModes = {};
+    let systemVoices = [];
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function scrollToTop() {
+        document.getElementById('top-nav').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        const total = correctCount + incorrectCount;
+        document.getElementById('stat-pct').innerText = total === 0 ? '0%' : Math.round((correctCount / total) * 100) + '%';
+    }
+
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+            return;
+        }
+        plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
+    }
+
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speakWordAndSentence(word, fullSentence) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+
+        const speed = parseFloat(document.getElementById('speed-range').value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+
+        const wordUtterance = new SpeechSynthesisUtterance(word);
+        wordUtterance.lang = 'pl-PL';
+        wordUtterance.rate = speed;
+        if (activeVoice) wordUtterance.voice = activeVoice;
+
+        const sentenceUtterance = new SpeechSynthesisUtterance(fullSentence);
+        sentenceUtterance.lang = 'pl-PL';
+        sentenceUtterance.rate = speed;
+        if (activeVoice) sentenceUtterance.voice = activeVoice;
+
+        window.speechSynthesis.speak(wordUtterance);
+        window.speechSynthesis.speak(sentenceUtterance);
+    }
+
+    function buildColoredHtml(full, stem, ok) {
+        if (stem && full.startsWith(stem) && full.length > stem.length) {
+            let ending = full.substring(stem.length);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
+        }
+        if (full.length > 2) {
+            let endingIndex = full.length - 2; 
+            if(full.endsWith('eniem') || full.endsWith('ami') || full.endsWith('emi')) endingIndex = full.length - 4;
+            if (endingIndex < 1) endingIndex = 1;
+            let basePart = full.substring(0, endingIndex);
+            let endPart = full.substring(endingIndex);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${basePart}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${endPart}</span></span>`;
+        }
+        return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${full}</span>`;
+    }
+
+    function toggleRule(id) {
+        const box = document.getElementById(id);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function setSecMode(secId, mode) {
+        activeSecModes[secId] = mode;
+        document.getElementById(`label-input-s${secId}`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-s${secId}`).classList.toggle('active', mode === 'select');
+        renderSection(secId);
+    }
+
+    function renderSection(secId) {
+        const container = document.getElementById(`container-s${secId}`);
+        if (!container) return;
+        container.innerHTML = '';
+        
+        const mode = activeSecModes[secId] || 'input';
+        const dataList = sectionData[secId] || [];
+
+        dataList.forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let htmlText = ex.pre;
+            let choicesHtml = '';
+            const pId = `display-s${secId}-${idx}`;
+            const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
+
+            if (mode === 'input') {
+                htmlText += `<span id="wrapper-s${secId}-${idx}"><span class="hint-badge">${ex.hint}</span> <input type="text" class="word-input" onchange="checkSecInput(${secId}, ${idx}, '${ex.ans.replace(/'/g, "\\'")}', '${ex.stem || ''}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="in-s${secId}-${idx}"></span>`;
+                htmlText += ex.post;
+            } else {
+                htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
+                htmlText += ex.post;
+                
+                const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
+                
+                choicesHtml += `<div class="choices-grid-wrapper" id="grid-s${secId}-${idx}"><div class="choices-grid">`;
+                choices.forEach(c => {
+                    choicesHtml += `<button class="choice-btn" onclick="checkSecSelect(this, '${ex.ans.replace(/'/g, "\\'")}', '${ex.stem || ''}', 'grid-s${secId}-${idx}', ${secId}, ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
+                });
+                choicesHtml += `</div></div>`;
+            }
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div class="sentence-text">${htmlText}</div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.ans.replace(/'/g, "\\'")}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-s${secId}-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-s${secId}-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkSecInput(secId, idx, ans, stem, fullSentence) {
+        const input = document.getElementById(`in-s${secId}-${idx}`);
+        const wrap = document.getElementById(`wrapper-s${secId}-${idx}`);
+        
+        let userVal = input.value.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+        let cleanAns = ans.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+
+        if(userVal === cleanAns) {
+            correctCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-s${secId}-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkSecSelect(btn, ans, stem, gridId, secId, idx, pId, fullSentence) {
+        const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            correctCount++; 
+            btn.classList.add('correct');
+            disp.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            btn.classList.add('incorrect');
+            disp.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-s${secId}-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        [3, 4, 5].forEach(i => {
+            activeSecModes[i] = 'input';
+            renderSection(i);
+        });
+    });
+</script>
+</body>
+</html>
