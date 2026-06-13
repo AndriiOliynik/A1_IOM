@@ -165,6 +165,11 @@
             <a href="#sec-10">X. Lokalizacja przedmiotów</a>
             <a href="#sec-11">XI. Miejscownik lm</a>
             <a href="#sec-12">XII. Układanie pytań</a>
+            <a href="#sec-13">XIII. Dodatkowe: Alternacje</a>
+            <a href="#sec-14">XIV. Dodatkowe: Żeńskie</a>
+            <a href="#sec-15">XV. Dodatkowe: Przym.+Rzecz. lp</a>
+            <a href="#sec-16">XVI. Dodatkowe: Liczba mnoga</a>
+            <a href="#sec-17">XVII. Dodatkowe: Przym.+Rzecz. lm</a>
         </div>
     </div>
 
@@ -228,6 +233,27 @@
     <div class="mode-toggle"><span id="label-input-s12" class="mode-label active" onclick="setSecMode(12, 'input')">Вписати питання</span><span id="label-select-s12" class="mode-label" onclick="setSecMode(12, 'select')">Test варіанти</span></div>
     <div id="container-s12" class="sentence-list"></div>
 
+    <!-- НОВІ ДОДАТКОВІ ЗАВДАННЯ ХІІІ - XVII -->
+    <h2 id="sec-13">XIII. Dodatkowe Ćw 1. Liczba pojedyncza — alternacje</h2>
+    <div class="mode-toggle"><span id="label-input-s13" class="mode-label active" onclick="setSecMode(13, 'input')">Вписати форму</span><span id="label-select-s13" class="mode-label" onclick="setSecMode(13, 'select')">Test варіанти</span></div>
+    <div id="container-s13" class="sentence-list"></div>
+
+    <h2 id="sec-14">XIV. Dodatkowe Ćw 2. Rzeczowniki żeńskie (k / g / ch)</h2>
+    <div class="mode-toggle"><span id="label-input-s14" class="mode-label active" onclick="setSecMode(14, 'input')">Вписати форму</span><span id="label-select-s14" class="mode-label" onclick="setSecMode(14, 'select')">Test варіанти</span></div>
+    <div id="container-s14" class="sentence-list"></div>
+
+    <h2 id="sec-15">XV. Dodatkowe Ćw 3. Przymiotnik + rzeczownik (liczba pojedyncza)</h2>
+    <div class="mode-toggle"><span id="label-input-s15" class="mode-label active" onclick="setSecMode(15, 'input')">Вписати форму</span><span id="label-select-s15" class="mode-label" onclick="setSecMode(15, 'select')">Test варіанти</span></div>
+    <div id="container-s15" class="sentence-list"></div>
+
+    <h2 id="sec-16">XVI. Dodatkowe Ćw 4. Liczba mnoga (-ach)</h2>
+    <div class="mode-toggle"><span id="label-input-s16" class="mode-label active" onclick="setSecMode(16, 'input')">Вписати форму</span><span id="label-select-s16" class="mode-label" onclick="setSecMode(16, 'select')">Test варіанти</span></div>
+    <div id="container-s16" class="sentence-list"></div>
+
+    <h2 id="sec-17">XVII. Dodatkowe Ćw 5. Przymiotnik + rzeczownik (liczba mnoga)</h2>
+    <div class="mode-toggle"><span id="label-input-s17" class="mode-label active" onclick="setSecMode(17, 'input')">Вписати форму</span><span id="label-select-s17" class="mode-label" onclick="setSecMode(17, 'select')">Test варіанти</span></div>
+    <div id="container-s17" class="sentence-list"></div>
+
     <div class="back-to-nav-container">
         <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
         <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
@@ -235,7 +261,6 @@
 </div>
 
 <script>
-    // Масиви даних для всіх 12 розділів
     const sectionData = {
         1: [
             { pre: "Pływam w ", post: ".", ans: "basenie", stem: "basen", hint: "basen", fakes: ["basenem", "basenu"], rule: "<b>basen</b> (ч.р., тверда основа): чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
@@ -274,8 +299,8 @@
             { pre: "Książka leży ", post: " podłodze.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "На горизонтальній відкритій поверхні предмета (підлога, стіл) — <b>na podłodze</b>." }
         ],
         4: [
-            { pre: "Ala siedzi ", post: " stole.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Сидіти безпосередньо поруч / за столом — використовується прийменник <b>przy</b>." },
-            { pre: "Spotkaliśmy się ", post: " kawie.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "Зустрітися з приводу якоїсь події / процесу (на каву) — сталий зворот <b>na kawie</b>." },
+            { pre: "Ala siedzi ", post: " stole.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Сидіти безпосередньо поруч / за столом — використовується прийменnik <b>przy</b>." },
+            { pre: "Spotkaliśmy się ", post: " kawie.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "Зустрітися з приводу якаїсь події / процесу (на каву) — сталий зворот <b>na kawie</b>." },
             { pre: "Obraz wisi ", post: " ścianie.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "На вертикальній площині (стіні) за правилами польської мови вживається прийменник <b>na</b>." },
             { pre: "Biurko stoi ", post: " oknie.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Знаходитися в безпосередній близькості (поруч із вікном) — це <b>przy oknie</b>." },
             { pre: "", post: " domu jest ogród.", ans: "Przy", stem: "Przy", hint: "w / na / przy", fakes: ["W", "Na"], rule: "Поруч із будинком, біля нього — використовуємо локативний прийменник <b>Przy</b>." },
@@ -283,7 +308,7 @@
             { pre: "", post: " stole stoją kwiaty.", ans: "Na", stem: "Na", hint: "w / na / przy", fakes: ["W", "Przy"], rule: "Квіти стоять зверху на поверхні столу, тому підходить виключно прийменник <b>Na</b>." },
             { pre: "Teatr jest ", post: " placu.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Якщо будівля розташована по периметру або біля площі, вживають прийменник <b>przy placu</b>." },
             { pre: "Studenci rozmawiali ", post: " ulicy.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "На відкритому просторі вулиці — сталий просторовий прийменник <b>na ulicy</b>." },
-            { pre: "Marysia płyвала ", post: " basenie.", ans: "w", stem: "w", hint: "w / na / przy", fakes: ["na", "przy"], rule: "Перебувати всередині резервуара з водою (басейну) — прийменник <b>w basenie</b>." }
+            { pre: "Marysia pływała ", post: " basenie.", ans: "w", stem: "w", hint: "w / na / przy", fakes: ["na", "przy"], rule: "Перебувати всередині резервуара з водою (басейну) — прийменник <b>w basenie</b>." }
         ],
         5: [
             { pre: "Kasia jest w ", post: ".", ans: "Londynie", stem: "Londyn", hint: "Londyn", fakes: ["Londynu", "Londynem"], rule: "<b>Londyn</b> (ч.р.): основа на твердий <i>n</i> дає чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
@@ -349,7 +374,7 @@
             { pre: "Książki stoją ", post: ".", ans: "na półce", hint: "na półce / na biurku", fakes: ["w półce", "na półkę"], rule: "<b>półka</b> (ж.р.): перед закінченням <i>-e</i> відбувається чергування приголосних <b>k -> c</b>." },
             { pre: "Telefon jest na ", post: " stoliku.", ans: "małym", stem: "małym", hint: "małym", fakes: ["małego", "mały"], rule: "Узгодження прикметника з іменником чоловічого роду в Miejscownik однини: закінчення <b>-ym</b>." },
             { pre: "Dywan leży ", post: ".", ans: "na podłodze", stem: "na podłodze", hint: "na podłodze", fakes: ["w podłodze", "na podłogę"], rule: "<b>podłoga</b> (ж.р.): задньоязиковий приголосний основи зазнає регулярного чергування <b>g -> z</b> + закінчення <b>-e</b>." },
-            { pre: "Owoce są ", post: ", a talerz z owocami stoi на столе.", ans: "w salaterze", stem: "w salaterze", hint: "na stole / w salaterze", fakes: ["na salaterze", "w salaterka"], rule: "<b>salaterka</b> (ж.р.): перебувати всередині глибокого посуду — прийменник <b>w</b>, приголосний чергується <b>k -> c + e</b>." },
+            { pre: "Owoce są ", post: ", a talerz z owocami stoi na stole.", ans: "w salaterze", stem: "w salaterze", hint: "na stole / w salaterze", fakes: ["na salaterze", "w salaterka"], rule: "<b>salaterka</b> (ж.р.): перебувати всередині глибокого посуду — прийменник <b>w</b>, приголосний чергується <b>k -> c + e</b>." },
             { pre: "Talerz z owocami ", post: " na stole.", ans: "stoi", stem: "stoi", hint: "дієслово: stoi", fakes: ["leży", "wisi"], rule: "Посуд на горизонтальній поверхні зазвичай вертикально <b>stoi</b> (стоїть)." },
             { pre: "Gazeta leży także ", post: ".", ans: "na kanapie", stem: "na kanapie", hint: "na stoliku / na kanapie", fakes: ["w kanapie", "na kanapę"], rule: "<b>kanapa</b> (ж.р.): на поверхні дивана/канапи — прийменник <b>na</b>, губний приголосний пом'якшується <b>p -> pie</b>." },
             { pre: "Krzesła stoją ", post: ".", ans: "przy stole", stem: "przy stole", hint: "przy stole / w pokoju", fakes: ["na stole", "w stole"], rule: "Стільці зазвичай розташовані безпосередньо поруч із столом, тому підходить прийменник <b>przy</b>." }
@@ -357,7 +382,7 @@
         11: [
             { pre: "Ania każde wakacje spędza w (1) ", post: " (góra).", ans: "górach", stem: "gór", hint: "góry (lm)", fakes: ["górze", "górami"], rule: "Miejscownik множини (liczba mnoga) для всіх родів має універсальне закінчення <b>-ach</b>." },
             { pre: "Koleżanka Ani woli spędzać lato w (2) ", post: " (gorący kraj).", ans: "gorących krajach", stem: "gorących kraj", hint: "gorące kraje (lm)", fakes: ["gorącym kraju", "gorącymi krajami"], rule: "Множина: прикметники мають закінчення <b>-ych/-ich</b>, іменники — закінчення <b>-ach</b>." },
-            { pre: "Magda lubi opalać się na (3) ", post: " (szeroka plaża)", ans: "szerokich plażach", stem: "szerokich plaż", hint: "szerokie plaże (lm)", fakes: ["szerokiej plaży", "szerokimi plażami"], rule: "Множина: після літери <i>k</i> прикметник приймає <b>-ich</b>, іменник закінчується на <b>-ach</b>." },
+            { pre: "Magda lubi opalać się na (3) ", post: " (szeroka plaża)", ans: "szerokich plażach", stem: "szerokich plaż", hint: "szerokie plaże (lm)", fakes: ["szerokiej plaży", "szerokimi plażami"], rule: "Множина: після літера <i>k</i> прикметник приймає <b>-ich</b>, іменник закінчується на <b>-ach</b>." },
             { pre: "i pływać w (4) ", post: " (ciepłe morze).", ans: "ciepłych morzach", stem: "ciepłych morz", hint: "ciepłe morza (lm)", fakes: ["ciepłym morzu", "ciepłymi morzami"], rule: "У місцевому відмінку множини іменники середнього роду також приймають закінчення <b>-ach</b>." },
             { pre: "Magda w (5) ", post: " (ocean) ogląda i fotografuje kolorowe ryby.", ans: "oceanach", stem: "ocean", hint: "oceany (lm)", fakes: ["oceanie", "oceanami"], rule: "Стандартне закінчення іменників чоловічого роду в Miejscownik lm — <b>-ach</b>." },
             { pre: "Ania natomiast chodzi po (6) ", post: " (mała wieś)", ans: "małych wsiach", stem: "małych wsi", hint: "małe wsie (lm)", fakes: ["małej wsi", "małymi wsiami"], rule: "Іменники жіночого роду на приголосний (<i>wieś</i>) у множині отримують закінчення <b>-ach</b>." },
@@ -370,7 +395,7 @@
         12: [
             { pre: "Sebastian myśli o Julii. Pytanie: ", post: " myśli Sebastian?", ans: "O kim", stem: "O kim", hint: "pytanie o osobę", fakes: ["O czym", "W kim"], rule: "Для істот (людей) після прийменника <i>o</i> ставиться питальний займенник у Miejscownik: <b>O kim</b>." },
             { pre: "Monika zakochała się w Danielu. Pytanie: ", post: " zakochała się Monika?", ans: "W kim", stem: "W kim", hint: "pytanie z w", fakes: ["W czym", "O kim"], rule: "Дієслово <i>zakochać się</i> вимагає прийменника <i>w</i> + Biernik/Miejscownik. Питання до особи — <b>W kim</b>." },
-            { pre: "Krystyna marzy o podróżach. Pytanie: ", post: " marzy Krystyna?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "W czym"], rule: "Для неістот (речей, явищ, подорожей) ставиться питальний займенnik <b>O czym</b>." },
+            { pre: "Krystyna marzy o podróżach. Pytanie: ", post: " marzy Krystyna?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "W czym"], rule: "Для неістот (речей, явищ, подорожей) ставиться питальний займенник <b>O czym</b>." },
             { pre: "Mikołaj opowiadał o swoich przygodach. Pytanie: ", post: " opowiadał Mikołaj?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "Po czym"], rule: "Пригоди — це неістоти, тому питальна форма має вигляд <b>O czym</b>." },
             { pre: "Kacper mówi o egzaminie. Pytanie: ", post: " mówi Kacper?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "Na czym"], rule: "Питання до неістоти з прийменником <i>o</i> формується як <b>O czym</b>." },
             { pre: "Kot śpi na fotelu. Pytanie: ", post: " śpi kot?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "Jak"], rule: "Для з'ясування локації (на кріслі) використовується загальне питальне слово <b>Gdzie</b> (або: <i>Na czym</i>)." },
@@ -378,6 +403,51 @@
             { pre: "Krzysiek mieszka w Londynie. Pytanie: ", post: " mieszka Krzysiek?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "Skąd"], rule: "Питання про місце проживання або перебування в місті ставиться за допомогою слова <b>Gdzie</b>." },
             { pre: "Studenci test piszą w styczniu. Pytanie: ", post: " piszą test studenci?", ans: "Kiedy", stem: "Kiedy", hint: "pytanie o czas", fakes: ["Gdzie", "W kim"], rule: "Назва місяця (у січні) є часовим орієнтиром, тому коректне питання — <b>Kiedy</b>." },
             { pre: "Na parkingu stoją samochody. Pytanie: ", post: " stoją samochody?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "O czym"], rule: "Питання стосується місця розташування автомобілів на паркувальному майданчику — використовуємо <b>Gdzie</b>." }
+        ],
+        
+        // НОВІ СЕКЦІЇ З ДАНИМИ ВПРАВ
+        13: [
+            { pre: "Kot śpi na ", post: ".", ans: "dywanie", stem: "dywan", hint: "dywan", fakes: ["dywaniu", "dywanem"], rule: "<b>dywan</b> (ч.р.): чергування приголосних <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Zostawiłem klucze na ", post: ".", ans: "stole", stem: "stół", hint: "stół", fakes: ["stoli", "stołu"], rule: "<b>stół</b> (ч.р.): чергування голосних <i>ó -> o</i> та приголосних <b>ł -> l</b> + закінчення <b>-e</b>." },
+            { pre: "W ", post: " jest dużo zabytków.", ans: "mieście", stem: "miast", hint: "miasto", fakes: ["miastu", "miaste"], rule: "<b>miasto</b> (с.р.): чергування голосних <i>a -> e</i> та приголосних <b>st -> ści</b> + закінчення <b>-e</b>." },
+            { pre: "Dziadek codziennie pracuje w ", post: ".", ans: "ogrodzie", stem: "ogród", hint: "ogród", fakes: ["ogródu", "ogrodem"], rule: "<b>ogród</b> (ч.р.): чергування <i>ó -> o</i> та <b>d -> dzi</b> + закінчення <b>-e</b>." },
+            { pre: "Do pracy jeżdżę na ", post: ".", ans: "rowerze", stem: "rower", hint: "rower", fakes: ["roweru", "rowerem"], rule: "<b>rower</b> (ч.р.): тверда основа чергується <b>r -> rz</b> + закінчення <b>-e</b>." },
+            { pre: "Wczoraj byliśmy w ", post: " na nowej sztuce.", ans: "teatrze", stem: "teatr", hint: "teatr", fakes: ["teatru", "teatrem"], rule: "<b>teatr</b> (ч.р.): класичне чергування приголосних <b>r -> rz</b> + закінчення <b>-e</b>." },
+            { pre: "List leży na ", post: ".", ans: "biurku", stem: "biurk", hint: "biurko", fakes: ["biurkiem", "biurce"], rule: "<b>biurko</b> (с.р.): основа на задньоязиковий <b>k</b> вимагає закінчення <b>-u</b>." },
+            { pre: "Po ", post: " poszliśmy na spacer.", ans: "obiedzie", stem: "obiad", hint: "obiad", fakes: ["obiadu", "obiadem"], rule: "<b>obiad</b> (ч.р.): чергування голосної <i>a -> e</i> та приголосного <b>d -> dzi</b> + закінчення <b>-e</b>." },
+            { pre: "Ptak siedzi w ", post: ".", ans: "gnieździe", stem: "gniazd", hint: "gniazdo", fakes: ["gniazdu", "gniaździe"], rule: "<b>gniazdo</b> (с.р.): чергування голосних <i>a -> e</i> та складне пом'якшення групи приголосних <b>zd -> ździ</b> + закінчення <b>-e</b>." },
+            { pre: "Telefon jest na ", post: ".", ans: "oknie", stem: "okn", hint: "okno", fakes: ["oknu", "oknem"], rule: "<b>okno</b> (с.р.): твердий приголосний основи чергується за м'яким типом <b>n -> ni</b> + закінчення <b>-e</b>." }
+        ],
+        14: [
+            { pre: "Mieszkam w ", post: ".", ans: "Polsce", stem: "Polsk", hint: "Polska", fakes: ["Polski", "Polskę"], rule: "<b>Polska</b> (ж.р.): задньоязиковий приголосний основи чергується за правилом <b>k -> c</b> + закінчення <b>-e</b>." },
+            { pre: "Kupiłam aspirynę w ", post: ".", ans: "aptece", stem: "aptek", hint: "apteka", fakes: ["apteki", "aptekę"], rule: "<b>apteka</b> (ж.р.): регулярна зміна задньоязикового звука перед закінченням локатива <b>k -> c</b> + <b>-e</b>." },
+            { pre: "Dzieci bawią się na ", post: ".", ans: "podłodze", stem: "podłog", hint: "podłoga", fakes: ["podłogi", "podłogę"], rule: "<b>podłoga</b> (ж.р.): задньоязиковий дзвінкий приголосний дає чергування <b>g -> dz</b> + закінчення <b>-e</b>." },
+            { pre: "Płyniemy łódką po ", post: ".", ans: "rzece", stem: "rzek", hint: "rzeka", fakes: ["rzeki", "rzekę"], rule: "<b>rzeka</b> (ж.р.): за класичною схемою задньоязикових приголосних маємо перехід <b>k -> c</b> + <b>-e</b>." },
+            { pre: "Mam ranę na ", post: ".", ans: "nodze", stem: "nog", hint: "noga", fakes: ["nogi", "nogę"], rule: "<b>noga</b> (ж.р.): відбувається регулярна альтернація приголосних звуків основи <b>g -> dz</b> + закінчення <b>-e</b>." },
+            { pre: "Wszyscy mówią o tej ", post: ".", ans: "książce", stem: "książk", hint: "książka", fakes: ["książki", "książkę"], rule: "<b>książka</b> (ж.р.): у позиції перед флексією <i>-e</i> маємо чергування звуків <b>k -> c</b>." },
+            { pre: "Jestem już w ", post: " do domu.", ans: "drodze", stem: "drog", hint: "droga", fakes: ["drogi", "drogę"], rule: "<b>droga</b> (ж.р.): для утворення форми місцевого відмінка приголосний основи зазнає чергування <b>g -> dz</b> + <b>-e</b>." }
+        ],
+        15: [
+            { pre: "Mieszkamy w ", post: ".", ans: "nowym bloku", stem: "nowym blok", hint: "nowy blok", fakes: ["nowego bloku", "nowym bloku"], rule: "<b>nowy blok</b> (ч.р.): закінчення прикметника чоловічого роду — <b>-ym</b>; іменник на задньоязиковий закінчується на <b>-u</b>." },
+            { pre: "Uczę się w ", post: ".", ans: "dobrej szkole", stem: "dobrej szkoł", hint: "dobra szkoła", fakes: ["dobrą szkołę", "dobrej szkoły"], rule: "<b>dobra szkoła</b> (ж.р.): закінчення прикметника жіночого роду — <b>-ej</b>; в іменнику чергування <b>ł -> li</b> + закінчення <b>-e</b>." },
+            { pre: "Spaliśmy w ", post: ".", ans: "drogim hotelu", stem: "drogim hotel", hint: "drogi hotel", fakes: ["drogiego hotelu", "drogi hotelu"], rule: "<b>drogi hotel</b> (ч.р.): прикметник після м'якого/задньоязикового має закінчення <b>-im</b>; іменник з м'якою основою отримує закінчення <b>-u</b>." },
+            { pre: "Obraz wisi na ", post: ".", ans: "białej ścianie", stem: "białej ścian", hint: "biała ściana", fakes: ["białą ścianę", "białej ściany"], rule: "<b>biała ściana</b> (ж.р.): прикметник змінюється на <b>-ej</b>; в іменнику маємо пом'якшення основи <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Pracuję w ", post: ".", ans: "dużym szpitalu", stem: "dużym szpital", hint: "duży szpital", fakes: ["dużego szpitala", "duży szpitalu"], rule: "<b>duży szpital</b> (ч.р.): прикметник твердої групи закінчується на <b>-ym</b>; іменник із історично м'яким приголосним основи має закінчення <b>-u</b>." },
+            { pre: "Rozmawialiśmy o ", post: ".", ans: "ciekawym filmie", stem: "ciekawym film", hint: "ciekawy film", fakes: ["ciekawego filmu", "ciekawym filmu"], rule: "<b>ciekawy film</b> (ч.р.): прикметник на <b>-ym</b>; в іменнику губний приголосний пом'якшується <b>m -> mi</b> + закінчення <b>-e</b>." }
+        ],
+        16: [
+            { pre: "Lubię spacerować po ", post: ".", ans: "górach", stem: "gór", hint: "góry", fakes: ["górze", "górami"], rule: "<b>góry</b> (множина): у Miejscownik lm (множини) абсолютно всі роди іменників отримують закінчення <b>-ach</b>." },
+            { pre: "W tych ", post: " są tanie ubrania.", ans: "sklepach", stem: "sklep", hint: "sklepy", fakes: ["sklepie", "sklepami"], rule: "<b>sklepy</b> (множина): локативна форма для множини утворюється за допомогою універсального суфікса <b>-ach</b>." },
+            { pre: "Na ", post: " rosną kwiaty.", ans: "łąkach", stem: "łąk", hint: "łąki", fakes: ["łące", "łąkami"], rule: "<b>łąki</b> (множина): іменник жіночого роду у множині набуває стандартного закінчення <b>-ach</b> (без чергувань приголосних)." },
+            { pre: "Dzieci bawią się na ", post: ".", ans: "ulicach", stem: "ulic", hint: "ulice", fakes: ["ulicy", "ulicami"], rule: "<b>ulice</b> (множина): закінчення місцевого відмінка для форми множини завжди має вигляд <b>-ach</b>." },
+            { pre: "Rozmawiamy o naszych ", post: ".", ans: "planach", stem: "plan", hint: "plany", fakes: ["planie", "planami"], rule: "<b>plany</b> (множина): неживий іменник чоловічого роду у множині отримує регулярне закінчення <b>-ach</b>." },
+            { pre: "W polskich ", post: " jest pyszne jedzenie.", ans: "restauracjach", stem: "restauracj", hint: "restauracje", fakes: ["restauracji", "restauracjami"], rule: "<b>restauracje</b> (множина): основи на <i>-cja</i> у місцевому відмінку множини підпорядковуються загальному правилу закінчення <b>-ach</b>." }
+        ],
+        17: [
+            { pre: "Byliśmy na wakacjach w ", post: ".", ans: "wysokich górach", stem: "wysokich gór", hint: "wysokie góry", fakes: ["wysokim górze", "wysokimi górami"], rule: "<b>wysokie góry</b> (множина): прикметники у Miejscownik lm мають закінчення <b>-ych / -ich</b>, іменники — <b>-ach</b>." },
+            { pre: "Lubię читать o ", post: ".", ans: "dalekich krajach", stem: "dalekich kraj", hint: "dalekie kraje", fakes: ["dalekim kraju", "dalekimi krajami"], rule: "<b>dalekie kraje</b> (множина): після м'яких чи задньоязикових прикметник закінчується на <b>-ich</b>, іменник — на <b>-ach</b>." },
+            { pre: "Oni mieszkają w ", post: ".", ans: "starych kamienicach", stem: "starych kamienic", hint: "stare kamienice", fakes: ["starej kamienicy", "starymi kamienicami"], rule: "<b>stare kamienice</b> (множина): прикметник твердого типу закінчується на <b>-ych</b>, іменник набуває форми на <b>-ach</b>." },
+            { pre: "Na ", post: " leżał śnieg.", ans: "zielonych polach", stem: "zielonych pol", hint: "zielone pola", fakes: ["zielonym polu", "zielonymi polami"], rule: "<b>zielone pola</b> (множина, середній рід): прикметник у множині закінчується на <b>-ych</b>, іменник отримує регулярне <b>-ach</b>." }
         ]
     };
 
@@ -443,7 +513,7 @@
         }
         if (full.length > 2) {
             let endingIndex = full.length - 2; 
-            if(full.endsWith('ecie') || full.endsWith('sze') || full.endsWith('odzie') || full.endsWith('ach')) endingIndex = full.length - 4;
+            if(full.endsWith('ecie') || full.endsWith('sze') || full.endsWith('odzie') || full.endsWith('ach') || full.endsWith('cach')) endingIndex = full.length - 4;
             if (endingIndex < 1) endingIndex = 1;
             let basePart = full.substring(0, endingIndex);
             let endPart = full.substring(endingIndex);
@@ -550,7 +620,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         loadVoices();
-        for (let i = 1; i <= 12; i++) {
+        for (let i = 1; i <= 17; i++) {
             activeSecModes[i] = 'input';
             renderSection(i);
         }
