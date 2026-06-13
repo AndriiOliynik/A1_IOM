@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ćwiczenia: Miejscownik (A1)</title>
+    <title>Ćwiczenia: Miejscownik (A1) - Kompleks</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -13,11 +13,7 @@
             --text: #1e293b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -29,7 +25,7 @@
         }
 
         .container {
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -51,17 +47,8 @@
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        .stat-box .num {
-            font-size: 1.4rem;
-            font-weight: 800;
-            display: block;
-        }
-        .stat-box .label {
-            font-size: 0.75rem;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+        .stat-box .num { font-size: 1.4rem; font-weight: 800; display: block; }
+        .stat-box .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 600; }
         .stat-correct { color: var(--success); }
         .stat-incorrect { color: var(--error); }
         .stat-percent { color: var(--primary); }
@@ -73,265 +60,110 @@
             border-radius: 12px;
             margin-bottom: 20px;
         }
-        .navigation-menu p {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        .nav-links {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+        .navigation-menu p { font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
         .nav-links a {
-            background: white;
-            border: 1px solid #cbd5e1;
-            padding: 6px 12px;
-            border-radius: 6px;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.2s;
+            background: white; border: 1px solid #cbd5e1; padding: 5px 10px;
+            border-radius: 6px; color: var(--primary); text-decoration: none;
+            font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
         }
-        .nav-links a:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .nav-links a.index-link {
-            color: #e67e22;
-            border-color: #f39c12;
-        }
-        .nav-links a.index-link:hover {
-            background: #e67e22;
-            color: white;
-            border-color: #e67e22;
-        }
+        .nav-links a:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-links a.index-link { color: #e67e22; border-color: #f39c12; }
+        .nav-links a.index-link:hover { background: #e67e22; color: white; }
 
         .audio-settings {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px;
+            border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem;
         }
-        .audio-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            gap: 10px;
-        }
+        .audio-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
         .audio-row:last-child { margin-bottom: 0; }
         .audio-row label { font-weight: 600; color: #475569; min-width: 70px; }
-        .audio-row select, .audio-row input {
-            flex: 1;
-            padding: 6px;
-            border-radius: 6px;
-            border: 1px solid #cbd5e1;
-            font-size: 0.85rem;
-            outline: none;
-        }
+        .audio-row select, .audio-row input { flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; outline: none; }
 
         h2 {
-            font-size: 1.25rem;
-            background: #e2e8f0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 24px;
-            margin-bottom: 14px;
-            color: #0f172a;
-            scroll-margin-top: 90px;
+            font-size: 1.15rem; background: #e2e8f0; padding: 8px 12px;
+            border-radius: 8px; margin-top: 28px; margin-bottom: 12px;
+            color: #0f172a; scroll-margin-top: 90px; border-left: 5px solid var(--primary);
         }
 
-        .mode-toggle {
-            display: flex;
-            background: #e2e8f0;
-            padding: 4px;
-            border-radius: 99px;
-            margin-bottom: 16px;
-        }
+        .mode-toggle { display: flex; background: #e2e8f0; padding: 3px; border-radius: 99px; margin-bottom: 12px; }
         .mode-label {
-            flex: 1;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 6px 0;
-            border-radius: 99px;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
+            flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600;
+            padding: 5px 0; border-radius: 99px; cursor: pointer; transition: all 0.2s; user-select: none;
         }
-        .mode-label.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+        .mode-label.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        .sentence-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .sentence-item {
-            background: #fff;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            font-size: 0.98rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-        .sentence-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
+        .sentence-list { display: flex; flex-direction: column; gap: 10px; }
+        .sentence-item { background: #fff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.98rem; }
+        .sentence-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
         .sentence-text { word-wrap: break-word; flex: 1; line-height: 1.6; }
         .sentence-actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
 
         .action-btn {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 4px 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #475569;
-            transition: all 0.1s;
-        }
-
-        .back-to-nav-container {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 14px;
-            margin-bottom: 10px;
-        }
-        .back-to-nav-btn {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #475569;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-        .back-to-nav-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-        .back-to-index-btn {
-            background: #fff3e0;
-            border: 1px solid #ffe0b2;
-            color: #e67e22;
-        }
-        .back-to-index-btn:hover {
-            background: #ffe0b2;
-            color: #d35400;
+            background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px;
+            padding: 4px 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: #475569;
         }
 
         .word-input {
-            display: inline-block;
-            font-size: 0.95rem;
-            padding: 2px 6px;
-            border: 2px solid #cbd5e1;
-            border-radius: 6px;
-            width: 140px;
-            outline: none;
-            margin: 2px 4px;
+            display: inline-block; font-size: 0.95rem; padding: 2px 6px;
+            border: 2px solid #cbd5e1; border-radius: 6px; width: 150px; outline: none; margin: 2px 4px;
         }
         .word-input:focus { border-color: var(--primary); }
 
-        .colored-word {
-            display: inline-block;
-            font-weight: 600;
-            padding: 1px 4px;
-            border-radius: 4px;
-            background: #f8fafc;
-        }
+        .colored-word { display: inline-block; font-weight: 600; padding: 1px 4px; border-radius: 4px; background: #f8fafc; }
         .colored-word.text-success { border: 1px solid var(--success); background: #f0fdf4; }
         .colored-word.text-error { border: 1px solid var(--error); background: #fef2f2; }
         
         .ending-correct { color: #d946ef; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
         .ending-incorrect { color: #f472b6; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
 
-        .choices-grid-wrapper {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #e2e8f0;
-        }
+        .choices-grid-wrapper { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; }
         .choices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        @media(max-width: 450px) { .choices-grid { grid-template-columns: repeat(2, 1fr); } }
         
         .choice-btn {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.95rem; 
-            font-weight: 600;   
-            text-align: center;
-            outline: none;
+            background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px; border-radius: 6px;
+            cursor: pointer; font-size: 0.9rem; font-weight: 600; text-align: center; outline: none;
         }
         .choice-btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
         .choice-btn.incorrect { background-color: var(--error) !important; color: white; border-color: var(--error); }
 
         .rule-box {
-            display: none;
-            margin-top: 8px;
-            padding: 8px 12px;
-            background-color: #fffbeb;
-            border-left: 4px solid #f59e0b;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: #78350f;
+            display: none; margin-top: 8px; padding: 8px 12px; background-color: #fffbeb;
+            border-left: 4px solid #f59e0b; border-radius: 4px; font-size: 0.85rem; color: #78350f;
         }
 
-        .hint-badge {
-            font-size: 0.78rem;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 1px 4px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
-        .final-footer {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 2px solid #e2e8f0;
-            text-align: center;
-        }
+        .hint-badge { font-size: 0.78rem; color: #64748b; background: #f1f5f9; padding: 1px 4px; border-radius: 4px; font-weight: bold; }
+        .back-to-nav-container { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+        .back-to-nav-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; }
+        .back-to-index-btn { background: #fff3e0; border: 1px solid #ffe0b2; color: #e67e22; }
+        .final-footer { margin-top: 30px; padding-top: 15px; border-top: 2px solid #e2e8f0; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- STATS PANEL -->
     <div class="stats-panel" id="top-nav">
         <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
         <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
         <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
     </div>
     
-    <!-- NAVIGATION MENU -->
     <div class="navigation-menu">
-        <p>Навігація:</p>
+        <p>Навігація за розділами:</p>
         <div class="nav-links">
-            <a href="index.html" class="index-link">🏠 На головну (Index)</a>
-            <a href="#ex-loc-heading">Miejscownik A1</a>
+            <a href="index.html" class="index-link">🏠 Index</a>
+            <a href="#sec-1">I. Rzeczownik</a>
+            <a href="#sec-2">II. Przymiotnik</a>
+            <a href="#sec-3">III. Przyimki (w/na/do)</a>
+            <a href="#sec-4">IV. Przyimki (w/na/przy)</a>
+            <a href="#sec-5">V. Państwa/Miasta</a>
+            <a href="#sec-6">VI. Gdzie mieszkają?</a>
+            <a href="#sec-7">VII. Pytania/Odpowiedzi</a>
+            <a href="#sec-8">VIII. Tekst: Michalina</a>
         </div>
     </div>
 
-    <!-- AUDIO SETTINGS -->
     <div class="audio-settings">
         <div class="audio-row">
             <label for="voice-select">Голос:</label>
@@ -344,41 +176,152 @@
         </div>
     </div>
 
-    <!-- EXERCISE CONTENT -->
-    <h2 id="ex-loc-heading">Miejscownik A1: Wybieranie poprawnej formy rzeczownika.</h2>
-    <div class="mode-toggle">
-        <span id="label-input-loc" class="mode-label active" onclick="setExMode('loc', 'input')">Вписати форму</span>
-        <span id="label-select-loc" class="mode-label" onclick="setExMode('loc', 'select')">Test варіанти</span>
-    </div>
-    
-    <div id="loc-container" class="sentence-list"></div>
+    <h2 id="sec-1">I. Wybieranie poprawnej formy rzeczownika (Przykład: Kot śpi na łóżku)</h2>
+    <div class="mode-toggle"><span id="label-input-s1" class="mode-label active" onclick="setSecMode(1, 'input')">Вписати форму</span><span id="label-select-s1" class="mode-label" onclick="setSecMode(1, 'select')">Test варіанти</span></div>
+    <div id="container-s1" class="sentence-list"></div>
+
+    <h2 id="sec-2">II. Wybieranie poprawnej formy przymiotnika (Przykład: Zosia mieszka w pięknym domu)</h2>
+    <div class="mode-toggle"><span id="label-input-s2" class="mode-label active" onclick="setSecMode(2, 'input')">Вписати форму</span><span id="label-select-s2" class="mode-label" onclick="setSecMode(2, 'select')">Test варіанти</span></div>
+    <div id="container-s2" class="sentence-list"></div>
+
+    <h2 id="sec-3">III. Wybieranie odpowiedniego przyimka (w, na, do) (Przykład: Oglądam film w kinie)</h2>
+    <div class="mode-toggle"><span id="label-input-s3" class="mode-label active" onclick="setSecMode(3, 'input')">Вписати прийменник</span><span id="label-select-s3" class="mode-label" onclick="setSecMode(3, 'select')">Test варіанти</span></div>
+    <div id="container-s3" class="sentence-list"></div>
+
+    <h2 id="sec-4">IV. Wybieranie odpowiedniego przyimka (w, na, przy) (Przykład: Sofa stoi przy ścianie)</h2>
+    <div class="mode-toggle"><span id="label-input-s4" class="mode-label active" onclick="setSecMode(4, 'input')">Вписати прийменник</span><span id="label-select-s4" class="mode-label" onclick="setSecMode(4, 'select')">Test варіанти</span></div>
+    <div id="container-s4" class="sentence-list"></div>
+
+    <h2 id="sec-5">V. Skoniuguj miasta/państwa (Przykład: On jest w Kijowie)</h2>
+    <div class="mode-toggle"><span id="label-input-s5" class="mode-label active" onclick="setSecMode(5, 'input')">Вписати місто</span><span id="label-select-s5" class="mode-label" onclick="setSecMode(5, 'select')">Test варіанти</span></div>
+    <div id="container-s5" class="sentence-list"></div>
+
+    <h2 id="sec-6">VI. Napisz, gdzie mieszkają te osoby (Przykład: Andrzej mieszka w Krakowie)</h2>
+    <div class="mode-toggle"><span id="label-input-s6" class="mode-label active" onclick="setSecMode(6, 'input')">Вписати місто</span><span id="label-select-s6" class="mode-label" onclick="setSecMode(6, 'select')">Test варіанти</span></div>
+    <div id="container-s6" class="sentence-list"></div>
+
+    <h2 id="sec-7">VII. Odpowiedz na pytania (Przykład: O czym mówisz? Mówię o Krakowie)</h2>
+    <div class="mode-toggle"><span id="label-input-s7" class="mode-label active" onclick="setSecMode(7, 'input')">Вписати відповідь</span><span id="label-select-s7" class="mode-label" onclick="setSecMode(7, 'select')">Test варіанти</span></div>
+    <div id="container-s7" class="sentence-list"></div>
+
+    <h2 id="sec-8">VIII. Tekst z lukami: Michalina i Marek</h2>
+    <div class="mode-toggle"><span id="label-input-s8" class="mode-label active" onclick="setSecMode(8, 'input')">Вписати форму</span><span id="label-select-s8" class="mode-label" onclick="setSecMode(8, 'select')">Test варіанти</span></div>
+    <div id="container-s8" class="sentence-list"></div>
 
     <div class="back-to-nav-container">
         <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
         <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
     </div>
-    
-    <!-- FINAL FOOTER -->
-    <div class="final-footer">
-        <button class="back-to-nav-btn back-to-index-btn" style="padding: 10px 20px; font-size: 0.95rem;" onclick="location.href='index.html'">🏠 Повернутися на головну сторінку</button>
-    </div>
 </div>
 
 <script>
-    const locData = [
-        { pre: "1. Pływam w ", post: ".", ans: "basenie", stem: "basen", nomination: "basen", fakes: ["basenem", "basenu"], rule: "<b>basen</b> (ч.р., твердий приголосний <b>n</b>): у Miejscownik відбувається чергування <b>n -> ni</b> та додається закінчення <b>-e</b>." },
-        { pre: "2. Jesteśmy w ", post: ".", ans: "kinie", stem: "kin", nomination: "kino", fakes: ["kino", "kina"], rule: "<b>kino</b> (с.р., твердий приголосний <b>n</b>): відкидаємо <i>-o</i>, чергуємо <b>n -> ni</b> та додаємо закінчення <b>-e</b>." },
-        { pre: "3. Jem obiad w ", post: ".", ans: "restauracji", stem: "restauracj", nomination: "restauracja", fakes: ["restaurację", "restauracja"], rule: "<b>restauracja</b> (ж.р. на <b>-cja</b>): закінчення змінюється на довге або м'яке <b>-ji / -i</b>." },
-        { pre: "4. Karol czeka na ", post: ".", ans: "przystanku", stem: "przystank", nomination: "przystanek", fakes: ["przystankiem", "przystanek"], rule: "<b>przystanek</b> (ч.р. на <b>-ek</b>): випадає голосна <i>e</i>, а після задньоязикових <i>k, g, ch</i> завжди пишеться закінчення <b>-u</b>." },
-        { pre: "5. Wczoraj byliśmy w ", post: ".", ans: "teatrze", stem: "teatr", nomination: "teatr", fakes: ["teatru", "teatrem"], rule: "<b>teatr</b> (ч.р., тверда основа на <b>r</b>): у Miejscownik відбувається обов'язкове чергування <b>r -> rz</b> + закінчення <b>-e</b>." },
-        { pre: "6. Dzieci kąpią się w ", post: ".", ans: "morzu", stem: "morz", nomination: "morze", fakes: ["morzem", "morza"], rule: "<b>morze</b> (с.р., основа на функціонально м'який <b>ż/rz</b>): іменники з м'якою основою в однині отримують закінчення <b>-u</b>." },
-        { pre: "7. Mój dom stoi na ", post: ".", ans: "górze", stem: "gór", nomination: "góra", fakes: ["góry", "górę"], rule: "<b>góra</b> (ж.р., тверда основа на <b>r</b>): відкидаємо <i>-a</i>, чергуємо <b>r -> rz</b> та додаємо закінчення <b>-e</b>." },
-        { pre: "8. Czy studiujecie na ", post: "?", ans: "uniwersytecie", stem: "uniwersytet", nomination: "uniwersytet", fakes: ["uniwersytet", "uniwersytetu"], rule: "<b>uniwersytet</b> (ч.р., тверда основа на <b>t</b>): у Miejscownik відбувається м'яке чергування <b>t -> ci</b> + закінчення <b>-e</b>." },
-        { pre: "9. Ludzie spacerują w ", post: ".", ans: "parku", stem: "park", nomination: "park", fakes: ["parkiem", "park"], rule: "<b>park</b> (ч.р., основа на задньоязиковий <b>k</b>): після приголосних <i>k, g, ch</i> у Miejscownik завжди додаємо закінчення <b>-u</b>." },
-        { pre: "10. Moja córka jest teraz w ", post: ".", ans: "szkole", stem: "szkoł", nomination: "szkoła", fakes: ["szkoły", "szkołę"], rule: "<b>szkoła</b> (ж.р., тверда основа на <b>ł</b>): при відмінюванні відбувається класичне чергування літер <b>ł -> li</b> + закінчення <b>-e</b>." }
-    ];
+    // Масиви даних для всіх 8 розділів
+    const sectionData = {
+        1: [
+            { pre: "Pływam w ", post: ".", ans: "basenie", stem: "basen", hint: "basen", fakes: ["basenem", "basenu"], rule: "<b>basen</b> (ч.р., тверда основа): чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Jesteśmy w ", post: ".", ans: "kinie", stem: "kin", hint: "kino", fakes: ["kino", "kina"], rule: "<b>kino</b> (с.р.): основа на <i>n</i> дає чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Jem obiad w ", post: ".", ans: "restauracji", stem: "restauracj", hint: "restauracja", fakes: ["restaurację", "restauracja"], rule: "<b>restauracja</b> (ж.р. на <i>-cja</i>): у місцевому відмінку приймає закінчення <b>-ji / -i</b>." },
+            { pre: "Karol czeka na ", post: ".", ans: "przystanku", stem: "przystank", hint: "przystanek", fakes: ["przystankiem", "przystanek"], rule: "<b>przystanek</b> (ч.р. на <i>-ek</i>): випадає голосна <i>e</i>, після задньоязикового <b>k</b> йде закінчення <b>-u</b>." },
+            { pre: "Wczoraj byliśmy w ", post: ".", ans: "teatrze", stem: "teatr", hint: "teatr", fakes: ["teatru", "teatrem"], rule: "<b>teatr</b> (ч.р.): класичне чергування твердої основи <b>r -> rz</b> + закінчення <b>-e</b>." },
+            { pre: "Dzieci kąpią się w ", post: ".", ans: "morzu", stem: "morz", hint: "morze", fakes: ["morzem", "morza"], rule: "<b>morze</b> (с.р., основа на <i>rz</i>): іменники середнього роду з м'якою/шиплячою основою мають закінчення <b>-u</b>." },
+            { pre: "Mój dom stoi na ", post: ".", ans: "górze", stem: "gór", hint: "góra", fakes: ["góry", "górę"], rule: "<b>góra</b> (ж.р.): відкидаємо <i>-a</i>, чергуємо <b>r -> rz</b> + закінчення <b>-e</b>." },
+            { pre: "Czy studiujecie na ", post: "?", ans: "uniwersytecie", stem: "uniwersytet", hint: "uniwersytet", fakes: ["uniwersytet", "uniwersytetu"], rule: "<b>uniwersytet</b> (ч.р.): тверда основа чергується <b>t -> ci</b> + закінчення <b>-e</b>." },
+            { pre: "Ludzie spacerują w ", post: ".", ans: "parku", stem: "park", hint: "park", fakes: ["parkiem", "park"], rule: "<b>park</b> (ч.р., задньоязикова основа): після літери <b>k</b> закінчення завжди <b>-u</b>." },
+            { pre: "Moja córka jest teraz w ", post: ".", ans: "szkole", stem: "szkoł", hint: "szkoła", fakes: ["szkoły", "szkołę"], rule: "<b>szkoła</b> (ж.р.): відбувається класичне чергування приголосних <b>ł -> li</b> + закінчення <b>-e</b>." }
+        ],
+        2: [
+            { pre: "Alicja pracuje w ", post: " budynku.", ans: "wysokim", stem: "wysoki", hint: "wysoki", fakes: ["wysokiego", "wysoki"], rule: "<b>wysoki budynek</b> (ч.р.): прикметники чоловічого роду в Miejscownik однини мають закінчення <b>-im</b>." },
+            { pre: "Łukasz opowiada o ", post: " książce.", ans: "ciekawej", stem: "ciekawej", hint: "ciekawa", fakes: ["ciekawą", "ciekawa"], rule: "<b>ciekawa książka</b> (ж.р.): прикметники жіночого роду мають закінчення <b>-ej</b>." },
+            { pre: "Krystyna mieszka w ", post: " mieście.", ans: "małym", stem: "małym", hint: "małe", fakes: ["mały", "małego"], rule: "<b>małe miasto</b> (с.р.): прикметники середнього роду в Miejscownik отримують закінчення <b>-ym / -im</b>." },
+            { pre: "Stół stoi na ", post: " dywanie.", ans: "kolorowym", stem: "kolorowym", hint: "kolorowy", fakes: ["kolorowy", "kolorowego"], rule: "<b>kolorowy dywan</b> (ч.р.): закінчення твердих прикметників чоловічого роду — <b>-ym</b>." },
+            { pre: "Wystawa była w ", post: " muzeum.", ans: "nowym", stem: "nowym", hint: "nowe", fakes: ["nowego", "nowy"], rule: "<b>nowe muzeum</b> (с.р.): для середнього роду на приголосний використовується закінчення <b>-ym</b>." },
+            { pre: "Byliśmy wczoraj na bardzo ", post: " filmie.", ans: "długim", stem: "długi", hint: "długi", fakes: ["długi", "długiego"], rule: "<b>długi film</b> (ч.р.): після літери <b>g</b> закінчення завжди має вигляд <b>-im</b>." },
+            { pre: "Rozmawialiśmy wczoraj o ", post: " dziewczynie.", ans: "pięknej", stem: "pięknej", hint: "piękna", fakes: ["piękna", "piękną"], rule: "<b>piękna dziewczyna</b> (ж.р.): стандартне закінчення прикметника жіночого роду — <b>-ej</b>." },
+            { pre: "Mieszkamy przy ", post: " ulicy.", ans: "ruchliwej", stem: "ruchliwej", hint: "ruchliwa", fakes: ["ruchliwa", "ruchliwą"], rule: "<b>ruchliwa ulica</b> (ж.р.): прикметник узгоджується з іменником у жіночому роді на <b>-ej</b>." },
+            { pre: "Na ", post: " górze stał zamek.", ans: "wysokiej", stem: "wysokiej", hint: "wysoka", fakes: ["wysoka", "wysoką"], rule: "<b>wysoka góra</b> (ж.р.): після м'яких чи задньоязикових (<i>k</i>) закінчення виглядає як <b>-iej</b>." },
+            { pre: "Piotrek siedzi na ", post: " krześle.", ans: "wygodnym", stem: "wygodnym", hint: "wygodne", fakes: ["wygodnego", "wygodne"], rule: "<b>wygodne krzesło</b> (с.р.): прикметник середнього роду закінчується на <b>-m</b> (тут <b>-nym</b>)." }
+        ],
+        3: [
+            { pre: "Piję kawę ", post: " Rynku.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "Географічні відкриті простори (ринки, площі) в польській мові вимагають прийменника <b>na</b>." },
+            { pre: "Studiujemy ", post: " uniwersytecie.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "Із закладами вищої освіти, факультетами та курсами вживається прийменник <b>na</b>." },
+            { pre: "Dzieci uczą się ", post: " szkole.", ans: "w", stem: "w", hint: "w / na / do", fakes: ["na", "do"], rule: "Для закритих приміщень установ (школа, ресторан) традиційно використовується прийменник <b>w</b>." },
+            { pre: "Franek mieszka ", post: " mieście.", ans: "w", stem: "w", hint: "w / na / do", fakes: ["na", "do"], rule: "У межах населеного пункту (якщо це місто) говоримо <b>w mieście</b>." },
+            { pre: "Bożena mieszka ", post: " wsi.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "Сталий вираз: мешкати у селі — це завжди <b>na wsi</b>." },
+            { pre: "Dziewczyny stoją ", post: " przystanku.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "На зупинці громадського транспорту — це відкритий простір, тому <b>na przystanku</b>." },
+            { pre: "Oni spacerują ", post: " lesie.", ans: "w", stem: "w", hint: "w / na / do", fakes: ["na", "do"], rule: "Всередині тривимірного простору (ліс, чагарник) вживаємо прийменник <b>w lesie</b>." },
+            { pre: "Chłopcy bawią się ", post: " parku.", ans: "w", stem: "w", hint: "w / na / do", fakes: ["na", "do"], rule: "У межах огородженої зеленої зони відпочинку частіше вживається <b>w parku</b>." },
+            { pre: "Mateusz śpi ", post: " pokoju.", ans: "w", stem: "w", hint: "w / na / do", fakes: ["na", "do"], rule: "Всередині закритого приміщення або кімнати — <b>w pokoju</b>." },
+            { pre: "Książka leży ", post: " podłodze.", ans: "na", stem: "na", hint: "w / na / do", fakes: ["w", "do"], rule: "На горизонтальній відкритій поверхні предмета (підлога, стіл) — <b>na podłodze</b>." }
+        ],
+        4: [
+            { pre: "Ala siedzi ", post: " stole.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Сидіти безпосередньо поруч / за столом — використовується прийменник <b>przy</b>." },
+            { pre: "Spotkaliśmy się ", post: " kawie.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "Зустрітися з приводу якоїсь події / процесу (на каву) — сталий зворот <b>na kawie</b>." },
+            { pre: "Obraz wisi ", post: " ścianie.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "На вертикальній площині (стіні) за правилами польської мови вживається прийменник <b>na</b>." },
+            { pre: "Biurko stoi ", post: " oknie.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Знаходитися в безпосередній близькості (поруч із вікном) — це <b>przy oknie</b>." },
+            { pre: "", post: " domu jest ogród.", ans: "Przy", stem: "Przy", hint: "w / na / przy", fakes: ["W", "Na"], rule: "Поруч із будинком, біля нього — використовуємо локативний прийменник <b>Przy</b>." },
+            { pre: "", post: " kinie jest parking.", ans: "Przy", stem: "Przy", hint: "w / na / przy", fakes: ["W", "Na"], rule: "Поблизу кінотеатру, біля його будівлі — обираємо <b>Przy</b>." },
+            { pre: "", post: " stole stoją kwiaty.", ans: "Na", stem: "Na", hint: "w / na / przy", fakes: ["W", "Przy"], rule: "Квіти стоять зверху на поверхні столу, тому підходить виключно прийменник <b>Na</b>." },
+            { pre: "Teatr jest ", post: " placu.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Якщо будівля розташована по периметру або біля площі, вживають прийменник <b>przy placu</b>." },
+            { pre: "Studenci rozmawiali ", post: " ulicy.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "На відкритому просторі вулиці — сталий просторовий прийменник <b>na ulicy</b>." },
+            { pre: "Marysia pływała ", post: " basenie.", ans: "w", stem: "w", hint: "w / na / przy", fakes: ["na", "przy"], rule: "Перебувати всередині резервуара з водою (басейну) — прийменник <b>w basenie</b>." }
+        ],
+        5: [
+            { pre: "Kasia jest w ", post: ".", ans: "Londynie", stem: "Londyn", hint: "Londyn", fakes: ["Londynu", "Londynem"], rule: "<b>Londyn</b> (ч.р.): основа на твердий <i>n</i> дає чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Chłopcy są w ", post: ".", ans: "Paryżu", stem: "Paryż", hint: "Paryż", fakes: ["Paryże", "Paryżem"], rule: "<b>Paryż</b> (ч.р.): закінчується на шиплячий <i>ż</i>, тому приймає закінчення <b>-u</b>." },
+            { pre: "Jestem w ", post: ".", ans: "Moskwie", stem: "Moskwa", hint: "Moskwa", fakes: ["Moskwy", "Moskwę"], rule: "<b>Moskwa</b> (ж.р.): губний приголосний <i>w</i> перед закінченням пом'якшується: <b>w -> wi</b> + <b>-e</b>." },
+            { pre: "Jesteście w ", post: ".", ans: "Krakowie", stem: "Kraków", hint: "Kraków", fakes: ["Krakówe", "Krakowu"], rule: "<b>Kraków</b> (ч.р.): суфікс <i>-ów</i> переходить в <i>-ow-</i>, а твердий <b>w -> wi</b> + <b>-e</b>." },
+            { pre: "Paweł jest w ", post: ".", ans: "Berlinie", stem: "Berlin", hint: "Berlin", fakes: ["Berlinu", "Berlinie"], rule: "<b>Berlin</b> (ч.р.): аналогічно до Londyn, приголосний <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Urszula jest w ", post: ".", ans: "Lizbonie", stem: "Lizbona", hint: "Lizbona", fakes: ["Lizbony", "Lizbonę"], rule: "<b>Lizbona</b> (ж.р.): відкидаємо <i>-a</i>, кінцевий твердий <b>n -> ni</b> + <b>-e</b>." },
+            { pre: "Dziewczyny są w ", post: ".", ans: "Rzymie", stem: "Rzym", hint: "Rzym", fakes: ["Rzymu", "Rzymem"], rule: "<b>Rzym</b> (ч.р.): тверда основа на <i>m</i> змінюється на м'яку <b>m -> mi</b> + <b>-e</b>." },
+            { pre: "Studenci są w ", post: ".", ans: "Madrycie", stem: "Madryt", hint: "Madryt", fakes: ["Madrytu", "Madryciem"], rule: "<b>Madryt</b> (ч.р.): кінцевий твердий приголосний основи чергується <b>t -> ci</b> + закінчення <b>-e</b>." },
+            { pre: "Nasi przyjaciele są w ", post: ".", ans: "Warszawie", stem: "Warszawa", hint: "Warszawa", fakes: ["Warszawy", "Warszawę"], rule: "<b>Warszawa</b> (ж.р.): основа на твердий <i>w</i> змінюється на <b>wi + e</b>." },
+            { pre: "Jesteś w ", post: ".", ans: "Pradze", stem: "Praga", hint: "Praga", fakes: ["Pragy", "Pragę"], rule: "<b>Praga</b> (ж.р.): у Miejscownik задньоязиковий приголосний основи чергується <b>g -> z</b> + <b>-e</b>." },
+            { pre: "Marysia jest w ", post: ".", ans: "Wiedniu", stem: "Wiedeń", hint: "Wiedeń", fakes: ["Wiednie", "Wiedniu"], rule: "<b>Wiedeń</b> (ч.р.): бігла голосна <i>e</i> випадає, м'яка основа на <b>ń</b> вимагає закінчення <b>-u</b>." },
+            { pre: "Grzesiek jest w ", post: ".", ans: "Amsterdamie", stem: "Amsterdam", hint: "Amsterdam", fakes: ["Amsterdamu", "Amsterdamie"], rule: "<b>Amsterdam</b> (ч.р.): твердий губний <i>m</i> перед закінченням <b>-e</b> пом'якшується (<b>mi</b>)." },
+            { pre: "Kinga i Jurek są w ", post: ".", ans: "Brukseli", stem: "Bruksel", hint: "Bruksela", fakes: ["Bruksely", "Brukselę"], rule: "<b>Bruksela</b> (ж.р.): м'який приголосний <b>l</b> у місцевому відмінку однини має закінчення <b>-i</b>." },
+            { pre: "Ola i Marek są w ", post: ".", ans: "Sztokholmie", stem: "Sztokholm", hint: "Sztokholm", fakes: ["Sztokholmu", "Sztokholmie"], rule: "<b>Sztokholm</b> (ч.р.): кінцевий приголосний освоює пом'якшення <b>m -> mi</b> перед закінченням <b>-e</b>." },
+            { pre: "Rodzice są w ", post: ".", ans: "Budapeszcie", stem: "Budapeszt", hint: "Budapeszt", fakes: ["Budapesztu", "Budapesztem"], rule: "<b>Budapeszt</b> (ч.р.): відбувається складне чергування приголосних групи <b>st -> szci</b> + закінчення <b>-e</b>." }
+        ],
+        6: [
+            { pre: "Zosia mieszka w ", post: ".", ans: "Gdańsku", stem: "Gdańsk", hint: "Gdańsk", fakes: ["Gdańske", "Gdańskiem"], rule: "<b>Gdańsk</b> (ч.р.): назви міст, що закінчуються на суфікс <b>-sk</b>, завжди отримують закінчення <b>-u</b>." },
+            { pre: "Michał mieszka w ", post: ".", ans: "Wrocławiu", stem: "Wrocław", hint: "Wrocław", fakes: ["Wrocławe", "Wrocławiu"], rule: "<b>Wrocław</b> (ч.р.): основа закінчується на історично м'який / губний приголосний, тому закінчення <b>-iu</b>." },
+            { pre: "Zuzia mieszka w ", post: ".", ans: "Poznaniu", stem: "Poznań", hint: "Poznań", fakes: ["Poznanu", "Poznanie"], rule: "<b>Poznań</b> (ч.р.): оскільки основа закінчується на м'який <b>ń</b>, слову притаманне закінчення <b>-iu</b>." },
+            { pre: "Marta mieszka w ", post: ".", ans: "Warszawie", stem: "Warszawa", hint: "Warszawa", fakes: ["Warszawy", "Warszawę"], rule: "<b>Warszawa</b> (ж.р.): основа на твердий губний звук зазнає пом'якшення <b>w -> wi</b> + закінчення <b>-e</b>." },
+            { pre: "Julek mieszka w ", post: ".", ans: "Łodzi", stem: "Łódź", hint: "Łódź", fakes: ["Łódźu", "Łodzie"], rule: "<b>Łódź</b> (ж.р., тип відмінювання як іменники 3-ї відміни): закінчення змінюється на <b>-i</b>." },
+            { pre: "Kuba mieszka w ", post: ".", ans: "Szczecinie", stem: "Szczecin", hint: "Szczecin", fakes: ["Szczecinu", "Szczeciniem"], rule: "<b>Szczecin</b> (ч.р.): твердий приголосний основи змінюється на м'яку пару <b>n -> ni</b> + закінчення <b>-e</b>." },
+            { pre: "Agnieszka mieszka w ", post: ".", ans: "Olsztynie", stem: "Olsztyn", hint: "Olsztyn", fakes: ["Olsztynu", "Olsztynem"], rule: "<b>Olsztyn</b> (ч.р.): аналогічно до інших назв на <i>-n</i>, маємо м'яку пару <b>ni + e</b>." },
+            { pre: "Ola mieszka w ", post: ".", ans: "Rzeszowie", stem: "Rzeszów", hint: "Rzeszów", fakes: ["Rzeszówu", "Rzeszowe"], rule: "<b>Rzeszów</b> (ч.р.): чергування звуків у суфіксі <i>-ów -> -ow-</i>, губний пом'якшується <b>w -> wi</b> + <b>-e</b>." },
+            { pre: "Piotrek siedzi w ", post: ".", ans: "Zielonej Górze", stem: "Zielonej Górze", hint: "Zielona Góra", fakes: ["Zielona Góra", "Zieloną Górę"], rule: "<b>Zielona Góra</b>: відмінюються обидві частини. Прикметник жіночого роду на <b>-ej</b>, іменник дає чергування <b>r -> rz + e</b>." }
+        ],
+        7: [
+            { pre: "O czym mówicie? O: Mówimy o ", post: ".", ans: "Warszawie", stem: "Warszawa", hint: "Warszawa", fakes: ["Warszawy", "Warszawę"], rule: "Іменник жіночого роду <b>Warszawa</b> у Miejscownik змінює кінцеву групу на <b>-wie</b>." },
+            { pre: "O kim oni mówią? O: Mówią o ", post: ".", ans: "Marku", stem: "Marek", hint: "Marek", fakes: ["Markie", "Marku"], rule: "<b>Marek</b> (імя, ч.р.): випадає бігла голосна <i>e</i>, після задньоязикового приголосного <b>k</b> пишеться закінчення <b>-u</b>." },
+            { pre: "O kim one mówią? O: Mówią o ", post: ".", ans: "Michale", stem: "Michał", hint: "Michał", fakes: ["Michału", "Michale"], rule: "<b>Michał</b> (ч.р.): кінцевий твердий приголосний основи зазнає регулярного чергування <b>ł -> l</b> + <b>-e</b>." },
+            { pre: "O czym ona mówi? O: Mówi o ", post: ".", ans: "książce", stem: "książce", hint: "książka", fakes: ["książki", "książkę"], rule: "<b>książka</b> (ж.р.): перед закінченням <i>-e</i> відбувається чергування задньоязикового приголосного <b>k -> c</b>." },
+            { pre: "O czym on mówi? O: Mówi o ", post: ".", ans: "filmie", stem: "film", hint: "film", fakes: ["filmu", "filmie"], rule: "<b>film</b> (ч.р.): основа закінчується на твердий приголосний <i>m</i>, що пом'якшується до <b>mi + e</b>." },
+            { pre: "O czym mówisz? O: Mówię o ", post: ".", ans: "polityce", stem: "polityce", hint: "polityka", fakes: ["polityki", "politykę"], rule: "<b>polityka</b> (ж.р.): кінцевий приголосний основи за правилом змінюється на м'який свистячий <b>k -> c</b> + <b>-e</b>." },
+            { pre: "O czym mówi Tomek? O: Mówi o ", post: ".", ans: "historii", stem: "historii", hint: "historia", fakes: ["history", "historię"], rule: "<b>historia</b> (ж.р. на <i>-ia</i>): у місцевому відмінку однини приймає закінчення з подвоєною або м'якою голосню <b>-ii</b>." },
+            { pre: "O kim mówi Anka? O: Mówi o ", post: ".", ans: "synu", stem: "syn", hint: "syn", fakes: ["synie", "synem"], rule: "<b>syn</b> (ч.р.): чоловічі назви осіб на твердий приголосний (окрім деяких винятків) часто мають закінчення <b>-u</b>." },
+            { pre: "O kim mówi Matylda? O: Mówi o ", post: ".", ans: "siostrze", stem: "siostra", hint: "siostra", fakes: ["siostry", "siostrę"], rule: "<b>siostra</b> (ж.р.): перед закінченням <b>-e</b> група приголосних зазнає чергування <b>str -> strz</b>." },
+            { pre: "O czym mówi Krzysiek? O: Mówi o ", post: ".", ans: "domu", stem: "dom", hint: "dom", fakes: ["domie", "domem"], rule: "<b>dom</b> (ч.р.): є традиційним коротким словом-винятком чоловічого роду, що приймає закінчення <b>-u</b>." }
+        ],
+        8: [
+            { pre: "Michalina lubi jeść obiad w (1) ", post: ".", ans: "restauracji", stem: "restauracj", hint: "restauracja", fakes: ["restauracja", "restaurację"], rule: "Жіночий рід на <i>-cja</i> вживається у формі місцевого відмінка із закінченням <b>-i</b>." },
+            { pre: "Dzisiaj Michalina i Marek idą do miasta i właśnie w (2) ", post: " chcą coś zjeść,", ans: "mieście", stem: "mieście", hint: "miasto", fakes: ["miastu", "miasta"], rule: "Іменник середнього роду <b>miasto</b> отримує регулярне чергування основи <b>st -> ści</b> + закінчення <b>-e</b>." },
+            { pre: "a w (3) ", post: " wypiją kawę.", ans: "kawiarni", stem: "kawiarni", hint: "kawiarnia", fakes: ["kawiarnie", "kawiarnią"], rule: "<b>kawiarnia</b> (ж.р., основа на м'який приголосний): закінчення змінюється на чисте <b>-i</b>." },
+            { pre: "Znaleźli miejsce w (4) ", post: "", ans: "ulubionej restauracji", stem: "ulubionej restauracji", hint: "ulubiona restauracja", fakes: ["ulubiona restauracja", "ulubioną restaurację"], rule: "Узгоджена пара прикметника та іменника жіночого роду в Miejscownik: <b>-ej</b> + <b>-i</b>." },
+            { pre: "na (5) ", post: ".", ans: "krakowskim Rynku", stem: "krakowskim Rynku", hint: "krakowski Rynek", fakes: ["krakowski Rynek", "krakowskiego Rynku"], rule: "Чоловічий рід (відкрите місце): прикметник отримує <b>-im</b>, іменник на задньоязиковий закінчується на <b>-u</b>." },
+            { pre: "Zjedli bardzo dobry obiad i wyszli na ulicę. Na (6) ", post: " spotkali swoich dobrych przyjaciół.", ans: "ulicy", stem: "ulicy", hint: "ulica", fakes: ["ulica", "ulicę"], rule: "<b>ulica</b> (ж.р. із функціонально м'яким шиплячим приголосним основи <i>c</i>): закінчується на <b>-y</b>." },
+            { pre: "Postanowili iść najpierw do kawiarni, a potem obejrzeć wystawę malarstwa. W (7) ", post: " spotkali koleżankę Michaliny, która szła na koncert.", ans: "galerii", stem: "galerii", hint: "galeria", fakes: ["galeria", "galerię"], rule: "<b>galeria</b> (ж.р. на <i>-ia</i>): у місцевому відмінку однини має обов'язкове закінчення <b>-ii</b>." },
+            { pre: "Poszli więc razem z nią. W (8) ", post: " był świetny koncert.", ans: "filharmonii", stem: "filharmonii", hint: "filharmonia", fakes: ["filharmonia", "filharmonię"], rule: "<b>filharmonia</b> (іменник жіночого роду іншомовного походження на <i>-ia</i>): закінчується на <b>-ii</b>." },
+            { pre: "Po (9) ", post: " wybrali się na piwo do pubu.", ans: "koncercie", stem: "koncercie", hint: "koncert", fakes: ["koncertu", "koncertem"], rule: "Прийменник <i>po</i> вимагає Miejscownik. Тверда основа чоловічого роду чергується: <b>t -> ci + e</b>." },
+            { pre: "W (10) ", post: " siedzieli do północy.", ans: "pubie", stem: "pub", hint: "pub", fakes: ["pubu", "pubem"], rule: "<b>pub</b> (ч.р.): запозичене слово на твердий губний приголосний <i>b</i> пом'якшується до <b>bi + e</b>." },
+            { pre: "W końcu o pierwszej w (11) ", post: " wrócili do domu.", ans: "nocy", stem: "nocy", hint: "noc", fakes: ["noc", "nocą"], rule: "<b>noc</b> (іменник жіночого роду, що закінчується на приголосний): у Miejscownik має закінчення <b>-y</b>." }
+        ]
+    };
 
-    let currentMode = 'input';
+    // Стан режимів для кожного розділу окремо
+    let secModes = { 1: 'input', 2: 'input', 3: 'input', 4: 'input', 5: 'input', 6: 'input', 7: 'input', 8: 'input' };
     let systemVoices = [];
     let correctCount = 0;
     let incorrectCount = 0;
@@ -398,17 +341,19 @@
         if (!window.speechSynthesis) return;
         systemVoices = window.speechSynthesis.getVoices();
         const voiceSelect = document.getElementById('voice-select');
-        voiceSelect.innerHTML = '';
-        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        if(!voiceSelect) return;
         
-        if(plVoices.length === 0) {
-            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_') || v.lang.toLowerCase().includes('pol'));
+        
+        if (plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос (Default)", ""));
             return;
         }
         plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
     }
 
-    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+    if (window.speechSynthesis) {
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
@@ -417,7 +362,8 @@
         window.speechSynthesis.cancel();
 
         const speed = parseFloat(document.getElementById('speed-range').value);
-        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+        const voiceSelect = document.getElementById('voice-select');
+        const activeVoice = systemVoices.find(v => v.name === voiceSelect.value);
 
         const wordUtterance = new SpeechSynthesisUtterance(word);
         wordUtterance.lang = 'pl-PL';
@@ -430,18 +376,20 @@
         if (activeVoice) sentenceUtterance.voice = activeVoice;
 
         window.speechSynthesis.speak(wordUtterance);
-        window.speechSynthesis.speak(sentenceUtterance);
+        // Невелика затримка перед реченням для кращого сприйняття
+        setTimeout(() => {
+            if (window.speechSynthesis.speaking) window.speechSynthesis.speak(sentenceUtterance);
+        }, 120);
     }
 
     function buildColoredHtml(full, stem, ok) {
-        if (full.startsWith(stem) && full.length > stem.length) {
+        if (full.toLowerCase().startsWith(stem.toLowerCase()) && full.length > stem.length) {
             let ending = full.substring(stem.length);
             return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
         }
-        // Якщо основа зазнала глибоких чергувань (наприклад, teatr -> teatrze), підсвітимо останню частину як закінчення
         if (full.length > 2) {
             let endingIndex = full.length - 2; 
-            if(full.endsWith('ecie') || full.endsWith('sze')) endingIndex = full.length - 4;
+            if(full.endsWith('ecie') || full.endsWith('szcie') || full.endsWith('acji')) endingIndex = full.length - 4;
             let basePart = full.substring(0, endingIndex);
             let endPart = full.substring(endingIndex);
             return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${basePart}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${endPart}</span></span>`;
@@ -454,37 +402,39 @@
         box.style.display = (box.style.display === 'block') ? 'none' : 'block';
     }
 
-    function setExMode(exKey, mode) {
-        currentMode = mode;
-        document.getElementById(`label-input-loc`).classList.toggle('active', mode === 'input');
-        document.getElementById(`label-select-loc`).classList.toggle('active', mode === 'select');
-        renderExercise();
+    function setSecMode(secId, mode) {
+        secModes[secId] = mode;
+        document.getElementById(`label-input-s${secId}`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-s${secId}`).classList.toggle('active', mode === 'select');
+        renderSection(secId);
     }
 
-    function renderExercise() {
-        const container = document.getElementById('loc-container');
+    function renderSection(secId) {
+        const container = document.getElementById(`container-s${secId}`);
         container.innerHTML = '';
+        const dataArr = sectionData[secId];
+        const mode = secModes[secId];
 
-        locData.forEach((ex, idx) => {
+        dataArr.forEach((ex, idx) => {
             const item = document.createElement('div');
             item.className = 'sentence-item';
             let htmlText = ex.pre;
             let choicesHtml = '';
-            const pId = `loc-display-${idx}`;
+            const pId = `s${secId}-display-${idx}`;
             const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
 
-            if (currentMode === 'input') {
-                htmlText += `<span id="loc-wrapper-${idx}"><span class="hint-badge">${ex.nomination}</span> <input type="text" class="word-input" onchange="checkInput(${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="loc-in-${idx}"></span>`;
+            if (mode === 'input') {
+                htmlText += `<span id="s${secId}-wrapper-${idx}"><span class="hint-badge">${ex.hint}</span> <input type="text" class="word-input" onchange="checkInput(${secId}, ${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="s${secId}-in-${idx}"></span>`;
                 htmlText += ex.post;
             } else {
                 htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
-                htmlText += ex.post + ` <span class="hint-badge">(${ex.nomination})</span>`;
+                htmlText += ex.post + ` <span class="hint-badge">(${ex.hint})</span>`;
                 
                 const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
                 
-                choicesHtml += `<div class="choices-grid-wrapper" id="loc-grid-${idx}"><div class="choices-grid">`;
+                choicesHtml += `<div class="choices-grid-wrapper" id="s${secId}-grid-${idx}"><div class="choices-grid">`;
                 choices.forEach(c => {
-                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 'loc-grid-${idx}', ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
+                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 's${secId}-grid-${idx}', ${secId}, ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
                 });
                 choicesHtml += `</div></div>`;
             }
@@ -494,19 +444,19 @@
                     <div class="sentence-text">${htmlText}</div>
                     <div class="sentence-actions">
                         <button class="action-btn" onclick="speakWordAndSentence('${ex.ans}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
-                        <button class="action-btn" onclick="toggleRule('rule-loc-${idx}')">💡</button>
+                        <button class="action-btn" onclick="toggleRule('rule-s${secId}-${idx}')">💡</button>
                     </div>
                 </div>
                 ${choicesHtml}
-                <div class="rule-box" id="rule-loc-${idx}">${ex.rule}</div>
+                <div class="rule-box" id="rule-s${secId}-${idx}">${ex.rule}</div>
             `;
             container.appendChild(item);
         });
     }
 
-    function checkInput(idx, ans, stem, fullSentence) {
-        const input = document.getElementById(`loc-in-${idx}`);
-        const wrap = document.getElementById(`loc-wrapper-${idx}`);
+    function checkInput(secId, idx, ans, stem, fullSentence) {
+        const input = document.getElementById(`s${secId}-in-${idx}`);
+        const wrap = document.getElementById(`s${secId}-wrapper-${idx}`);
         if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
             correctCount++; 
             wrap.innerHTML = buildColoredHtml(ans, stem, true); 
@@ -515,12 +465,12 @@
             incorrectCount++; 
             wrap.innerHTML = buildColoredHtml(ans, stem, false); 
             speakWordAndSentence("Źle", fullSentence);
-            document.getElementById(`rule-loc-${idx}`).style.display = 'block';
+            document.getElementById(`rule-s${secId}-${idx}`).style.display = 'block';
         }
         updateStatsUi();
     }
 
-    function checkSelect(btn, ans, stem, gridId, idx, pId, fullSentence) {
+    function checkSelect(btn, ans, stem, gridId, secId, idx, pId, fullSentence) {
         const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
         const disp = document.getElementById(pId);
         const grid = document.getElementById(gridId);
@@ -536,14 +486,21 @@
             btn.classList.add('incorrect');
             disp.innerHTML = buildColoredHtml(ans, stem, false); 
             speakWordAndSentence("Źle", fullSentence);
-            document.getElementById(`rule-loc-${idx}`).style.display = 'block';
+            document.getElementById(`rule-s${secId}-${idx}`).style.display = 'block';
         }
         updateStatsUi();
     }
 
+    function renderAll() {
+        for (let i = 1; i <= 8; i++) {
+            renderSection(i);
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         loadVoices();
-        renderExercise();
+        renderAll();
+        setTimeout(loadVoices, 300); // Страхувальний таймаут для підвантаження голосів у Chromium
     });
 </script>
 </body>
