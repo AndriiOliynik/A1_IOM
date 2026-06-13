@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ćwiczenia: Miejscownik (A1)</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --background: #f1f5f9;
+            --text: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stats-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .stat-box .num {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+        }
+        .stat-box .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .stat-correct { color: var(--success); }
+        .stat-incorrect { color: var(--error); }
+        .stat-percent { color: var(--primary); }
+
+        .navigation-menu {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .navigation-menu p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .nav-links a.index-link {
+            color: #e67e22;
+            border-color: #f39c12;
+        }
+        .nav-links a.index-link:hover {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+
+        .audio-settings {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .audio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .audio-row:last-child { margin-bottom: 0; }
+        .audio-row label { font-weight: 600; color: #475569; min-width: 70px; }
+        .audio-row select, .audio-row input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 24px;
+            margin-bottom: 14px;
+            color: #0f172a;
+            scroll-margin-top: 90px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 99px;
+            margin-bottom: 16px;
+        }
+        .mode-label {
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 6px 0;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .mode-label.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sentence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sentence-item {
+            background: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.98rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .sentence-text { word-wrap: break-word; flex: 1; line-height: 1.6; }
+        .sentence-actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+        .action-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.1s;
+        }
+
+        .back-to-nav-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+            margin-bottom: 10px;
+        }
+        .back-to-nav-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .back-to-nav-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .back-to-index-btn {
+            background: #fff3e0;
+            border: 1px solid #ffe0b2;
+            color: #e67e22;
+        }
+        .back-to-index-btn:hover {
+            background: #ffe0b2;
+            color: #d35400;
+        }
+
+        .word-input {
+            display: inline-block;
+            font-size: 0.95rem;
+            padding: 2px 6px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            width: 140px;
+            outline: none;
+            margin: 2px 4px;
+        }
+        .word-input:focus { border-color: var(--primary); }
+
+        .colored-word {
+            display: inline-block;
+            font-weight: 600;
+            padding: 1px 4px;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+        .colored-word.text-success { border: 1px solid var(--success); background: #f0fdf4; }
+        .colored-word.text-error { border: 1px solid var(--error); background: #fef2f2; }
+        
+        .ending-correct { color: #d946ef; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+        .ending-incorrect { color: #f472b6; font-weight: 900; -webkit-text-stroke: 1.2px #4a044e; }
+
+        .choices-grid-wrapper {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .choices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        
+        .choice-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem; 
+            font-weight: 600;   
+            text-align: center;
+            outline: none;
+        }
+        .choice-btn.correct { background-color: var(--success) !important; color: white; border-color: var(--success); }
+        .choice-btn.incorrect { background-color: var(--error) !important; color: white; border-color: var(--error); }
+
+        .rule-box {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #78350f;
+        }
+
+        .hint-badge {
+            font-size: 0.78rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .final-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- STATS PANEL -->
+    <div class="stats-panel" id="top-nav">
+        <div class="stat-box"><span id="stat-ok" class="num stat-correct">0</span><span class="label">Правильно</span></div>
+        <div class="stat-box"><span id="stat-err" class="num stat-incorrect">0</span><span class="label">Помилки</span></div>
+        <div class="stat-box"><span id="stat-pct" class="num stat-percent">0%</span><span class="label">Оцінка</span></div>
+    </div>
+    
+    <!-- NAVIGATION MENU -->
+    <div class="navigation-menu">
+        <p>Навігація:</p>
+        <div class="nav-links">
+            <a href="index.html" class="index-link">🏠 На головну (Index)</a>
+            <a href="#ex-loc-heading">Miejscownik A1</a>
+        </div>
+    </div>
+
+    <!-- AUDIO SETTINGS -->
+    <div class="audio-settings">
+        <div class="audio-row">
+            <label for="voice-select">Голос:</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="audio-row">
+            <label for="speed-range">Швидкість:</label>
+            <input type="range" id="speed-range" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('speed-val').innerText = parseFloat(this.value).toFixed(1) + 'x'">
+            <span id="speed-val" style="font-weight:bold; min-width:35px; text-align:right;">1.0x</span>
+        </div>
+    </div>
+
+    <!-- EXERCISE CONTENT -->
+    <h2 id="ex-loc-heading">Miejscownik A1: Wybieranie poprawnej formy rzeczownika.</h2>
+    <div class="mode-toggle">
+        <span id="label-input-loc" class="mode-label active" onclick="setExMode('loc', 'input')">Вписати форму</span>
+        <span id="label-select-loc" class="mode-label" onclick="setExMode('loc', 'select')">Test варіанти</span>
+    </div>
+    
+    <div id="loc-container" class="sentence-list"></div>
+
+    <div class="back-to-nav-container">
+        <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
+        <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
+    </div>
+    
+    <!-- FINAL FOOTER -->
+    <div class="final-footer">
+        <button class="back-to-nav-btn back-to-index-btn" style="padding: 10px 20px; font-size: 0.95rem;" onclick="location.href='index.html'">🏠 Повернутися на головну сторінку</button>
+    </div>
+</div>
+
+<script>
+    const locData = [
+        { pre: "1. Pływam w ", post: ".", ans: "basenie", stem: "basen", nomination: "basen", fakes: ["basenem", "basenu"], rule: "<b>basen</b> (ч.р., твердий приголосний <b>n</b>): у Miejscownik відбувається чергування <b>n -> ni</b> та додається закінчення <b>-e</b>." },
+        { pre: "2. Jesteśmy w ", post: ".", ans: "kinie", stem: "kin", nomination: "kino", fakes: ["kino", "kina"], rule: "<b>kino</b> (с.р., твердий приголосний <b>n</b>): відкидаємо <i>-o</i>, чергуємо <b>n -> ni</b> та додаємо закінчення <b>-e</b>." },
+        { pre: "3. Jem obiad w ", post: ".", ans: "restauracji", stem: "restauracj", nomination: "restauracja", fakes: ["restaurację", "restauracja"], rule: "<b>restauracja</b> (ж.р. на <b>-cja</b>): закінчення змінюється на довге або м'яке <b>-ji / -i</b>." },
+        { pre: "4. Karol czeka na ", post: ".", ans: "przystanku", stem: "przystank", nomination: "przystanek", fakes: ["przystankiem", "przystanek"], rule: "<b>przystanek</b> (ч.р. на <b>-ek</b>): випадає голосна <i>e</i>, а після задньоязикових <i>k, g, ch</i> завжди пишеться закінчення <b>-u</b>." },
+        { pre: "5. Wczoraj byliśmy w ", post: ".", ans: "teatrze", stem: "teatr", nomination: "teatr", fakes: ["teatru", "teatrem"], rule: "<b>teatr</b> (ч.р., тверда основа на <b>r</b>): у Miejscownik відбувається обов'язкове чергування <b>r -> rz</b> + закінчення <b>-e</b>." },
+        { pre: "6. Dzieci kąpią się w ", post: ".", ans: "morzu", stem: "morz", nomination: "morze", fakes: ["morzem", "morza"], rule: "<b>morze</b> (с.р., основа на функціонально м'який <b>ż/rz</b>): іменники з м'якою основою в однині отримують закінчення <b>-u</b>." },
+        { pre: "7. Mój dom stoi na ", post: ".", ans: "górze", stem: "gór", nomination: "góra", fakes: ["góry", "górę"], rule: "<b>góra</b> (ж.р., тверда основа на <b>r</b>): відкидаємо <i>-a</i>, чергуємо <b>r -> rz</b> та додаємо закінчення <b>-e</b>." },
+        { pre: "8. Czy studiujecie na ", post: "?", ans: "uniwersytecie", stem: "uniwersytet", nomination: "uniwersytet", fakes: ["uniwersytet", "uniwersytetu"], rule: "<b>uniwersytet</b> (ч.р., тверда основа на <b>t</b>): у Miejscownik відбувається м'яке чергування <b>t -> ci</b> + закінчення <b>-e</b>." },
+        { pre: "9. Ludzie spacerują w ", post: ".", ans: "parku", stem: "park", nomination: "park", fakes: ["parkiem", "park"], rule: "<b>park</b> (ч.р., основа на задньоязиковий <b>k</b>): після приголосних <i>k, g, ch</i> у Miejscownik завжди додаємо закінчення <b>-u</b>." },
+        { pre: "10. Moja córka jest teraz w ", post: ".", ans: "szkole", stem: "szkoł", nomination: "szkoła", fakes: ["szkoły", "szkołę"], rule: "<b>szkoła</b> (ж.р., тверда основа на <b>ł</b>): при відмінюванні відбувається класичне чергування літер <b>ł -> li</b> + закінчення <b>-e</b>." }
+    ];
+
+    let currentMode = 'input';
+    let systemVoices = [];
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    function scrollToTop() {
+        document.getElementById('top-nav').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateStatsUi() {
+        document.getElementById('stat-ok').innerText = correctCount;
+        document.getElementById('stat-err').innerText = incorrectCount;
+        const total = correctCount + incorrectCount;
+        document.getElementById('stat-pct').innerText = total === 0 ? '0%' : Math.round((correctCount / total) * 100) + '%';
+    }
+
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        systemVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voice-select');
+        voiceSelect.innerHTML = '';
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
+        
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
+            return;
+        }
+        plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
+    }
+
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speakWordAndSentence(word, fullSentence) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+
+        const speed = parseFloat(document.getElementById('speed-range').value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
+
+        const wordUtterance = new SpeechSynthesisUtterance(word);
+        wordUtterance.lang = 'pl-PL';
+        wordUtterance.rate = speed;
+        if (activeVoice) wordUtterance.voice = activeVoice;
+
+        const sentenceUtterance = new SpeechSynthesisUtterance(fullSentence);
+        sentenceUtterance.lang = 'pl-PL';
+        sentenceUtterance.rate = speed;
+        if (activeVoice) sentenceUtterance.voice = activeVoice;
+
+        window.speechSynthesis.speak(wordUtterance);
+        window.speechSynthesis.speak(sentenceUtterance);
+    }
+
+    function buildColoredHtml(full, stem, ok) {
+        if (full.startsWith(stem) && full.length > stem.length) {
+            let ending = full.substring(stem.length);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
+        }
+        // Якщо основа зазнала глибоких чергувань (наприклад, teatr -> teatrze), підсвітимо останню частину як закінчення
+        if (full.length > 2) {
+            let endingIndex = full.length - 2; 
+            if(full.endsWith('ecie') || full.endsWith('sze')) endingIndex = full.length - 4;
+            let basePart = full.substring(0, endingIndex);
+            let endPart = full.substring(endingIndex);
+            return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${basePart}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${endPart}</span></span>`;
+        }
+        return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${full}</span>`;
+    }
+
+    function toggleRule(id) {
+        const box = document.getElementById(id);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function setExMode(exKey, mode) {
+        currentMode = mode;
+        document.getElementById(`label-input-loc`).classList.toggle('active', mode === 'input');
+        document.getElementById(`label-select-loc`).classList.toggle('active', mode === 'select');
+        renderExercise();
+    }
+
+    function renderExercise() {
+        const container = document.getElementById('loc-container');
+        container.innerHTML = '';
+
+        locData.forEach((ex, idx) => {
+            const item = document.createElement('div');
+            item.className = 'sentence-item';
+            let htmlText = ex.pre;
+            let choicesHtml = '';
+            const pId = `loc-display-${idx}`;
+            const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
+
+            if (currentMode === 'input') {
+                htmlText += `<span id="loc-wrapper-${idx}"><span class="hint-badge">${ex.nomination}</span> <input type="text" class="word-input" onchange="checkInput(${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="loc-in-${idx}"></span>`;
+                htmlText += ex.post;
+            } else {
+                htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
+                htmlText += ex.post + ` <span class="hint-badge">(${ex.nomination})</span>`;
+                
+                const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
+                
+                choicesHtml += `<div class="choices-grid-wrapper" id="loc-grid-${idx}"><div class="choices-grid">`;
+                choices.forEach(c => {
+                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 'loc-grid-${idx}', ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
+                });
+                choicesHtml += `</div></div>`;
+            }
+
+            item.innerHTML = `
+                <div class="sentence-header">
+                    <div class="sentence-text">${htmlText}</div>
+                    <div class="sentence-actions">
+                        <button class="action-btn" onclick="speakWordAndSentence('${ex.ans}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">🔊</button>
+                        <button class="action-btn" onclick="toggleRule('rule-loc-${idx}')">💡</button>
+                    </div>
+                </div>
+                ${choicesHtml}
+                <div class="rule-box" id="rule-loc-${idx}">${ex.rule}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function checkInput(idx, ans, stem, fullSentence) {
+        const input = document.getElementById(`loc-in-${idx}`);
+        const wrap = document.getElementById(`loc-wrapper-${idx}`);
+        if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
+            correctCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            wrap.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-loc-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    function checkSelect(btn, ans, stem, gridId, idx, pId, fullSentence) {
+        const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
+        const disp = document.getElementById(pId);
+        const grid = document.getElementById(gridId);
+        grid.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            correctCount++; 
+            btn.classList.add('correct');
+            disp.innerHTML = buildColoredHtml(ans, stem, true); 
+            speakWordAndSentence(ans, fullSentence);
+        } else {
+            incorrectCount++; 
+            btn.classList.add('incorrect');
+            disp.innerHTML = buildColoredHtml(ans, stem, false); 
+            speakWordAndSentence("Źle", fullSentence);
+            document.getElementById(`rule-loc-${idx}`).style.display = 'block';
+        }
+        updateStatsUi();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadVoices();
+        renderExercise();
+    });
+</script>
+</body>
+</html>
