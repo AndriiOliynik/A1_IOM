@@ -161,6 +161,10 @@
             <a href="#sec-6">VI. Gdzie mieszkają?</a>
             <a href="#sec-7">VII. Pytania/Odpowiedzi</a>
             <a href="#sec-8">VIII. Tekst: Michalina</a>
+            <a href="#sec-9">IX. Miasta i kierunki</a>
+            <a href="#sec-10">X. Lokalizacja przedmiotów</a>
+            <a href="#sec-11">XI. Miejscownik lm</a>
+            <a href="#sec-12">XII. Układanie pytań</a>
         </div>
     </div>
 
@@ -208,6 +212,22 @@
     <div class="mode-toggle"><span id="label-input-s8" class="mode-label active" onclick="setSecMode(8, 'input')">Вписати форму</span><span id="label-select-s8" class="mode-label" onclick="setSecMode(8, 'select')">Test варіанти</span></div>
     <div id="container-s8" class="sentence-list"></div>
 
+    <h2 id="sec-9">IX. Uzupełnij zdania, opisując gdzie leżą miasta (północ, południe, wschód, zachód)</h2>
+    <div class="mode-toggle"><span id="label-input-s9" class="mode-label active" onclick="setSecMode(9, 'input')">Вписати форму</span><span id="label-select-s9" class="mode-label" onclick="setSecMode(9, 'select')">Test варіанти</span></div>
+    <div id="container-s9" class="sentence-list"></div>
+
+    <h2 id="sec-10">X. Uzupełnij tekst, opisując gdzie znajdują się przedmioty na rysunku</h2>
+    <div class="mode-toggle"><span id="label-input-s10" class="mode-label active" onclick="setSecMode(10, 'input')">Вписати форму</span><span id="label-select-s10" class="mode-label" onclick="setSecMode(10, 'select')">Test варіанти</span></div>
+    <div id="container-s10" class="sentence-list"></div>
+
+    <h2 id="sec-11">XI. Uzupełnij tekst, używając rzeczowników i przymiotników w miejscowniku (liczba mnoga)</h2>
+    <div class="mode-toggle"><span id="label-input-s11" class="mode-label active" onclick="setSecMode(11, 'input')">Вписати форму</span><span id="label-select-s11" class="mode-label" onclick="setSecMode(11, 'select')">Test варіанти</span></div>
+    <div id="container-s11" class="sentence-list"></div>
+
+    <h2 id="sec-12">XII. Ułóż pytania do podkreślonych wyrazów</h2>
+    <div class="mode-toggle"><span id="label-input-s12" class="mode-label active" onclick="setSecMode(12, 'input')">Вписати питання</span><span id="label-select-s12" class="mode-label" onclick="setSecMode(12, 'select')">Test варіанти</span></div>
+    <div id="container-s12" class="sentence-list"></div>
+
     <div class="back-to-nav-container">
         <button class="back-to-nav-btn back-to-index-btn" onclick="location.href='index.html'">🚪 На головну</button>
         <button class="back-to-nav-btn" onclick="scrollToTop()">↑ До навігації</button>
@@ -215,7 +235,7 @@
 </div>
 
 <script>
-    // Масиви даних для всіх 8 розділів
+    // Масиви даних для всіх 12 розділів
     const sectionData = {
         1: [
             { pre: "Pływam w ", post: ".", ans: "basenie", stem: "basen", hint: "basen", fakes: ["basenem", "basenu"], rule: "<b>basen</b> (ч.р., тверда основа): чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
@@ -263,7 +283,7 @@
             { pre: "", post: " stole stoją kwiaty.", ans: "Na", stem: "Na", hint: "w / na / przy", fakes: ["W", "Przy"], rule: "Квіти стоять зверху на поверхні столу, тому підходить виключно прийменник <b>Na</b>." },
             { pre: "Teatr jest ", post: " placu.", ans: "przy", stem: "przy", hint: "w / na / przy", fakes: ["w", "na"], rule: "Якщо будівля розташована по периметру або біля площі, вживають прийменник <b>przy placu</b>." },
             { pre: "Studenci rozmawiali ", post: " ulicy.", ans: "na", stem: "na", hint: "w / na / przy", fakes: ["w", "przy"], rule: "На відкритому просторі вулиці — сталий просторовий прийменник <b>na ulicy</b>." },
-            { pre: "Marysia pływała ", post: " basenie.", ans: "w", stem: "w", hint: "w / na / przy", fakes: ["na", "przy"], rule: "Перебувати всередині резервуара з водою (басейну) — прийменник <b>w basenie</b>." }
+            { pre: "Marysia płyвала ", post: " basenie.", ans: "w", stem: "w", hint: "w / na / przy", fakes: ["na", "przy"], rule: "Перебувати всередині резервуара з водою (басейну) — прийменник <b>w basenie</b>." }
         ],
         5: [
             { pre: "Kasia jest w ", post: ".", ans: "Londynie", stem: "Londyn", hint: "Londyn", fakes: ["Londynu", "Londynem"], rule: "<b>Londyn</b> (ч.р.): основа на твердий <i>n</i> дає чергування <b>n -> ni</b> + закінчення <b>-e</b>." },
@@ -311,17 +331,57 @@
             { pre: "a w (3) ", post: " wypiją kawę.", ans: "kawiarni", stem: "kawiarni", hint: "kawiarnia", fakes: ["kawiarnie", "kawiarnią"], rule: "<b>kawiarnia</b> (ж.р., основа на м'який приголосний): закінчення змінюється на чисте <b>-i</b>." },
             { pre: "Znaleźli miejsce w (4) ", post: "", ans: "ulubionej restauracji", stem: "ulubionej restauracji", hint: "ulubiona restauracja", fakes: ["ulubiona restauracja", "ulubioną restaurację"], rule: "Узгоджена пара прикметника та іменника жіночого роду в Miejscownik: <b>-ej</b> + <b>-i</b>." },
             { pre: "na (5) ", post: ".", ans: "krakowskim Rynku", stem: "krakowskim Rynku", hint: "krakowski Rynek", fakes: ["krakowski Rynek", "krakowskiego Rynku"], rule: "Чоловічий рід (відкрите місце): прикметник отримує <b>-im</b>, іменник на задньоязиковий закінчується на <b>-u</b>." },
-            { pre: "Zjedli bardzo dobry obiad i wyszli na ulicę. Na (6) ", post: " spotkali swoich dobrych przyjaciół.", ans: "ulicy", stem: "ulicy", hint: "ulica", fakes: ["ulica", "ulicę"], rule: "<b>ulica</b> (ж.р. із функціонально м'яким шиплячим приголосним основи <i>c</i>): закінчується на <b>-y</b>." },
-            { pre: "Postanowili iść najpierw do kawiarni, a potem obejrzeć wystawę malarstwa. W (7) ", post: " spotkali koleżankę Michaliny, która szła na koncert.", ans: "galerii", stem: "galerii", hint: "galeria", fakes: ["galeria", "galerię"], rule: "<b>galeria</b> (ж.р. на <i>-ia</i>): у місцевому відмінку однини має обов'язкове закінчення <b>-ii</b>." },
-            { pre: "Poszli więc razem z nią. W (8) ", post: " był świetny koncert.", ans: "filharmonii", stem: "filharmonii", hint: "filharmonia", fakes: ["filharmonia", "filharmonię"], rule: "<b>filharmonia</b> (іменник жіночого роду іншомовного походження на <i>-ia</i>): закінчується на <b>-ii</b>." },
-            { pre: "Po (9) ", post: " wybrali się na piwo do pubu.", ans: "koncercie", stem: "koncercie", hint: "koncert", fakes: ["koncertu", "koncertem"], rule: "Прийменник <i>po</i> вимагає Miejscownik. Тверда основа чоловічого роду чергується: <b>t -> ci + e</b>." },
-            { pre: "W (10) ", post: " siedzieli do północy.", ans: "pubie", stem: "pub", hint: "pub", fakes: ["pubu", "pubem"], rule: "<b>pub</b> (ч.р.): запозичене слово на твердий губний приголосний <i>b</i> пом'якшується до <b>bi + e</b>." },
-            { pre: "W końcu o pierwszej w (11) ", post: " wrócili do domu.", ans: "nocy", stem: "nocy", hint: "noc", fakes: ["noc", "nocą"], rule: "<b>noc</b> (іменник жіночого роду, що закінчується на приголосний): у Miejscownik має закінчення <b>-y</b>." }
+            { pre: "Zjedli bardzo dobry obiad i wyszli na ulicę. Na (6) ", post: " spotkali swoich dobrych przyjaciół.", ans: "ulicy", stem: "ulicy", hint: "ulica", fakes: ["ulica", "ulicę"], rule: "<b>ulica</b> (ж.р.): закінчується на історично м'який приголосний <i>c</i>, тому має закінчення <b>-y</b>." }
+        ],
+        9: [
+            { pre: "Zakopane leży na ", post: " Polski.", ans: "południu", stem: "południ", hint: "południe", fakes: ["południem", "południa"], rule: "<b>południe</b> (с.р., основа на м'який звук): у місцевому відмінку однини має закінчення <b>-u</b>." },
+            { pre: "Warszawa leży na ", post: " Polski.", ans: "wschodzie", stem: "wschod", hint: "wschód", fakes: ["wschodu", "wschodem"], rule: "<b>wschód</b> (ч.р.): під час відмінювання відбувається чергування голосних <i>ó -> o</i> та приголосних <b>d -> dzie</b> + <b>-e</b>." },
+            { pre: "Gdańsk leży na ", post: " Polski.", ans: "północy", stem: "północ", hint: "północ", fakes: ["północe", "północu"], rule: "<b>północ</b> (ж.р., основа на функціонально м'який приголосний <i>c</i>): закінчується на літеру <b>-y</b>." },
+            { pre: "Suwałki leżą na ", post: " Polski.", ans: "północnym wschodzie", stem: "północnym wschodzie", hint: "północny wschód", fakes: ["północnym wschodu", "północny wschód"], rule: "<b>północny wschód</b>: обидва слова переходять у Miejscownik. Прикметник чоловічого роду на <i>-ym</i>, іменник змінює <i>d -> dzie + e</i>." },
+            { pre: "Szczecin leży na ", post: " Polski.", ans: "północnym zachodzie", stem: "północnym zachodzie", hint: "północny zachód", fakes: ["północnym zachodu", "północny zachód"], rule: "<b>północny zachód</b>: комплексне розташування, закінчення прикметника <i>-ym</i>, в іменнику чергування <i>ó->o, d->dzie</i> + <b>-e</b>." },
+            { pre: "Wrocław leży na ", post: " Polski.", ans: "zachodzie", stem: "zachod", hint: "zachód", fakes: ["zachodu", "zachodem"], rule: "<b>zachód</b> (ч.р.): під впливом відмінювання маємо чергування звуків <i>ó -> o</i> та <b>d -> dzie</b> + закінчення <b>-e</b>." },
+            { pre: "Zielona Góra leży na ", post: " Polski.", ans: "północnym zachodzie", stem: "północnym zachodzie", hint: "północny zachód", fakes: ["północnym zachodu", "północny zachód"], rule: "Географічно Zielona Góra лежить на північному заході Польщі." },
+            { pre: "Rzeszów leży na ", post: " Polski.", ans: "południowym wschodzie", stem: "południowym wschodzie", hint: "południowy wschód", fakes: ["południowym wschodu", "południowy wschód"], rule: "Комплексний напрямок: прикметник закінчується на <i>-ym</i>, іменник <i>wschód</i> дає форму <i>wschodzie</i>." }
+        ],
+        10: [
+            { pre: "Książka leży ", post: ".", ans: "na stole", stem: "na stole", hint: "na stole / na małym stole", fakes: ["w stole", "na stołem"], rule: "Знаходитися на поверхні предмета (столу) вимагає прийменника <b>na</b> та іменника у Miejscownik (<b>stole</b>)." },
+            { pre: "Obrazy wiszą ", post: ".", ans: "na ścianie", stem: "na ścianie", hint: "na ścianie / w pokoju", fakes: ["w ścianie", "przy ścianie"], rule: "У польській мові картини висять <b>na ścianie</b> (вертикальна поверхня)." },
+            { pre: "Książki stoją ", post: ".", ans: "na półce", hint: "na półce / na biurku", fakes: ["w półce", "na półkę"], rule: "<b>półka</b> (ж.р.): перед закінченням <i>-e</i> відбувається чергування приголосних <b>k -> c</b>." },
+            { pre: "Telefon jest na ", post: " stoliku.", ans: "małym", stem: "małym", hint: "małym", fakes: ["małego", "mały"], rule: "Узгодження прикметника з іменником чоловічого роду в Miejscownik однини: закінчення <b>-ym</b>." },
+            { pre: "Dywan leży ", post: ".", ans: "na podłodze", stem: "na podłodze", hint: "na podłodze", fakes: ["w podłodze", "na podłogę"], rule: "<b>podłoga</b> (ж.р.): задньоязиковий приголосний основи зазнає регулярного чергування <b>g -> z</b> + закінчення <b>-e</b>." },
+            { pre: "Owoce są ", post: ", a talerz z owocami stoi на столе.", ans: "w salaterze", stem: "w salaterze", hint: "na stole / w salaterze", fakes: ["na salaterze", "w salaterka"], rule: "<b>salaterka</b> (ж.р.): перебувати всередині глибокого посуду — прийменник <b>w</b>, приголосний чергується <b>k -> c + e</b>." },
+            { pre: "Talerz z owocami ", post: " na stole.", ans: "stoi", stem: "stoi", hint: "дієслово: stoi", fakes: ["leży", "wisi"], rule: "Посуд на горизонтальній поверхні зазвичай вертикально <b>stoi</b> (стоїть)." },
+            { pre: "Gazeta leży także ", post: ".", ans: "na kanapie", stem: "na kanapie", hint: "na stoliku / na kanapie", fakes: ["w kanapie", "na kanapę"], rule: "<b>kanapa</b> (ж.р.): на поверхні дивана/канапи — прийменник <b>na</b>, губний приголосний пом'якшується <b>p -> pie</b>." },
+            { pre: "Krzesła stoją ", post: ".", ans: "przy stole", stem: "przy stole", hint: "przy stole / w pokoju", fakes: ["na stole", "w stole"], rule: "Стільці зазвичай розташовані безпосередньо поруч із столом, тому підходить прийменник <b>przy</b>." }
+        ],
+        11: [
+            { pre: "Ania każde wakacje spędza w (1) ", post: " (góra).", ans: "górach", stem: "gór", hint: "góry (lm)", fakes: ["górze", "górami"], rule: "Miejscownik множини (liczba mnoga) для всіх родів має універсальне закінчення <b>-ach</b>." },
+            { pre: "Koleżanka Ani woli spędzać lato w (2) ", post: " (gorący kraj).", ans: "gorących krajach", stem: "gorących kraj", hint: "gorące kraje (lm)", fakes: ["gorącym kraju", "gorącymi krajami"], rule: "Множина: прикметники мають закінчення <b>-ych/-ich</b>, іменники — закінчення <b>-ach</b>." },
+            { pre: "Magda lubi opalać się na (3) ", post: " (szeroka plaża)", ans: "szerokich plażach", stem: "szerokich plaż", hint: "szerokie plaże (lm)", fakes: ["szerokiej plaży", "szerokimi plażami"], rule: "Множина: після літери <i>k</i> прикметник приймає <b>-ich</b>, іменник закінчується на <b>-ach</b>." },
+            { pre: "i pływać w (4) ", post: " (ciepłe morze).", ans: "ciepłych morzach", stem: "ciepłych morz", hint: "ciepłe morza (lm)", fakes: ["ciepłym morzu", "ciepłymi morzami"], rule: "У місцевому відмінку множини іменники середнього роду також приймають закінчення <b>-ach</b>." },
+            { pre: "Magda w (5) ", post: " (ocean) ogląda i fotografuje kolorowe ryby.", ans: "oceanach", stem: "ocean", hint: "oceany (lm)", fakes: ["oceanie", "oceanami"], rule: "Стандартне закінчення іменників чоловічого роду в Miejscownik lm — <b>-ach</b>." },
+            { pre: "Ania natomiast chodzi po (6) ", post: " (mała wieś)", ans: "małych wsiach", stem: "małych wsi", hint: "małe wsie (lm)", fakes: ["małej wsi", "małymi wsiami"], rule: "Іменники жіночого роду на приголосний (<i>wieś</i>) у множині отримують закінчення <b>-ach</b>." },
+            { pre: "i śpi w (7) ", post: " (nieduże schronisko).", ans: "niedużych schroniskach", stem: "niedużych schronisk", hint: "nieduże schroniska (lm)", fakes: ["niedużym schronisku", "niedużymi schroniskami"], rule: "Множина: прикметник отримує закінчення <b>-ych</b>, іменник після задньоязикового — <b>-ach</b>." },
+            { pre: "Magda woli mieszkać w (8) ", post: " (hotel, pensjonat).", ans: "hotelach i pensjonatach", stem: "hotelach i pensjonat", hint: "hotele, pensjonaty (lm)", fakes: ["hotelu i pensjonacie", "hotelami i pensjonatami"], rule: "Обидва іменники чоловічого роду у множині приймають регулярне закінчення <b>-ach</b>." },
+            { pre: "Gdy koleżanki spotykają się po (9) ", post: " (wakacje),", ans: "wakacjach", stem: "wakacj", hint: "wakacje (завжди lm)", fakes: ["wakacji", "wakacjami"], rule: "Слово <i>wakacje</i> вживається тільки у множині, закінчення локатива — <b>-ach</b>." },
+            { pre: "opowiadają o (10) ", post: " (piękne miejsce), które widziały,", ans: "pięknych miejscach", stem: "pięknych miejsc", hint: "piękne miejsca (lm)", fakes: ["pięknym miejscu", "pięknymi miejscami"], rule: "Множина: прикметник середнього роду закінчується на <b>-ych</b>, іменник — на <b>-ach</b>." },
+            { pre: "i o (11) ", post: " (nowy kolega), których poznały.", ans: "nowych kolegach", stem: "nowych koleg", hint: "nowi koledzy (lm)", fakes: ["nowym koledze", "nowymi kolegami"], rule: "Іменник чоловічо-особового роду <i>kolega</i> у множині має стандартне закінчення <b>-ach</b>." }
+        ],
+        12: [
+            { pre: "Sebastian myśli o Julii. Pytanie: ", post: " myśli Sebastian?", ans: "O kim", stem: "O kim", hint: "pytanie o osobę", fakes: ["O czym", "W kim"], rule: "Для істот (людей) після прийменника <i>o</i> ставиться питальний займенник у Miejscownik: <b>O kim</b>." },
+            { pre: "Monika zakochała się w Danielu. Pytanie: ", post: " zakochała się Monika?", ans: "W kim", stem: "W kim", hint: "pytanie z w", fakes: ["W czym", "O kim"], rule: "Дієслово <i>zakochać się</i> вимагає прийменника <i>w</i> + Biernik/Miejscownik. Питання до особи — <b>W kim</b>." },
+            { pre: "Krystyna marzy o podróżach. Pytanie: ", post: " marzy Krystyna?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "W czym"], rule: "Для неістот (речей, явищ, подорожей) ставиться питальний займенnik <b>O czym</b>." },
+            { pre: "Mikołaj opowiadał o swoich przygodach. Pytanie: ", post: " opowiadał Mikołaj?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "Po czym"], rule: "Пригоди — це неістоти, тому питальна форма має вигляд <b>O czym</b>." },
+            { pre: "Kacper mówi o egzaminie. Pytanie: ", post: " mówi Kacper?", ans: "O czym", stem: "O czym", hint: "pytanie o rzecz", fakes: ["O kim", "Na czym"], rule: "Питання до неістоти з прийменником <i>o</i> формується як <b>O czym</b>." },
+            { pre: "Kot śpi na fotelu. Pytanie: ", post: " śpi kot?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "Jak"], rule: "Для з'ясування локації (на кріслі) використовується загальне питальне слово <b>Gdzie</b> (або: <i>Na czym</i>)." },
+            { pre: "Oni spotkają się po filmie. Pytanie: ", post: " spotkają się?", ans: "Kiedy", stem: "Kiedy", hint: "pytanie o czas", fakes: ["Gdzie", "Jak"], rule: "Вказівка на час події (після фільму) вимагає питального слова <b>Kiedy</b>." },
+            { pre: "Krzysiek mieszka w Londynie. Pytanie: ", post: " mieszka Krzysiek?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "Skąd"], rule: "Питання про місце проживання або перебування в місті ставиться за допомогою слова <b>Gdzie</b>." },
+            { pre: "Studenci test piszą w styczniu. Pytanie: ", post: " piszą test studenci?", ans: "Kiedy", stem: "Kiedy", hint: "pytanie o czas", fakes: ["Gdzie", "W kim"], rule: "Назва місяця (у січні) є часовим орієнтиром, тому коректне питання — <b>Kiedy</b>." },
+            { pre: "Na parkingu stoją samochody. Pytanie: ", post: " stoją samochody?", ans: "Gdzie", stem: "Gdzie", hint: "pytanie o miejsce", fakes: ["Kiedy", "O czym"], rule: "Питання стосується місця розташування автомобілів на паркувальному майданчику — використовуємо <b>Gdzie</b>." }
         ]
     };
 
-    // Стан режимів для кожного розділу окремо
-    let secModes = { 1: 'input', 2: 'input', 3: 'input', 4: 'input', 5: 'input', 6: 'input', 7: 'input', 8: 'input' };
+    let activeSecModes = {};
     let systemVoices = [];
     let correctCount = 0;
     let incorrectCount = 0;
@@ -341,19 +401,17 @@
         if (!window.speechSynthesis) return;
         systemVoices = window.speechSynthesis.getVoices();
         const voiceSelect = document.getElementById('voice-select');
-        if(!voiceSelect) return;
-        
         voiceSelect.innerHTML = '';
-        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_') || v.lang.toLowerCase().includes('pol'));
+        const plVoices = systemVoices.filter(v => v.lang.startsWith('pl-') || v.lang.startsWith('pl_'));
         
-        if (plVoices.length === 0) {
-            voiceSelect.appendChild(new Option("Системний польський голос (Default)", ""));
+        if(plVoices.length === 0) {
+            voiceSelect.appendChild(new Option("Системний польський голос", ""));
             return;
         }
         plVoices.forEach(v => voiceSelect.appendChild(new Option(`${v.name} (${v.lang})`, v.name)));
     }
 
-    if (window.speechSynthesis) {
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
@@ -362,8 +420,7 @@
         window.speechSynthesis.cancel();
 
         const speed = parseFloat(document.getElementById('speed-range').value);
-        const voiceSelect = document.getElementById('voice-select');
-        const activeVoice = systemVoices.find(v => v.name === voiceSelect.value);
+        const activeVoice = systemVoices.find(v => v.name === document.getElementById('voice-select').value);
 
         const wordUtterance = new SpeechSynthesisUtterance(word);
         wordUtterance.lang = 'pl-PL';
@@ -376,20 +433,18 @@
         if (activeVoice) sentenceUtterance.voice = activeVoice;
 
         window.speechSynthesis.speak(wordUtterance);
-        // Невелика затримка перед реченням для кращого сприйняття
-        setTimeout(() => {
-            if (window.speechSynthesis.speaking) window.speechSynthesis.speak(sentenceUtterance);
-        }, 120);
+        window.speechSynthesis.speak(sentenceUtterance);
     }
 
     function buildColoredHtml(full, stem, ok) {
-        if (full.toLowerCase().startsWith(stem.toLowerCase()) && full.length > stem.length) {
+        if (stem && full.startsWith(stem) && full.length > stem.length) {
             let ending = full.substring(stem.length);
             return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${stem}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${ending}</span></span>`;
         }
         if (full.length > 2) {
             let endingIndex = full.length - 2; 
-            if(full.endsWith('ecie') || full.endsWith('szcie') || full.endsWith('acji')) endingIndex = full.length - 4;
+            if(full.endsWith('ecie') || full.endsWith('sze') || full.endsWith('odzie') || full.endsWith('ach')) endingIndex = full.length - 4;
+            if (endingIndex < 1) endingIndex = 1;
             let basePart = full.substring(0, endingIndex);
             let endPart = full.substring(endingIndex);
             return `<span class="colored-word ${ok ? 'text-success' : 'text-error'}">${basePart}<span class="${ok ? 'ending-correct' : 'ending-incorrect'}">${endPart}</span></span>`;
@@ -403,7 +458,7 @@
     }
 
     function setSecMode(secId, mode) {
-        secModes[secId] = mode;
+        activeSecModes[secId] = mode;
         document.getElementById(`label-input-s${secId}`).classList.toggle('active', mode === 'input');
         document.getElementById(`label-select-s${secId}`).classList.toggle('active', mode === 'select');
         renderSection(secId);
@@ -411,20 +466,22 @@
 
     function renderSection(secId) {
         const container = document.getElementById(`container-s${secId}`);
+        if (!container) return;
         container.innerHTML = '';
-        const dataArr = sectionData[secId];
-        const mode = secModes[secId];
+        
+        const mode = activeSecModes[secId] || 'input';
+        const dataList = sectionData[secId] || [];
 
-        dataArr.forEach((ex, idx) => {
+        dataList.forEach((ex, idx) => {
             const item = document.createElement('div');
             item.className = 'sentence-item';
             let htmlText = ex.pre;
             let choicesHtml = '';
-            const pId = `s${secId}-display-${idx}`;
+            const pId = `display-s${secId}-${idx}`;
             const fullCorrectSentence = (ex.pre + ex.ans + ex.post).replace(/\s+/g, ' ').trim();
 
             if (mode === 'input') {
-                htmlText += `<span id="s${secId}-wrapper-${idx}"><span class="hint-badge">${ex.hint}</span> <input type="text" class="word-input" onchange="checkInput(${secId}, ${idx}, '${ex.ans}', '${ex.stem}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="s${secId}-in-${idx}"></span>`;
+                htmlText += `<span id="wrapper-s${secId}-${idx}"><span class="hint-badge">${ex.hint}</span> <input type="text" class="word-input" onchange="checkSecInput(${secId}, ${idx}, '${ex.ans}', '${ex.stem || ''}', '${fullCorrectSentence.replace(/'/g, "\\'")}')" id="in-s${secId}-${idx}"></span>`;
                 htmlText += ex.post;
             } else {
                 htmlText += ` <b id="${pId}" style="color:var(--primary)">[ ? ]</b> `;
@@ -432,9 +489,9 @@
                 
                 const choices = [ex.ans, ...ex.fakes].sort(() => 0.5 - Math.random());
                 
-                choicesHtml += `<div class="choices-grid-wrapper" id="s${secId}-grid-${idx}"><div class="choices-grid">`;
+                choicesHtml += `<div class="choices-grid-wrapper" id="grid-s${secId}-${idx}"><div class="choices-grid">`;
                 choices.forEach(c => {
-                    choicesHtml += `<button class="choice-btn" onclick="checkSelect(this, '${ex.ans}', '${ex.stem}', 's${secId}-grid-${idx}', ${secId}, ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
+                    choicesHtml += `<button class="choice-btn" onclick="checkSecSelect(this, '${ex.ans}', '${ex.stem || ''}', 'grid-s${secId}-${idx}', ${secId}, ${idx}, '${pId}', '${fullCorrectSentence.replace(/'/g, "\\'")}')">${c}</button>`;
                 });
                 choicesHtml += `</div></div>`;
             }
@@ -454,9 +511,9 @@
         });
     }
 
-    function checkInput(secId, idx, ans, stem, fullSentence) {
-        const input = document.getElementById(`s${secId}-in-${idx}`);
-        const wrap = document.getElementById(`s${secId}-wrapper-${idx}`);
+    function checkSecInput(secId, idx, ans, stem, fullSentence) {
+        const input = document.getElementById(`in-s${secId}-${idx}`);
+        const wrap = document.getElementById(`wrapper-s${secId}-${idx}`);
         if(input.value.trim().toLowerCase() === ans.toLowerCase()) {
             correctCount++; 
             wrap.innerHTML = buildColoredHtml(ans, stem, true); 
@@ -470,7 +527,7 @@
         updateStatsUi();
     }
 
-    function checkSelect(btn, ans, stem, gridId, secId, idx, pId, fullSentence) {
+    function checkSecSelect(btn, ans, stem, gridId, secId, idx, pId, fullSentence) {
         const isCorrect = btn.innerText.trim().toLowerCase() === ans.toLowerCase();
         const disp = document.getElementById(pId);
         const grid = document.getElementById(gridId);
@@ -491,16 +548,12 @@
         updateStatsUi();
     }
 
-    function renderAll() {
-        for (let i = 1; i <= 8; i++) {
-            renderSection(i);
-        }
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
         loadVoices();
-        renderAll();
-        setTimeout(loadVoices, 300); // Страхувальний таймаут для підвантаження голосів у Chromium
+        for (let i = 1; i <= 12; i++) {
+            activeSecModes[i] = 'input';
+            renderSection(i);
+        }
     });
 </script>
 </body>
